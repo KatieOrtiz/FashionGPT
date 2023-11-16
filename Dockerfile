@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 
 # Install Flask and Jinja2 (if not already installed)
-RUN pip install Flask Jinja2
+RUN pip install Flask Jinja2 Streamlit
 
 # Install Nginx
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
