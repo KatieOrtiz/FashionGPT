@@ -1,0 +1,93 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #b8d8be;
+}
+
+.header {
+  background-color: #205566; /* Set the background color here */
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar h1 {
+  color: #ffffff;
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center; /* Center the list items vertically */
+}
+
+nav ul li {
+  margin-left: 520px; /* Increase the margin to add more space */
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  flex: 1; /* Make the container take the available vertical space */
+}
+
+main {
+  padding: 20px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-btn {
+  position: fixed;
+  top: 10px; /* Adjust the top position as needed */
+  left: 10px; /* Adjust the left position as needed */
+}
+
+.email-verification {
+  margin-top: 350px;
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #c8e1cc;
+    }
+.email-btn{
+  margin-top: 25px;
+}
+.signup-btn{
+   margin-top: 25px;
+}
+.password-btn{
+  margin-top: 25px;
+}
+.footer {
+  background-color: #c8e1cc;
+  color: #000000;
+  padding: 10px;
+  text-align: center;
+  margin-top: auto; /* Push the footer to the bottom */
+}
