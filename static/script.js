@@ -2,11 +2,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("getStarted");
   button.addEventListener("click", function () {
-    window.location.href = "emailVerification.html";
+    window.location.href = "emailVerification";
   });
   var button = document.getElementById("getStarted2");
   button.addEventListener("click", function () {
-    window.location.href = "emailVerification.html";
+    window.location.href = "emailVerification";
   });
 });
 
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn");
   button.addEventListener("click", function () {
-    window.location.href = "frontPage.html";
+    window.location.href = "frontPage";
   });
 });
 //homepage

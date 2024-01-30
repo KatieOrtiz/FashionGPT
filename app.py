@@ -5,23 +5,26 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('frontPage.html')
+@app.route('/frontPage')
+def frontPage():
+    return render_template('frontPage.html')
 @app.route('/emailVerification')
 def emailVerification():
     return render_template('emailVerification.html')
 @app.route('/homePage')
-def emailVerification():
+def homePage():
     return render_template('homePage.html')
 @app.route('/PasswordPage')
-def emailVerification():
+def PasswordPage():
     return render_template('PasswordPage.html')
 @app.route('/personalDetails')
-def emailVerification():
+def personalDetails():
     return render_template('personalDetails.html')
 @app.route('/register')
-def emailVerification():
+def register():
     return render_template('register.html')
 @app.route('/sizePreference')
-def emailVerification():
+def sizePreference():
     return render_template('sizePreference.html')
 
 if __name__ == '__main__':
