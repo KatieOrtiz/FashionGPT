@@ -12,13 +12,15 @@
     <div class="container">
       <button class="back-btn" type="button" id="backBtn">Back</button>
       <main>
-<div class="verification">
-    <h1>FashionGPT</h1>
-    <p>Email/Username</p>
-    <input type="text" id="email" name="q" />
-    <br>
-    <button class="email-btn" type="button" id="emailBtn">Next</button>
-  </div>
+        <form method="post" action="{{ url_for('emailVerification') }}">
+          <div class="verification">
+              <h1>FashionGPT</h1>
+              <p>Email</p>
+              <input type="text" id="email" name="email" />
+              <br>
+              <button class="email-btn" type="submit">Next</button>
+          </div>
+      </form>
       </main>
     </div>
   </body>
