@@ -9,60 +9,45 @@
     <title>Your Discord-Like Website</title>
 </head>
 
-<body>
+<body class="three-sections-page">
 
-    <header>
-        <h1>Your Discord-Like Website</h1>
-    </header>
-
-    <nav>
-        <div class="container">
-            <a href="#">Home</a>
-            <a href="#">Channels</a>
-            <a href="#">Friends</a>
-            <a href="#">Settings</a>
+    <div id="left-section">
+        <h2>Filters</h2>
+        <button class="collapsible">Price</button>
+        <div class="content">
+            <p>Content for Button 1</p>
         </div>
-    </nav>
 
-    <main>
-        <div class="container">
-            <!-- Left Panel -->
-            <div class="left-panel">
-                <h2>Options</h2>
-                <ul>
-                    <li><a href="#">Price</a></li>
-                    <li><a href="#">Outfit Preference</a></li>
-                    <li><a href="#">Season</a></li>
-                    <li><a href="#">Style</a></li>
-                    <li><a href="#">Color</a></li>
-                </ul>
-            </div>
-
-            <!-- Main Content -->
-            <div class="content">
-                <div class="server">
-                    <h2>Your Server Name</h2>
-                    <div class="channel">
-                        #general
-                    </div>
-                    <div class="channel">
-                        #random
-                    </div>
-                </div>
-
-                <div class="message">
-                    <p><strong>Username:</strong> Hello, this is a message!</p>
-                </div>
-
-                <!-- Add more messages as needed -->
-            </div>
+        <button class="collapsible">Outfit Preference</button>
+        <div class="content">
+            <p>Content for Button 2</p>
         </div>
-    </main>
 
-    <footer>
-        <p>&copy; 2023 Your Discord-Like Website</p>
-    </footer>
+        <button class="collapsible">Season</button>
+        <div class="content">
+            <p>Content for Button 3</p>
+        </div>
+
+        <button class="collapsible">Style</button>
+        <div class="content">
+            <p>Content for Button 4</p>
+        </div>
+
+        <button class="collapsible">Color</button>
+        <div class="content">
+            <p>Content for Button 5</p>
+        </div>
+    </div>
+
+    <div id="middle-section">
+        <input type="text" id="search-bar" placeholder="Search...">
+    </div>
+
+    <div id="right-section">
+        <button class="menu-button">Home</button>
+        <button class="menu-button">Likes</button>
+        <button class="menu-button">Settings</button>
+    </div>
 
 </body>
-
 </html>
