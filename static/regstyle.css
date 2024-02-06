@@ -1,0 +1,81 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+  }
+  h1{
+    padding: 0px;
+  }
+  button {
+    background-color: #0074e4;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+    justify-content: center; /* Center the content vertically */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+  }
+  
+  .verification {
+    text-align: center;
+    border-radius: 10px;
+    background-color: #202020;
+    color: white;
+    width: 400px;
+    height: 600px;
+    padding-top: 25px;
+    box-sizing: border-box; /* Include padding and border in width calculation */
+    margin-bottom: 0px;
+  }
+  
+  .regTextbox {
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    padding: 50px; /* Add 50 pixels of padding around the text */
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  
+  .enterText {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #cccccc;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    margin-top: 5px;
+    background: none;
+    color: white;
+  }
+  
+  .error{
+    background-color: #f7bcbc;
+  }
+  .back-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+  }
+  .regbutton
+  {
+    margin-top: 25px;
+    width: 200px;
+  }
