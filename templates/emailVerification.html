@@ -16,14 +16,15 @@
     <div class="container">
       <button class="back-btn" type="button" id="backBtn">Back</button>
       <main>
-        <div class="verification">
-          <h1>FashionGPT</h1>
-          <p>Sign in or Sign Up</p>
+        <form method="post" action="{{ url_for('emailVerification') }}">
           <div class="regTextbox">
-          <input type="text" class="enterText" id="email" placeholder="Email Address"/>
+              <h1>FashionGPT</h1>
+              <p>Email</p>
+              <input type="text" class="enterText" id="email" placeholder="Email Address"/>
+              <br>
+              <button class="regbutton" type="submit" id="emailBtn">Continue</button>
           </div>
-          <button class="regbutton" type="button" id="emailBtn">Continue</button>
-        </div>
+      </form>
       </main>
     </div>
   </body>
