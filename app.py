@@ -34,7 +34,7 @@ def emailVerification():
 
         if result:
             # Email exists, redirect to homePage or any other appropriate route
-            return redirect(url_for('homePage'))
+            return redirect(url_for('passwordPage'))
         else:
             # Email does not exist, redirect to register page
             return redirect(url_for('register'))
