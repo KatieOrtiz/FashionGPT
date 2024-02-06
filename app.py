@@ -45,9 +45,23 @@ def emailVerification():
 def homePage():
     return render_template('homePage.html')
 
-@app.route('/PasswordPage')
-def PasswordPage():
-    return render_template('PasswordPage.html')
+@app.route('/passwordPage')
+def passwordPage():
+    if request.method == 'POST':
+        password = request.form.get('password')
+
+        # Check if the email exists in the Users table
+        query = "SELECT * FROM Users WHERE password = %s"
+        cursor.execute(query, (password,))
+        result = cursor.fetchone()
+
+        if result:
+            # Email exists, redirect to homePage or any other appropriate route
+            return redirect(url_for('homePage'))
+        else:
+            # Email does not exist, redirect to register page
+            return redirect(url_for('password'))
+    return render_template('passwordPage.html')
 
 @app.route('/personalDetails')
 def personalDetails():
