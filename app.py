@@ -45,7 +45,7 @@ def emailVerification():
 def homePage():
     return render_template('homePage.html')
 
-@app.route('/passwordPage')
+@app.route('/passwordPage', methods=['GET', 'POST'])
 def passwordPage():
     if request.method == 'POST':
         password = request.form.get('password')
