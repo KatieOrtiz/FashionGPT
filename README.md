@@ -1,7 +1,6 @@
 # FashionGPT
 # Documentation will be added here for the application
 
-
 To connect to mysql db from docker container:
 1. Log in via root (mysql -u root -p)
 2. Run the command: 

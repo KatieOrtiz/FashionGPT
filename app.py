@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, jsonify, flash, send_from_directory, abort, session
+from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
+
 import mysql.connector
 
 app = Flask(__name__)
@@ -13,6 +15,16 @@ db_config = {
     'host': '130.166.160.21',
     'database': 'fashion_gpt',
 }
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+# login_manager.login_view = 'login'
+
+app.secret_key = '123'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(user_id)
 
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
@@ -65,7 +77,6 @@ def passwordPage():
             # Password is incorrect, display passwordPage page again with a message that the password is incorrect
             flash('Incorrect password. Please try again.', 'error')
             return redirect(url_for('passwordPage'))
-    return render_template('passwordPage.html')
 
 @app.route('/personalDetails')
 def personalDetails():

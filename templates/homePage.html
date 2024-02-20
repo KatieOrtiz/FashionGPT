@@ -1,53 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    />
-    <script src="static/script.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <title>Three Sections Page</title>
-  </head>
-  <body class="three-sections-page">
+</head>
+<body class="three-sections-page">
     <div id="left-section">
-      <h2>Filters</h2>
-      <button class="collapsible">Price</button>
-      <div class="content">
-        <p>Content for Button 1</p>
-      </div>
-
-      <button class="collapsible">Outfit Preference</button>
-      <div class="content">
-        <p>Content for Button 2</p>
-      </div>
-
-      <button class="collapsible">Season</button>
-      <div class="content">
-        <p>Content for Button 3</p>
-      </div>
-
-      <button class="collapsible">Style</button>
-      <div class="content">
-        <p>Content for Button 4</p>
-      </div>
-
-      <button class="collapsible">Color</button>
-      <div class="content">
-        <p>Content for Button 5</p>
-      </div>
+        <form id="filters-form" style="padding-left: 10px;">
+            <h2>Filters</h2>
+            <div class="filter-section">
+                <h3>Price</h3>
+                <input type="text" id="price-range" name="priceRange" placeholder="From" style="width: 120px;"> ~
+                <input type="text" id="price-range" name="priceRange" placeholder="To" style="width: 120px;">
+            </div>
+            <div class="filter-section">
+                <h3>Outfit Preference</h3>
+                <div class="preferences" id="outfit-preferences">
+                    <button type="button" class="preference-button" data-value="Casual">Casual</button>
+                    <button type="button" class="preference-button" data-value="Formal">Formal</button>
+                    <button type="button" class="preference-button" data-value="Sporty">Sporty</button>
+                    <button type="button" class="preference-button" data-value="BusinessCasual">Business Casual</button>
+                    <button type="button" class="preference-button" data-value="Glamorous">Glamorous</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3>Season</h3>
+                <div class="preferences" id="season-preferences">
+                    <button type="button" class="preference-button" data-value="Spring">Spring</button>
+                    <button type="button" class="preference-button" data-value="Summer">Summer</button>
+                    <button type="button" class="preference-button" data-value="Autumn">Autumn</button>
+                    <button type="button" class="preference-button" data-value="Winter">Winter</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3>Style</h3>
+                <div class="preferences" id="style-preferences">
+                    <button type="button" class="preference-button" data-value="Classic">Classic</button>
+                    <button type="button" class="preference-button" data-value="Vintage">Vintage</button>
+                    <button type="button" class="preference-button" data-value="Streetwear">Streetwear</button>
+                    <button type="button" class="preference-button" data-value="Preppy">Preppy</button>
+                    <button type="button" class="preference-button" data-value="Boho">Boho</button>
+                    <button type="button" class="preference-button" data-value="Minimalist">Minimalist</button>
+                </div>
+            </div>
+            <br>
+            <button type="submit" id="submit-filters" style="margin: 20px; padding-left: 40px; padding-right: 40px;">Submit</button>
+            <button type="reset" id="reset-filters" style="padding-left: 40px; padding-right: 40px;">Reset</button>
+        </form>
     </div>
 
     <div id="middle-section">
-      <input type="text" id="search-bar" placeholder="Search..." />
+        <input type="text" id="search-bar" placeholder="Search...">
     </div>
 
     <div id="right-section">
-      <span id="homebutton"><i class="fa-solid fa-house"></i></span>
-      <span id="likebutton"><i class="fa-solid fa-heart"></i></span>
-      <span id="settingbutton"><i class="fa-solid fa-gear"></i></span>
+        <span id="homebutton"><i class="fa-solid fa-house"></i></span>
+        <span id="likebutton"><i class="fa-solid fa-heart"></i></span>
+        <span id="settingbutton"><i class="fa-solid fa-gear"></i></span>
     </div>
-  </body>
+    <script src="static/script.js"></script>
+</body>
 </html>
