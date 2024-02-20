@@ -3,7 +3,7 @@
 FROM python:3.9-slim
 
 # Install Flask and Jinja2 (if not already installed)
-RUN pip install Flask Jinja2 mysql-connector-python
+RUN pip install Flask flask-login Jinja2 mysql-connector-python
 
 # Install Nginx and MariaDB client
 RUN apt-get update && apt-get install -y nginx nano && rm -rf /var/lib/apt/lists/*
@@ -41,6 +41,9 @@ EXPOSE 3306
 WORKDIR /opt/
 # Start Nginx and your Flask application (replace 'app.py' with your Python file)
 CMD service nginx start && python /opt/app.py
+
+
+
 
 # # Start Nginx, MariaDB server, and your Flask application
 # CMD service nginx start && mysqld_safe --skip-syslog --skip-networking --hostname=fashiongpt& python /opt/app.py
