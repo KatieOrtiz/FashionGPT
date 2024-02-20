@@ -5,6 +5,9 @@ import mysql.connector
 
 app = Flask(__name__)
 
+# Set the secret key for the application
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 # db connection settings
 db_config = {
     'user': 'db_admin',
@@ -62,19 +65,18 @@ def passwordPage():
     if request.method == 'POST':
         password = request.form.get('password')
 
-        # Check if the email exists in the Users table
+        # Check if the password exists in the Users table
         query = "SELECT * FROM Users WHERE password = %s"
         cursor.execute(query, (password,))
         result = cursor.fetchone()
 
         if result:
-            # Email exists, redirect to homePage or any other appropriate route
+            # Password exists, redirect to homePage or any other appropriate route
             return redirect(url_for('homePage'))
         else:
             # Password is incorrect, display passwordPage page again with a message that the password is incorrect
             flash('Incorrect password. Please try again.', 'error')
-            # return redirect(url_for('passwordPage'))
-    return render_template('passwordPage.html')
+            return redirect(url_for('passwordPage'))
 
 @app.route('/personalDetails')
 def personalDetails():
