@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/script.js"></script>
+    <style>
+        /* Add a class to the labels to target only the ones for dropdowns */
+        label.dropdown-label {
+            display: block;
+            margin-bottom: 5px; /* Optional: Add some spacing between labels and dropdowns */
+        }
+
+        /* Style for the dropdowns */
+        select.menu-dropdown {
+            width: 100%; /* Make the dropdown take 100% width of its container */
+            padding: 8px;
+            box-sizing: border-box; /* Include padding and border in the total width */
+            margin-bottom: 10px; /* Optional: Add some spacing between dropdowns */
+        }
+    </style>
+    <title>Size Preference</title>
+</head>
+
+<body class="three-sections-page">
+
+    <div id="left-section">
+        <h2>Filters</h2>
+        <button class="collapsible">Password/Security</button>
+        <div class="content">
+            <p>Go to Password and Security</p>
+        </div>
+
+        <button class="collapsible">Size Preference</button>
+        <div class="content">
+            <p>Go to Size Preference</p>
+        </div>
+
+    </div>
+
+    <div id="middle-section">
+        <h2>Shirts</h2>
+
+        <!-- Dropdown Menu 1 -->
+        <label for="neck" class="dropdown-label">Neck:</label>
+        <select id="neck" name="neck" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <!-- Dropdown Menu 2 -->
+        <label for="shoulder" class="dropdown-label">Shoulder:</label>
+        <select id="shoulder" name="shoulder" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="chest" class="dropdown-label">Chest:</label>
+        <select id="chest" name="chest" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="arm" class="dropdown-label">Arm:</label>
+        <select id="arm" name="arm" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <h2>Pants</h2>
+
+        <!-- Dropdown Menu 3 -->
+        <label for="waist" class="dropdown-label">Waist:</label>
+        <select id="waist" name="waist" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="thighs" class="dropdown-label">Thighs:</label>
+        <select id="thighs" name="thighs" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="calf" class="dropdown-label">Calf:</label>
+        <select id="calf" name="calf" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="inseam" class="dropdown-label">Inseam:</label>
+        <select id="inseam" name="inseam" class="menu-dropdown">
+            <option value="item1">Item 1</option>
+            <option value="item2">Item 2</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        
+    </div>
+
+    <div id="right-section">
+        <button class="menu-button">Home</button>
+        <button class="menu-button">Likes</button>
+        <button class="menu-button">Settings</button>
+    </div>
+
+</body>
+
+</html>
