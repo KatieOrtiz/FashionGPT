@@ -33,4 +33,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('continue-btn1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'registersize2.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnrs2');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'registerSize.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnrs1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'register.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnev1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'emailVerification.html';
+    });
+  }
+});

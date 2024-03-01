@@ -79,3 +79,45 @@ button {
   margin-top: 25px;
   width: 200px;
 }
+.enterSignup
+{
+  color: white;
+  width: 100%;
+  border: 2px solid #cccccc;
+  border-radius:5px;
+  height: 60px;
+  margin: 0;
+  display: block;
+  padding: 20px;
+  min-width: 0;
+  background: transparent;
+  box-sizing: border-box;
+  animation-name: mui-auto-fill-cancel;
+  letter-spacing: inherit;
+}
+
+.measurement-select {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column; /* Display labels and select elements in a column */
+  align-items: center; /* Align items horizontally */
+}
+
+.measurement-select label {
+  font-weight: bold;
+  text-align: center; /* Center text horizontally */
+  margin-bottom: 5px; /* Add some space between label and select */
+}
+
+select {
+  width: 50%; /* Set the desired width for each select box */
+  max-width: 125px; /* Limit the maximum width if necessary */
+  padding: 5px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+.sizing-guide {
+  padding-left: 60px;
+  width: 70%; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
