@@ -103,5 +103,9 @@ def register():
 def sizePreference():
     return render_template('sizePreference.html')
 
+@app.route('/changePassword')
+def changePassword():
+    return render_template('changePassword.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)

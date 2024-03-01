@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.location.href = "frontPage";
   });
 });
-
 //homepage
 document.addEventListener('DOMContentLoaded', function () {
     const coll = document.querySelectorAll('.collapsible');
@@ -34,41 +33,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
+// Functionality for continue button
 document.addEventListener('DOMContentLoaded', function () {
-  // Toggle active class for preference buttons
-  document.querySelectorAll('.preference-button').forEach(button => {
-      button.addEventListener('click', function () {
-          this.classList.toggle('active');
-      });
-  });
-
-  // Form submission handling
-  document.getElementById('filters-form').addEventListener('submit', function (event) {
-      event.preventDefault(); // Prevent the default form submission
-
-      const formData = {
-          priceRange: document.getElementById('price-range').value,
-          outfitPreferences: [],
-          seasonPreferences: [],
-          stylePreferences: [],
-      };
-
-      // Collect active preferences
-      document.querySelectorAll('#outfit-preferences .active').forEach(button => {
-          formData.outfitPreferences.push(button.dataset.value);
-      });
-      document.querySelectorAll('#season-preferences .active').forEach(button => {
-          formData.seasonPreferences.push(button.dataset.value);
-      });
-      document.querySelectorAll('#style-preferences .active').forEach(button => {
-          formData.stylePreferences.push(button.dataset.value);
-      });
-
-      // Example: Send formData to server
-      console.log(formData); // Replace this with the fetch API call
-
-      // Reset active buttons if needed
-      document.querySelectorAll('.preference-button.active').forEach(button => button.classList.remove('active'));
-  });
+  var continueBtn = document.getElementById('continue-btn1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'registersize2.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnrs2');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'registerSize.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnrs1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'register.html';
+    });
+  }
+});
+// Functionality for continue button
+document.addEventListener('DOMContentLoaded', function () {
+  var continueBtn = document.getElementById('backBtnev1');
+  if (continueBtn) { // Ensure the button exists before trying to add an event listener
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'emailVerification.html';
+    });
+  }
 });
