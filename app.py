@@ -92,7 +92,7 @@ def verify_password():
 
 @app.route('/dashboard')
 @login_required
-def home():
+def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/logout')
