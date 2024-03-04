@@ -51,7 +51,7 @@ def PasswordPage():
 
 @app.route('/userProfile')
 def userProfile():
-    return render_template('personalDetails.html')
+    return render_template('userProfile.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
