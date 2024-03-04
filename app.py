@@ -49,8 +49,8 @@ def homePage():
 def PasswordPage():
     return render_template('PasswordPage.html')
 
-@app.route('/personalDetails')
-def personalDetails():
+@app.route('/userProfile')
+def userProfile():
     return render_template('personalDetails.html')
 
 @app.route('/register', methods=['GET', 'POST'])
