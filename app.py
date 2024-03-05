@@ -78,9 +78,9 @@ def passwordPage():
             flash('Incorrect password. Please try again.', 'error')
             return redirect(url_for('passwordPage'))
 
-@app.route('/personalDetails')
-def personalDetails():
-    return render_template('personalDetails.html')
+@app.route('/userProfile')
+def userProfile():
+    return render_template('userProfile.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
