@@ -77,6 +77,9 @@ def passwordPage():
             # Password is incorrect, display passwordPage page again with a message that the password is incorrect
             flash('Incorrect password. Please try again.', 'error')
             return redirect(url_for('passwordPage'))
+    else:
+        # If it's a GET request, render the passwordPage template
+        return render_template('passwordPage.html')
 
 @app.route('/personalDetails')
 def personalDetails():
