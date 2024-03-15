@@ -1,0 +1,100 @@
+
+[
+    {
+      "gender": "Female",
+      "waist": 28.5,
+      "hips": 36.0,
+      "bust": 34.0,
+      "height": 165.0,
+      "weight": 55.0,
+      "age": 25,
+      "style": "Casual",
+      "outfit": {
+        "top": "Loose-fitting graphic t-shirt",
+        "bottom": "Skinny jeans",
+        "shoes": "White sneakers",
+        "outerwear": "Denim jacket"
+      }
+    },
+    {
+      "gender": "Male",
+      "waist": 32.0,
+      "hips": 38.5,
+      "bust": 40.0,
+      "height": 178.0,
+      "weight": 75.0,
+      "age": 30,
+      "style": "Formal",
+      "outfit": {
+        "top": "Crisp white button-up shirt",
+        "bottom": "Dark-wash jeans",
+        "shoes": "Black leather dress shoes",
+        "outerwear": "Charcoal gray tailored suit"
+      }
+    },
+    {
+      "gender": "Female",
+      "waist": 26.0,
+      "hips": 34.5,
+      "bust": 32.0,
+      "height": 160.0,
+      "weight": 50.0,
+      "age": 22,
+      "style": "Athleisure",
+      "outfit": {
+        "top": "Cropped tank top",
+        "bottom": "High-waisted leggings",
+        "shoes": "Stylish sneakers",
+        "outerwear": "Zip-up hoodie"
+      }
+    },
+    {
+      "gender": "Male",
+      "waist": 34.5,
+      "hips": 40.0,
+      "bust": 42.0,
+      "height": 185.0,
+      "weight": 80.0,
+      "age": 35,
+      "style": "Streetwear",
+      "outfit": {
+        "top": "Graphic t-shirt layered with a bomber jacket",
+        "bottom": "Slim-fit jogger pants",
+        "shoes": "High-top sneakers",
+        "outerwear": "None"
+      }
+    },
+    {
+      "gender": "Female",
+      "waist": 30.0,
+      "hips": 38.0,
+      "bust": 36.0,
+      "height": 170.0,
+      "weight": 60.0,
+      "age": 28,
+      "style": "Bohemian",
+      "outfit": {
+        "top": "Flowy maxi dress with floral patterns",
+        "bottom": "None",
+        "shoes": "Leather sandals",
+        "outerwear": "Crochet cardigan"
+      }
+    },
+    {
+      "gender": "Male",
+      "waist": 31.0,
+      "hips": 39.5,
+      "bust": 38.0,
+      "height": 175.0,
+      "weight": 70.0,
+      "age": 32,
+      "style": "Casual",
+      "outfit": {
+        "top": "Plain fitted t-shirt",
+        "bottom": "Dark-wash jeans",
+        "shoes": "Sneakers",
+        "outerwear": "Zip-up hoodie"
+      }
+    }
+  ]
+  
