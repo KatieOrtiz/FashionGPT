@@ -102,6 +102,64 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/registersize', methods=['GET', 'POST'])
+def registersize():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        neck = request.form.get('neck')
+        chest = request.form.get('chest')
+        sleeve = request.form.get('sleeve')
+
+        # Insert user data into the Users table
+        user_query = "INSERT INTO Users (username, email, password) VALUES (%s, %s, %s)"
+        cursor.execute(user_query, (username, email, password))
+        conn.commit()
+
+        # Retrieve user_id of the newly inserted user
+        user_id = cursor.lastrowid
+
+        # Insert size measurements into the Measurements table
+        size_query = "INSERT INTO Measurements (user_id, neck, chest, sleeve) VALUES (%s, %s, %s, %s)"
+        cursor.execute(size_query, (user_id, neck, chest, sleeve))
+        conn.commit()
+
+        # Redirect to the homePage or any other appropriate route
+        return redirect(url_for('homePage'))
+
+    return render_template('registersize.html')
+
+
+@app.route('/registersize2', methods=['GET', 'POST'])
+def registersizetwo():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        waist = request.form.get('pWaist')
+        inseam = request.form.get('inseam')
+        hip = request.form.get('hip')
+
+        # Insert user data into the Users table
+        user_query = "INSERT INTO Users (username, email, password) VALUES (%s, %s, %s)"
+        cursor.execute(user_query, (username, email, password))
+        conn.commit()
+
+        # Retrieve user_id of the newly inserted user
+        user_id = cursor.lastrowid
+
+        # Insert pant size measurements into the PantMeasurements table
+        size_query = "INSERT INTO PantMeasurements (user_id, waist, inseam, hip) VALUES (%s, %s, %s, %s)"
+        cursor.execute(size_query, (user_id, waist, inseam, hip))
+        conn.commit()
+
+        # Redirect to the homePage or any other appropriate route
+        return redirect(url_for('homePage'))
+
+    return render_template('registersize2.html')
+
+
 @app.route('/sizePreference')
 def sizePreference():
     return render_template('sizePreference.html')
