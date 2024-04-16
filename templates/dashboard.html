@@ -54,6 +54,10 @@
 
     <div id="middle-section">
         <input type="text" id="search-bar" placeholder="Search...">
+        <div id="middle-section">
+            <input type="text" id="search-bar" placeholder="Search...">
+            <div id="output-section"></div> <!-- Placeholder for displaying the output -->
+        </div>
     </div>
 
     <div id="right-section">
@@ -62,5 +66,32 @@
         <span id="settingbutton"><i class="fa-solid fa-gear"></i></span>
     </div>
     <script src="static/script.js"></script>
+    <script>
+        // Script to fetch and display data from the server
+        document.getElementById('submit-filters').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(document.getElementById('filters-form'));
+
+            fetch('/pref', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                const outputDiv = document.getElementById('output-section');
+                outputDiv.innerHTML = ''; // Clear previous content
+                // Dynamically create content based on data received
+                data.forEach((choice, index) => {
+                    let choiceDiv = document.createElement('div');
+                    choiceDiv.innerHTML = `<h3>Choice ${index + 1}</h3>`;
+                    Object.keys(choice).forEach(key => {
+                        let itemDiv = document.createElement('div');
+                        itemDiv.textContent = `${key}: ${choice[key].join(' - ')}`;
+                        choiceDiv.appendChild(itemDiv);
+                    });
+                    outputDiv.appendChild(choiceDiv);
+                });
+            }).catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
