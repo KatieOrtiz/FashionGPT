@@ -1,12 +1,16 @@
-from dotenv import load_dotenv
-import anthropic
-import os, re, time
 from scraper import outfit_suggestions_scraper
+from flask import session
+from dotenv import load_dotenv
+from models import Suggestion, User
+from extensions import db
+import anthropic
+import os, re, time, json
 
 
 load_dotenv()
-suggestion = ""
+suggestion_nextstep = ""
 start_time = time.time()
+query_id =0
 
 def GPT(system_prompt: str, msg: str): 
     client = anthropic.Anthropic(
@@ -15,7 +19,7 @@ def GPT(system_prompt: str, msg: str):
     )
     response = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=1024,
+        max_tokens=1224,
         temperature=0,
         system=system_prompt,
         messages=[
@@ -42,10 +46,11 @@ def GPT(system_prompt: str, msg: str):
     return "{" + response.content[0].text
 
 
-def one_getUserData(gender, weight, waist, length, Skintone, height, hair, build, Budget, Colors, age, Style, Season, fabric, usersRequest):
+def one_getUserData(generated_id, gender, weight, waist, length, Skintone, height, hair, build, Budget, Colors, age, Style, Season, fabric, usersRequest):
     start_time = time.time()
     msg = '''
     <INSTRUCTIONS_TO_FOLLOW>
+    </IMPORTANT>dont be too specific be less specific and more general, VERY GENERAL IN-FACT!</IMPORTANT>
 
     1. You don't have to fill all the values for each key, just the appropriate ones.
 
@@ -56,8 +61,6 @@ def one_getUserData(gender, weight, waist, length, Skintone, height, hair, build
     4. ALWAYS return the optimum recommendation then the color then brand and finally price all in an array.
 
     6. for now the only brands you can suggest are as follows H&M, Banana Republic, Forever 21, Uniqlo, and Zara
-
-    7. dont be too specific be less specific and more general.
 
     </INSTRUCTIONS_TO_FOLLOW>
 
@@ -165,25 +168,59 @@ def one_getUserData(gender, weight, waist, length, Skintone, height, hair, build
     }}
     '''
     totalMsg = msg+user_preferences
-    print(totalMsg)
     print("--------------------------")
     print("---GOT USER DATA----------")
     print("--------------------------")
+    global query_id
+    query_id = generated_id
     # return message_content
     two_ask_GPT_Suggestion(totalMsg)
 
 def two_ask_GPT_Suggestion(totalMsg):
     system = "you are a fashion designer, your role as a fashion designer is to give good suggestions on which outfits go with what; you have been known give amazing suggestions and have always been known for giving appropriate and not over the top suggestion, sleek and stylish designs which make people stare and appreciate. You are also known for getting right to the point and output your response only in JSON format and in a very strict order and way (explained more about how you respond in the examples below)."
     suggestion = GPT(system, totalMsg)
-    print(suggestion)
+    # print(suggestion)
+    suggestion_nextstep = suggestion
+    suggestion = json.loads(suggestion)
+
+    # suggestion = {key.lower(): value for key, value in suggestion.items()}
+    for key in suggestion:
+        if suggestion[key] == "-":
+            suggestion[key] = None
+
+    # Logging to DB
+    email = session['email']
+    user = User.query.filter_by(email=email).first()
+    user_id = user.id
+    query = Suggestion(
+        user_id=user_id,
+        query_id=query_id,
+        choose="general",
+        top=json.dumps(suggestion["top"]),
+        outerwear=json.dumps(suggestion["outerwear"]),
+        hat=json.dumps(suggestion["hat"]),
+        necklace=json.dumps(suggestion["necklace"]),
+        earring=json.dumps(suggestion["earring"]),
+        bottoms=json.dumps(suggestion["Bottoms"]),
+        socks=json.dumps(suggestion["socks"]),
+        footwear=json.dumps(suggestion["footwear"]),
+        bracelet=json.dumps(suggestion["bracelet"]),
+        watch=json.dumps(suggestion["watch"]),
+        belt=json.dumps(suggestion["belt"]),
+        avgTotalPrice=json.dumps(suggestion["avgTotalPrice"]),
+        reasoning=json.dumps(suggestion["reasoning"])
+    )
+    db.session.add(query)
+    db.session.commit()
+
+    # Assign each value from the dictionary to a variable
     print("--------------------------")
     print("---GOT SUGGESTION---------")
     print("--------------------------")
-    three_Scrape_Data(suggestion)
+    three_Scrape_Data(suggestion_nextstep)
 
 def three_Scrape_Data(suggestion):
     Scraped_Data = outfit_suggestions_scraper(suggestion)
-    print(Scraped_Data)
     print("--------------------------")
     print("---GOT SCRAPED DATA-------")
     print("--------------------------")
@@ -309,13 +346,58 @@ def four_Get_Best_Suggestion(Scraped_Data):
     </EXAMPLE>
     
     '''
-    totalMsg = msg+"\n suggestion = "+str(suggestion)+"\n options_to_choose_from = "+str(Scraped_Data)
-    print(totalMsg)
+    totalMsg = msg+"\n suggestion = "+str(suggestion_nextstep)+"\n options_to_choose_from = "+str(Scraped_Data)
     Final_suggestions = GPT(system, totalMsg)
-    print(Final_suggestions)
-    print("--------------------------")
-    print("---Final Suggestions------")
-    print("--------------------------")
+    if re.findall(r'"\s*}$', Final_suggestions):
+        Final_suggestions = Final_suggestions + "}"
+    if re.findall(r'"\s*$', Final_suggestions):
+        Final_suggestions = Final_suggestions + "}}"
+
+    email = session['email']
+    user = User.query.filter_by(email=email).first()
+    user_id = user.id
+
+    try:
+        # Assume Final_suggestions is your JSON string
+        Final_suggestions = json.loads(Final_suggestions)
+    except json.JSONDecodeError as e:
+        print("Failed to decode JSON:")
+        print(Final_suggestions)  # Log the problematic JSON string
+        raise
+
+    for key, suggestion in Final_suggestions.items():
+        # Replacing "-" with None for a more Pythonic representation
+        for item_key, item_value in suggestion.items():
+            if isinstance(item_value, list):  # Checking if the value is a list
+                suggestion[item_key] = [None if v == "-" else v for v in item_value]
+            else:
+                suggestion[item_key] = None if item_value == "-" else item_value
+        
+        # Preparing and adding each suggestion to the database
+        suggestion_record = Suggestion(
+            user_id=user_id,
+            query_id=query_id,
+            choose="choice"+key,  # Using key from the dictionary to specify the choice
+            top=json.dumps(suggestion["top"]),
+            outerwear=json.dumps(suggestion["outerwear"]),
+            hat=json.dumps(suggestion["hat"]),
+            necklace=json.dumps(suggestion["necklace"]),
+            earring=json.dumps(suggestion["earring"]),
+            bottoms=json.dumps(suggestion["Bottoms"]),
+            socks=json.dumps(suggestion["socks"]),
+            footwear=json.dumps(suggestion["footwear"]),
+            bracelet=json.dumps(suggestion["bracelet"]),
+            watch=json.dumps(suggestion["watch"]),
+            belt=json.dumps(suggestion["belt"]),
+            avgTotalPrice=json.dumps(suggestion["TotalPrice"]),
+            reasoning=json.dumps(suggestion["reasoning"])
+        )
+        db.session.add(suggestion_record)
+
+    db.session.commit()
+
     end_time = time.time()
     duration = end_time - start_time
-    print("The program took", duration, "to run")
+    print("--------------------------")
+    print("---Final Suggestions------")
+    print(f"-- {duration:.2f} (sec)--")

@@ -5,12 +5,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+from extensions import db
+from models import Product
+from datetime import datetime
 from time import sleep
 import json
 import re
 
 options = Options()
-# options.add_argument('--headless=new')
+options.add_argument('--headless=new')
 options.add_argument("--incognito")
 service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
 options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
@@ -21,6 +24,9 @@ driver.implicitly_wait(0.5)
 
 #scraper for H&M
 def HM(search):
+    '''
+        Scrapes hm.com using users prefernces  
+    '''
     # Go to the webpage
     driver.get(f'https://www2.hm.com/en_us/search-results.html?q={search}')
 
@@ -33,6 +39,7 @@ def HM(search):
             EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
         )
     except:
+        print("failed to load H&M")
         pass
 
     # Find all product items
@@ -45,10 +52,12 @@ def HM(search):
             name = product.find_element(By.CLASS_NAME, 'item-heading').text
             # Price
             price = product.find_element(By.CLASS_NAME, 'item-price').text
+            price2 = price[1::]
             # Color(s): Find the ul with class 'list-swatches' and then find all li with class 'item' within
             swatches_ul = product.find_elements(By.CLASS_NAME, 'list-swatches')
             color_elements = [li.find_element(By.TAG_NAME, 'a') for ul in swatches_ul for li in ul.find_elements(By.CLASS_NAME, 'item')]
             colors = [elem.get_attribute('title') for elem in color_elements if elem.get_attribute('title')]
+            colors_json = json.dumps(colors)
 
             # Image
             image_element = product.find_element(By.CLASS_NAME, 'item-image')
@@ -57,6 +66,11 @@ def HM(search):
             # Link
             link_element = product.find_element(By.CLASS_NAME, 'item-link')
             link = link_element.get_attribute("href")
+
+            #adding to db
+            new_product = Product(name=name, price=float(price2), color=colors_json, image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
 
             # Append product details to all_products list
             all_products.append({
@@ -105,6 +119,7 @@ def BR(search):
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-card'))
         )
     except:
+        print("failed to load Banana Republic")
         pass
 
     # Find all product cards
@@ -139,6 +154,12 @@ def BR(search):
                 link = link_element.get_attribute("href")
             except NoSuchElementException:
                 link = "Link not available"
+
+            #adding to db
+            price2 = price[1::]
+            new_product = Product(name=name, price=float(price2), color="-", image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
 
             # Append product details to all_products list
             all_products.append({
@@ -186,6 +207,7 @@ def F21(search):
             EC.presence_of_element_located((By.CLASS_NAME, "product-grid__item"))
         )
     except:
+        print("failed to load Forever 21")
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'product-grid__item')
@@ -206,6 +228,7 @@ def F21(search):
 
             # Color(s)
             colors = [img.get_attribute('title') for img in product.find_elements(By.CSS_SELECTOR, '.product-tile__swatches img')]
+            colors_json = json.dumps(colors)
             # Image
             try:
                 image_element = product.find_element(By.CLASS_NAME, 'product-tile__image')
@@ -219,6 +242,12 @@ def F21(search):
                 link = link_element.get_attribute("href")
             except NoSuchElementException:
                 link = ""
+
+            #adding to db
+            price2 = price[1::]
+            new_product = Product(name=name, price=float(price2), color=colors_json, image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
 
             # Append product details to all_products list
             all_products.append({
@@ -267,6 +296,7 @@ def uniqlo(search):
             EC.presence_of_element_located((By.CLASS_NAME, "fr-ec-product-tile-resize-wrapper"))
         )
     except:
+        print("failed to load UNIQLO")
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'fr-ec-product-tile-resize-wrapper')
@@ -338,6 +368,13 @@ def uniqlo(search):
             except NoSuchElementException:
                 link = ""
 
+            #adding to db
+            colors_json = json.dumps(colors)
+            price2 = price[1::]
+            new_product = Product(name=name, price=float(price2), color=colors_json, image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
+
             # Append product details to all_products list
             all_products.append({
                 'name': name,
@@ -372,7 +409,10 @@ def uniqlo(search):
     return dataDump
 
 #scraper for ZARA
-def zara(search):
+def zara(search: str) -> str:
+    '''
+        A function that scrapes data from the website Zara which includes product name, color, price, img, and url
+    '''
     sex = "M"
     if sex == "M":
         gender = "MAN"
@@ -388,6 +428,7 @@ def zara(search):
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li._product"))
         )
     except:
+        print("failed to load ZARA")
         pass
     
     # Find all product items
@@ -424,6 +465,12 @@ def zara(search):
             except NoSuchElementException:
                 link = "Link not found"
             
+            #adding to db
+            price2 = price[1::]
+            new_product = Product(name=name, price=float(price2), color="-", image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
+
             # Append product details to all_products list
             all_products.append({
                 'name': name,
@@ -456,9 +503,6 @@ def zara(search):
     # print(gptDump)
     return dataDump
 
-# gptDump, dataDump = zara("black tshirt", "M")
-# print(gptDump)
-# print(dataDump)
 
 #call on this to pass on to GPT for second step
 def outfit_suggestions_scraper(outfit_json):

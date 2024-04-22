@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
-from models import User
+from models import User, UserQuery
 import jwt
 from extensions import app, db, login_manager
 
@@ -85,6 +85,7 @@ def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/pref', methods=['GET', 'POST'])
+@login_required
 def pref():
     if request.method == 'POST':
         gender = request.form['gender']
@@ -102,13 +103,21 @@ def pref():
         Season = request.form['Season']
         fabric = request.form['fabric']
         usersRequest = request.form['usersRequest']
-        one_getUserData(gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
+        
+        #logging to DB
+        email = session['email']
+        user = User.query.filter_by(email=email).first()
+        user_id = user.id
+        query = UserQuery(user_id=user_id , gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
+        db.session.add(query)
+        db.session.commit()
+        generated_id = query.id
+        print(f'The generated ID for the newly inserted row is: {generated_id}')
 
-        # db.session.add()
-        # db.session.commit()
+        #sending query to AI
+        one_getUserData(generated_id=generated_id, gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
         
         resp = redirect(url_for('dashboard'))
-        
         return resp
     return render_template('reigstersize.html')
 
