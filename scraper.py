@@ -13,7 +13,7 @@ import json
 import re
 
 options = Options()
-options.add_argument('--headless=new')
+# options.add_argument('--headless=new')
 options.add_argument("--incognito")
 service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
 options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
@@ -556,5 +556,4 @@ def outfit_suggestions_scraper(outfit_json):
 
     except json.JSONDecodeError as e:
         return f"Error parsing JSON: {str(e)}"
-
 

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from models import Suggestion, User
 from extensions import db
 import anthropic
-import os, re, time, json
+import os, re, time, json, asyncio
 
 
 load_dotenv()
@@ -219,8 +219,12 @@ def two_ask_GPT_Suggestion(totalMsg):
     print("--------------------------")
     three_Scrape_Data(suggestion_nextstep)
 
+async def scrape(suggestion):
+    scraped_data = outfit_suggestions_scraper(suggestion)
+    return scraped_data
+
 def three_Scrape_Data(suggestion):
-    Scraped_Data = outfit_suggestions_scraper(suggestion)
+    Scraped_Data = asyncio.run(scrape(suggestion))
     print("--------------------------")
     print("---GOT SCRAPED DATA-------")
     print("--------------------------")
@@ -373,24 +377,25 @@ def four_Get_Best_Suggestion(Scraped_Data):
             else:
                 suggestion[item_key] = None if item_value == "-" else item_value
         
+
         # Preparing and adding each suggestion to the database
         suggestion_record = Suggestion(
             user_id=user_id,
             query_id=query_id,
             choose="choice"+key,  # Using key from the dictionary to specify the choice
-            top=json.dumps(suggestion["top"]),
-            outerwear=json.dumps(suggestion["outerwear"]),
-            hat=json.dumps(suggestion["hat"]),
-            necklace=json.dumps(suggestion["necklace"]),
-            earring=json.dumps(suggestion["earring"]),
-            bottoms=json.dumps(suggestion["Bottoms"]),
-            socks=json.dumps(suggestion["socks"]),
-            footwear=json.dumps(suggestion["footwear"]),
-            bracelet=json.dumps(suggestion["bracelet"]),
-            watch=json.dumps(suggestion["watch"]),
-            belt=json.dumps(suggestion["belt"]),
-            avgTotalPrice=json.dumps(suggestion["TotalPrice"]),
-            reasoning=json.dumps(suggestion["reasoning"])
+            top=json.dumps(suggestion.get("top", None)),
+            outerwear=json.dumps(suggestion.get("outerwear", None)),
+            hat=json.dumps(suggestion.get("hat", None)),
+            necklace=json.dumps(suggestion.get("necklace", None)),
+            earring=json.dumps(suggestion.get("earring", None)),
+            bottoms=json.dumps(suggestion.get("Bottoms", None)),
+            socks=json.dumps(suggestion.get("socks", None)),
+            footwear=json.dumps(suggestion.get("footwear", None)),
+            bracelet=json.dumps(suggestion.get("bracelet", None)),
+            watch=json.dumps(suggestion.get("watch", None)),
+            belt=json.dumps(suggestion.get("belt", None)),
+            avgTotalPrice=json.dumps(suggestion.get("TotalPrice", None)),
+            reasoning=json.dumps(suggestion.get("reasoning", None))
         )
         db.session.add(suggestion_record)
 
