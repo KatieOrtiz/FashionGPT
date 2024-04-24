@@ -2,28 +2,44 @@
 
 # Prerequisites:
 - VS Code
-# Python Modules to Install:
-    pip install:
-    1. flask_login
-    2. flask_cors
-    3. flask_sqlalchemy
-    4. jwt
-    5. python-dotenv
-    6. anthropic
 
-# Install the Following Extension on VS Code:
+# Python Modules to Install (use VS Code Terminal):
+    pip install selenium
+    pip install flask_login
+    pip install flask_cors
+    pip install flask_sqlalchemy
+    pip install jwt
+    pip install python-env
+    pip install python-dotenv
+
+(please upgrade pip if there are errors installing anthropic)
+    pip install anthropic
+
+# Install the Following Extensions on VS Code:
+Extension ID: cweijan.vscode-mysql-client2
 Extension ID: cweijan.dbclient-jdbc
 
-# Comment out the following lines in app.pt
+# Connect to the Database with the Following Steps:
+On the left side toolbar, click "Database" icon
+Click "Create Connection"
+Select "SQLite" under "Server Type
+Browse for Database Path (projectpath\instance\mydb.db)
+Click "Save" 
+Click "Connect"
+
+# Comment out the following lines in app.py
 lines 39, 42, 74, 76
 
-# Create a file called .env and add the following line
-API_KEY="" <- this should be the first API key from the email channel in our discord for claude anthropic AI
+# Create a file called .env on project root and add the following line:
+API_KEY="" <- the value between the quotations should be the first API key from the email channel in our discord for claude anthropic AI
+
+# URL for application: 127.0.0.1:5555
 
 # To Run Application with AI/Web Scraper Script for Windows:
 
   1. Download the appropriate version of chromedriver.exe from Stable section here: https://googlechromelabs.github.io/chrome-for-testing/
-  2. Replace code in the beginning of scraper.py with the below and replace paths with the appropriate paths
+  2. Comment out lines 15 - 23 in scraper.py and add the following code above the commented out code with paths replaced to your chromedriver.exe file:
+
     options = Options()
     # options.add_argument('--headless=new')
     options.add_argument("--incognito")
