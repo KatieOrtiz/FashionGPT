@@ -17,7 +17,8 @@ Extension ID: cweijan.dbclient-jdbc
 # Comment out the following lines in app.pt
 lines 39, 42, 74, 76
 
-
+# Create a file called .env and add the following line
+API_KEY="" <- this should be the first API key from the email channel in our discord for claude anthropic AI
 
 # To Run Application with AI/Web Scraper Script for Windows:
 
