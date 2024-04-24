@@ -1,172 +1,144 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify, flash, send_from_directory, abort, session
-from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
+from flask import request, render_template, redirect, url_for, session, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timedelta, timezone
+from flask_cors import CORS
+from models import User, UserQuery
+import jwt
+from extensions import app, db, login_manager
 
-import mysql.connector
+from haiku import one_getUserData
 
-app = Flask(__name__)
-
-# Set the secret key for the application
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
-# db connection settings
-db_config = {
-    'user': 'db_admin',
-    'password': 'dbpass',
-    'host': '130.166.160.21',
-    'database': 'fashion_gpt',
-}
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-# login_manager.login_view = 'login'
-
-app.secret_key = '123'
+CORS(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return users.get(user_id)
-
-conn = mysql.connector.connect(**db_config)
-cursor = conn.cursor()
+    return db.session.get(User, int(user_id))
 
 @app.route('/')
 def index():
-    return render_template('frontPage.html')
-
-@app.route('/frontPage')
-def frontPage():
-    return render_template('frontPage.html')
-
-@app.route('/emailVerification', methods=['GET', 'POST'])
-def emailVerification():
-    if request.method == 'POST':
-        email = request.form.get('email')
-
-        # Check if the email exists in the Users table
-        query = "SELECT * FROM Users WHERE email = %s"
-        cursor.execute(query, (email,))
-        result = cursor.fetchone()
-
-        if result:
-            # Email exists, redirect to homePage or any other appropriate route
-            return redirect(url_for('passwordPage'))
-        else:
-            # Email does not exist, redirect to register page
-            return redirect(url_for('register'))
-
-    return render_template('emailVerification.html')
-
-@app.route('/homePage')
-def homePage():
-    return render_template('homePage.html')
-
-@app.route('/passwordPage', methods=['GET', 'POST'])
-def passwordPage():
-    if request.method == 'POST':
-        password = request.form.get('password')
-
-        # Check if the password exists in the Users table
-        query = "SELECT * FROM Users WHERE password = %s"
-        cursor.execute(query, (password,))
-        result = cursor.fetchone()
-
-        if result:
-            # Password exists, redirect to homePage or any other appropriate route
-            return redirect(url_for('homePage'))
-        else:
-            # Password is incorrect, display passwordPage page again with a message that the password is incorrect
-            flash('Incorrect password. Please try again.', 'error')
-            return redirect(url_for('passwordPage'))
-    else:
-        # If it's a GET request, render the passwordPage template
-        return render_template('passwordPage.html')
-
-@app.route('/personalDetails')
-def personalDetails():
-    return render_template('personalDetails.html')
+    return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
 
-        # Insert user data into the Users table
-        query = "INSERT INTO Users (username, email, password) VALUES (%s, %s, %s)"
-        cursor.execute(query, (username, email, password))
-        conn.commit()
+        if User.query.filter_by(email=email).first():
+            flash('Email already exists.')
+            return redirect(url_for('register'))
 
-        # Redirect to the homePage or any other appropriate route
-        return redirect(url_for('homePage'))
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
 
+        db.session.add(new_user)
+        db.session.commit()
+
+        token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
+        flash('User registered successfully!')
+        resp = redirect(url_for('dashboard'))
+        resp.set_cookie('x-access-token', token)
+        return resp
     return render_template('register.html')
 
-@app.route('/registersize', methods=['GET', 'POST'])
-def registersize():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        username = request.form.get('username')
         email = request.form.get('email')
-        password = request.form.get('password')
-        neck = request.form.get('neck')
-        chest = request.form.get('chest')
-        sleeve = request.form.get('sleeve')
+        if not email:
+            flash('Please enter an email address.')
+            return render_template('login.html')
 
-        # Insert user data into the Users table
-        user_query = "INSERT INTO Users (username, email, password) VALUES (%s, %s, %s)"
-        cursor.execute(user_query, (username, email, password))
-        conn.commit()
+        # Check if the email exists in the database
+        user = User.query.filter_by(email=email).first()
+        if user is None:
+            flash('No account found with that email address.')
+            return render_template('login.html')
+        # If user exists, proceed to verify password
+        session['email'] = email
+        return redirect(url_for('verify_password'))
 
-        # Retrieve user_id of the newly inserted user
-        user_id = cursor.lastrowid
+    return render_template('login.html')
 
-        # Insert size measurements into the Measurements table
-        size_query = "INSERT INTO Measurements (user_id, neck, chest, sleeve) VALUES (%s, %s, %s, %s)"
-        cursor.execute(size_query, (user_id, neck, chest, sleeve))
-        conn.commit()
-
-        # Redirect to the homePage or any other appropriate route
-        return redirect(url_for('homePage'))
-
-    return render_template('registersize.html')
-
-
-@app.route('/registersize2', methods=['GET', 'POST'])
-def registersizetwo():
+@app.route('/verify_password', methods=['GET', 'POST'])
+def verify_password():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+    email = session['email']
+    user = User.query.filter_by(email=email).first()
     if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        waist = request.form.get('pWaist')
-        inseam = request.form.get('inseam')
-        hip = request.form.get('hip')
+        if user and user.check_password(request.form['password']):
+            login_user(user)
+            token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
+            resp = redirect(url_for('dashboard'))
+            resp.set_cookie('x-access-token', token)
+            return resp
+        else:
+            flash('Invalid password. Try again.')
+    return render_template('verify_password.html')
 
-        # Insert user data into the Users table
-        user_query = "INSERT INTO Users (username, email, password) VALUES (%s, %s, %s)"
-        cursor.execute(user_query, (username, email, password))
-        conn.commit()
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
-        # Retrieve user_id of the newly inserted user
-        user_id = cursor.lastrowid
+@app.route('/pref', methods=['GET', 'POST'])
+@login_required
+def pref():
+    if request.method == 'POST':
+        gender = request.form['gender']
+        weight = request.form['weight']
+        waist = request.form['waist']
+        length = request.form['length']
+        Skintone = request.form['Skintone']
+        height = request.form['height']
+        hair = request.form['hair']
+        build = request.form['build']
+        Budget = request.form['Budget']
+        Colors = request.form['Colors']
+        age = request.form['age']
+        Style = request.form['Style']
+        Season = request.form['Season']
+        fabric = request.form['fabric']
+        usersRequest = request.form['usersRequest']
+        
+        #logging to DB
+        email = session['email']
+        user = User.query.filter_by(email=email).first()
+        user_id = user.id
+        query = UserQuery(user_id=user_id , gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
+        db.session.add(query)
+        db.session.commit()
+        generated_id = query.id
+        print(f'The generated ID for the newly inserted row is: {generated_id}')
 
-        # Insert pant size measurements into the PantMeasurements table
-        size_query = "INSERT INTO PantMeasurements (user_id, waist, inseam, hip) VALUES (%s, %s, %s, %s)"
-        cursor.execute(size_query, (user_id, waist, inseam, hip))
-        conn.commit()
-
-        # Redirect to the homePage or any other appropriate route
-        return redirect(url_for('homePage'))
-
-    return render_template('registersize2.html')
+        #sending query to AI
+        one_getUserData(generated_id=generated_id, gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
+        
+        resp = redirect(url_for('dashboard'))
+        return resp
+    return render_template('reigstersize.html')
 
 
-@app.route('/sizePreference')
-def sizePreference():
-    return render_template('sizePreference.html')
+#change password
 
-@app.route('/changePassword')
-def changePassword():
-    return render_template('changePassword.html')
+#change username
+
+#change Email
+
+#about us
+
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=5555)

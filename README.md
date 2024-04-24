@@ -1,4 +1,12 @@
 # FashionGPT
+
+
+
+# repetitive scripts
+docker build -t fashiongpt .
+docker run -p 8000:8000 -v "$(pwd):/opt" fashiongpt
+pip list 
+
 # Documentation will be added here for the application
 
 To connect to mysql db from docker container:

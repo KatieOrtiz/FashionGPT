@@ -3,7 +3,7 @@
 FROM python:3.9-slim
 
 # Install Flask and Jinja2 (if not already installed)
-RUN pip install Flask flask-login Jinja2 mysql-connector-python
+RUN pip install Flask flask-login Jinja2 mysql-connector-python PyJWT python-dotenv Flask-SQLAlchemy anthropic
 
 # Install Nginx and MariaDB client
 RUN apt-get update && apt-get install -y nginx nano && rm -rf /var/lib/apt/lists/*

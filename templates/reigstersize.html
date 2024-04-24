@@ -3,58 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/regstyles.css">
-    <script src="static/script.js"></script>
+    <link rel="stylesheet" href="../static/regstyles.css">
+    <script src="../static/script.js"></script>
     <title>Register</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <button class="back-btn" type="button" id="backBtnrs2">Back</button>
+    <form method="POST" action="/pref" class="container">
     <main>
-        <div class="verification">
+        <!-- Section 1: Basic Information -->
+        <div class="verification" id="section1">
             <img src="https://cdn.glitch.global/3ba659aa-d705-4434-aa85-8aa43e7784f0/321.png?v=1709168291466" alt="Sizing Guide" class="sizing-guide">
-            <h3>Please enter your size</h3>
+            <h3>Basic Information</h3>
             <div class="measurement-select">
-                <label for="neck">Neck (in):</label>
-                <select id="neck" name="neck">
-                    <option value="Null">Null</option>
-                    <option value="13-13.5">13-13 1/2</option>
-                    <option value="14-14.5">14-14 1/2</option>
-                    <option value="15-15.5">15-15 1/2</option>
-                    <option value="16-16.5">16-16 1/2</option>
-                    <option value="17-17.5">17-17 1/2</option>
-                    <option value="18-18.5">18-18 1/2</option>
-                    <option value="19-19.5">19-19 1/2</option>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                 </select>
             </div>
-
             <div class="measurement-select">
-                <label for="chest">Chest:</label>
-                <select id="chest" name="chest">
-                    <option value="Null">Null</option>
-                    <option value="33-35">33-35</option>
-                    <option value="36-38">36-38</option>
-                    <option value="39-41">39-41</option>
-                    <option value="42-44">42-44</option>
-                    <option value="45-47">45-47</option>
-                    <option value="48-50">48-50</option>
+                <label for="age">Age:</label>
+                <select id="age" name="age" required>
+                    <option value="18-25">18-25</option>
+                    <option value="26-35">26-35</option>
+                    <option value="36-45">36-45</option>
+                    <option value="46-55">46-55</option>
+                    <option value="56+">56+</option>
                 </select>
             </div>
-
             <div class="measurement-select">
-                <label for="sleeve">Sleeve:</label>
-                <select id="sleeve" name="sleeve">
+                <label for="height">Height:</label>
+                <select id="height" name="height" required>
+                    <option value="150-160">150-160 cm</option>
+                    <option value="161-170">161-170 cm</option>
+                    <option value="171-180">171-180 cm</option>
+                    <option value="181-190">181-190 cm</option>
+                    <option value="191+">191+ cm</option>
+                </select>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="showSection(2)">Next</button>
+            </div>
+        </div>
+    
+        <!-- Section 2: Appearance -->
+        <div class="verification hidden" id="section2">
+            <img src="https://cdn.glitch.global/3ba659aa-d705-4434-aa85-8aa43e7784f0/321.png?v=1709168291466" alt="Sizing Guide" class="sizing-guide">
+            <h3>Appearance</h3>
+            <div class="measurement-select">
+                <label for="hair">Hair Color:</label>
+                <select id="hair" name="hair" required>
+                    <option value="black">Black</option>
+                    <option value="brown">Brown</option>
+                    <option value="blonde">Blonde</option>
+                    <option value="red">Red</option>
+                    <option value="grey">Grey</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="Skintone">Skin Tone:</label>
+                <select id="Skintone" name="Skintone" required>
                     <option value="light">Light</option>
+                    <option value="medium">Medium</option>
+                    <option value="dark">Dark</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="build">Build:</label>
+                <select id="build" name="build" required>
+                    <option value="slim">Slim</option>
                     <option value="average">Average</option>
+                    <option value="muscular">Muscular</option>
                     <option value="heavy">Heavy</option>
                 </select>
             </div>
-
             <div class="button-container">
-                <button id="continue-btn1" class="continue-btn" type="submit">Continue</button>
+                <button type="button" onclick="showSection(3)">Next</button>
+            </div>
+        </div>
+    
+        <!-- Section 3: Clothing Preferences -->
+        <div class="verification hidden" id="section3">
+            <img src="https://cdn.glitch.global/3ba659aa-d705-4434-aa85-8aa43e7784f0/321.png?v=1709168291466" alt="Sizing Guide" class="sizing-guide">
+            <h3>Clothing Preferences</h3>
+            <div class="measurement-select">
+                <label for="Style">Style:</label>
+                <select id="Style" name="Style" required>
+                    <option value="casual">Casual</option>
+                    <option value="formal">Formal</option>
+                    <option value="sporty">Sporty</option>
+                    <option value="vintage">Vintage</option>
+                    <option value="-">Don't care</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="Season">Season:</label>
+                <select id="Season" name="Season" required>
+                    <option value="spring">Spring</option>
+                    <option value="summer">Summer</option>
+                    <option value="fall">Fall</option>
+                    <option value="winter">Winter</option>
+                    <option value="-">Don't care</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="fabric">Fabric:</label>
+                <select id="fabric" name="fabric" required>
+                    <option value="cotton">Cotton</option>
+                    <option value="polyester">Polyester</option>
+                    <option value="wool">Wool</option>
+                    <option value="linen">Linen</option>
+                    <option value="-">Don't care</option>
+                </select>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="showSection(4)">Next</button>
+            </div>
+        </div>
+    
+        <!-- Section 4: Additional Information -->
+        <div class="verification hidden" id="section4">
+            <img src="https://cdn.glitch.global/3ba659aa-d705-4434-aa85-8aa43e7784f0/321.png?v=1709168291466" alt="Sizing Guide" class="sizing-guide">
+            <h3>Additional Information</h3>
+            <div class="measurement-select">
+                <label for="weight">Weight:</label>
+                <select id="weight" name="weight" required>
+                    <option value="under50">Under 50 kg</option>
+                    <option value="50-60">50-60 kg</option>
+                    <option value="61-70">61-70 kg</option>
+                    <option value="71-80">71-80 kg</option>
+                    <option value="81+">81+ kg</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="waist">Waist:</label>
+                <select id="waist" name="waist" required>
+                    <option value="under28">Under 28 in</option>
+                    <option value="28-32">28-32 in</option>
+                    <option value="33-37">33-37 in</option>
+                    <option value="38+">38+ in</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="length">Length:</label>
+                <select id="length" name="length" required>
+                    <option value="short">Short</option>
+                    <option value="regular">Regular</option>
+                    <option value="long">Long</option>
+                    <option value="-">Don't know</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="Budget">Budget:</label>
+                <select id="Budget" name="Budget" required>
+                    <option value="under$50">Low (Under $50)</option>
+                    <option value="$50-150">Medium ($50 - $150)</option>
+                    <option value="over$150">High (Over $150)</option>
+                    <option value="-">Don't have one</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="Colors">Favorite Colors:</label>
+                <select id="Colors" name="Colors" multiple required>
+                    <option value="-">Don't care</option>
+                    <option value="black">Black</option>
+                    <option value="white">White</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                </select>
+            </div>
+            <div class="measurement-select">
+                <label for="usersRequest">Special Requests:</label>
+                <textarea id="usersRequest" name="usersRequest"></textarea>
+            </div>
+            <div class="button-container">
+                <button type="submit">Submit</button>
             </div>
         </div>
     </main>
+</form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Function to hide all sections
+        function hideAllSections() {
+            const sections = document.querySelectorAll('.verification');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+        }
+    
+        // Initially hide all sections
+        hideAllSections();
+    
+        // Show the first section by default
+        const firstSection = document.getElementById('section1');
+        if (firstSection) {
+            firstSection.classList.remove('hidden');
+        }
+    
+        // Function to show the next section
+        window.showSection = function(sectionNumber) {
+            hideAllSections();
+            const nextSection = document.getElementById(`section${sectionNumber}`);
+            if (nextSection) {
+                nextSection.classList.remove('hidden');
+                nextSection.classList.add('fade-in');
+            }
+        }
+    });
+    </script>
 </body>
 </html>
