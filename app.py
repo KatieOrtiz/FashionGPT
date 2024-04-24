@@ -36,10 +36,10 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
+       # token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
         flash('User registered successfully!')
-        resp = redirect(url_for('dashboard'))
-        resp.set_cookie('x-access-token', token)
+        resp = redirect(url_for('pref'))
+       # resp.set_cookie('x-access-token', token)
         return resp
     return render_template('register.html')
 
@@ -71,9 +71,9 @@ def verify_password():
     if request.method == 'POST':
         if user and user.check_password(request.form['password']):
             login_user(user)
-            token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
+           # token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
             resp = redirect(url_for('dashboard'))
-            resp.set_cookie('x-access-token', token)
+            #resp.set_cookie('x-access-token', token)
             return resp
         else:
             flash('Invalid password. Try again.')

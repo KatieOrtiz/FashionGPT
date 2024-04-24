@@ -2,11 +2,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("getStarted");
   button.addEventListener("click", function () {
-    window.location.href = "emailVerification";
+    window.location.href = "login";
   });
   var button = document.getElementById("getStarted2");
   button.addEventListener("click", function () {
-    window.location.href = "emailVerification";
+    window.location.href = "login";
   });
 });
 

@@ -1,5 +1,46 @@
 # FashionGPT
 
+# Prerequisites:
+- VS Code
+# Python Modules to Install:
+    pip install:
+    1. flask_login
+    2. flask_cors
+    3. flask_sqlalchemy
+    4. jwt
+    5. python-dotenv
+    6. anthropic
+
+# Install the Following Extension on VS Code:
+Extension ID: cweijan.dbclient-jdbc
+
+# Comment out the following lines in app.pt
+lines 39, 42, 74, 76
+
+
+
+# To Run Application with AI/Web Scraper Script for Windows:
+
+  1. Download the appropriate version of chromedriver.exe from Stable section here: https://googlechromelabs.github.io/chrome-for-testing/
+  2. Replace code in the beginning of scraper.py with the below and replace paths with the appropriate paths
+    options = Options()
+    # options.add_argument('--headless=new')
+    options.add_argument("--incognito")
+
+    # Set the path to your chromedriver.exe file
+    chrome_driver_path = "C:\\path\\to\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
+    service = Service(executable_path=chrome_driver_path)
+
+    # Set the path to your Chrome executable
+    chrome_binary_location = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    options.binary_location = chrome_binary_location
+
+    # Pass the options when creating the driver instance
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.implicitly_wait(0.5)
+
+
+# To Run Application with AI/Web Scraper Script for MacOS:
 
 
 # repetitive scripts
