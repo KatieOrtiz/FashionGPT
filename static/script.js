@@ -4,11 +4,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("getStarted");
   button.addEventListener("click", function () {
-    window.location.href = "emailVerification.html";
+    window.location.href = "emailVerification";
   });
   var button2 = document.getElementById("getStarted2");
   button2.addEventListener("click", function () {
-    window.location.href = "emailVerification.html";
+    window.location.href = "emailVerification";
   });
 });
 
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn");
   button.addEventListener("click", function () {
-    window.location.href = "frontPage.html";
+    window.location.href = "frontPage";
   });
 });
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('continue-btn1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registersize2.html';
+      window.location.href = 'registersize2';
     });
   }
 });
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs2');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registerSize.html';
+      window.location.href = 'registerSize';
     });
   }
 });
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'register.html';
+      window.location.href = 'register';
     });
   }
 });
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnev1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'emailVerification.html';
+      window.location.href = 'emailVerification';
     });
   }
 });
@@ -107,6 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // You can send the IDs to server, store in localStorage, or perform any other action
 
     // Navigate to the next page
-    window.location.href = 'nextPage.html'; // Replace 'next-page.html' with your actual next page URL
+    window.location.href = 'nextPage'; // Replace 'next-page.html' with your actual next page URL
   });
 });
