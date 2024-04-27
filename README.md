@@ -2,6 +2,8 @@
 
 # Prerequisites:
 - VS Code
+- Python installed
+- Pip installed
 
 # Python Modules to Install (use VS Code Terminal):
     pip install selenium
