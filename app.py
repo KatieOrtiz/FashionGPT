@@ -38,9 +38,10 @@ def register():
 
        # token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
         flash('User registered successfully!')
+        session['email'] = email
         resp = redirect(url_for('pref'))
        # resp.set_cookie('x-access-token', token)
-        return resp
+        return redirect(url_for('pref'))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -85,7 +86,7 @@ def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/pref', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def pref():
     if request.method == 'POST':
         gender = request.form['gender']
