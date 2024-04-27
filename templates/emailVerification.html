@@ -4,28 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="static/regstyles.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
     <script src="static/script.js"></script>
     <title>Front Page</title>
   </head>
-
+  
   <body>
     <div class="container">
       <button class="back-btn" type="button" id="backBtn">Back</button>
       <main>
         <div class="verification">
-          <form method="post" action="{{ url_for('emailVerification') }}">
-            <h1>FashionGPT</h1>
-            <p>Sign In or Sign Up</p>
-              <div class="regTextbox">
-                <input type="text" class="enterText" id="email" name="email" placeholder="Email Address"/>
-              </div>
-            <button class="regbutton" type="submit" id="emailBtn">Continue</button>
+          <h1>FashionGPT</h1>
+          <p>Sign in or Sign Up</p>
+          <div class="regTextbox">
+          <input type="text" class="enterSignup" id="email" placeholder="Email Address"/>
           </div>
-      </form>
+          <button class="regbutton" type="button" id="emailBtn">Continue</button>
+        </div>
       </main>
     </div>
   </body>

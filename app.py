@@ -81,9 +81,9 @@ def passwordPage():
         # If it's a GET request, render the passwordPage template
         return render_template('passwordPage.html')
 
-@app.route('/personalDetails')
-def personalDetails():
-    return render_template('personalDetails.html')
+@app.route('/userProfile')
+def userProfile():
+    return render_template('userProfile.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

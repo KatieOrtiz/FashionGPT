@@ -1,6 +1,7 @@
 body {
   display: flex;
-  flex-direction: column; /* Change to column */
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -158,46 +159,56 @@ i{
   padding: 15px;
   font-size: 20px;
 }
+#page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 250px; /* Add margin to separate sections */
+}
 
 
-.preferences {
+.section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Add margin to separate sections */
+}
+
+h1.section-header {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 20px; /* Add margin to lower the headers */
+}
+
+.box {
+  width: 150px; /* Set a fixed width for the boxes */
+  height: 100px; /* Adjust height as needed */
+  background-color: gray;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.box-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  gap: 10px; /* Adjust gap between boxes */
+  justify-content: space-between; /* Center boxes horizontally with space between */
 }
 
-.preference-button {
-  background-color: #777;
-  color: white;
-  cursor: pointer;
-  padding: 10px;
-  border: none;
-  outline: none;
-  font-size: 15px;
-  border-radius: 5px;
+
+.box:hover {
+  background-color: gray;
+  transform: translateY(-3px);
 }
 
-.submit-filters {
-  background-color: hsl(209, 100%, 45%);
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.reset-filters {
-  background-color: #777;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.preference-button.active {
-  background-color: #4CAF50; /* Green background for active buttons */
-  color: white; /* White text color for contrast */
+#next-button {
+  margin-top: 30px; /* Add margin to separate button from boxes */
 }

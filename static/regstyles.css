@@ -27,7 +27,7 @@ button {
   justify-content: center; /* Center the content vertically */
   min-height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: 45px 60px 20px;
   font-family: Arial, sans-serif;
   background-color: black;
   color: white;
@@ -39,7 +39,7 @@ button {
   background-color: #202020;
   color: white;
   width: 400px;
-  height: 600px;
+  height: 700px;
   padding-top: 25px;
   box-sizing: border-box; /* Include padding and border in width calculation */
   margin-bottom: 0px;
@@ -50,22 +50,26 @@ button {
   max-width: 400px;
   box-sizing: border-box;
   padding: 50px; /* Add 50 pixels of padding around the text */
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 
 .enterText {
-  width: 100%;
-  box-sizing: border-box;
-  border: 2px solid #cccccc;
-  border-radius: 5px;
-  outline: none;
-  padding: 10px;
-  margin-top: 5px;
-  background: none;
   color: white;
+  width: 100%;
+  border: 2px solid #cccccc;
+  border-radius:5px;
+  height: 60px;
+  margin: 0;
+  margin-bottom: 20px;
+  display: block;
+  padding: 20px;
+  min-width: 0;
+  background: transparent;
+  box-sizing: border-box;
+  animation-name: mui-auto-fill-cancel;
+  letter-spacing: inherit;
+  
+  
 }
-
 .error{
   background-color: #f7bcbc;
 }
