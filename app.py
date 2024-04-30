@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
-from models import User, UserQuery
+from models import User, UserQuery, Product
 import jwt
 from extensions import app, db, login_manager
 
@@ -38,9 +38,10 @@ def register():
 
        # token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
         flash('User registered successfully!')
+        session['email'] = email
         resp = redirect(url_for('pref'))
        # resp.set_cookie('x-access-token', token)
-        return resp
+        return redirect(url_for('pref'))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -82,10 +83,13 @@ def verify_password():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    # Fetch products from the database
+    products = Product.query.all()
+    print(products)  # Check if products are fetched successfully
+    return render_template('dashboard.html', products=products)
 
 @app.route('/pref', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def pref():
     if request.method == 'POST':
         gender = request.form['gender']
@@ -120,6 +124,11 @@ def pref():
         resp = redirect(url_for('dashboard'))
         return resp
     return render_template('reigstersize.html')
+
+# Add 
+@app.route('/userSettings')
+def personalDetails():
+    return render_template('userSettings.html')
 
 
 #change password

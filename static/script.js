@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('continue-btn1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registersize2.html';
+      window.location.href = 'registersize2';
     });
   }
 });
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs2');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registerSize.html';
+      window.location.href = 'registerSize';
     });
   }
 });
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'register.html';
+      window.location.href = 'register';
     });
   }
 });
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnev1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'emailVerification.html';
+      window.location.href = 'emailVerification';
     });
   }
 });
