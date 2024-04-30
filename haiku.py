@@ -168,9 +168,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     }}
     '''
     totalMsg = msg+user_preferences
-    print("--------------------------")
-    print("---GOT USER DATA----------")
-    print("--------------------------")
+    print("\033[32m✔\033[0m GOT USER DATA")
     global query_id
     query_id = generated_id
     # return message_content
@@ -214,9 +212,7 @@ def two_ask_GPT_Suggestion(totalMsg):
     db.session.commit()
 
     # Assign each value from the dictionary to a variable
-    print("--------------------------")
-    print("---GOT SUGGESTION---------")
-    print("--------------------------")
+    print("\033[32m✔\033[0m GOT SUGGESTION")
     three_Scrape_Data(suggestion_nextstep)
 
 async def scrape(suggestion):
@@ -225,9 +221,7 @@ async def scrape(suggestion):
 
 def three_Scrape_Data(suggestion):
     Scraped_Data = asyncio.run(scrape(suggestion))
-    print("--------------------------")
-    print("---GOT SCRAPED DATA-------")
-    print("--------------------------")
+    print("\033[32m✔\033[0m GOT SCRAPED DATA")
     
     four_Get_Best_Suggestion(Scraped_Data)
 
@@ -403,6 +397,5 @@ def four_Get_Best_Suggestion(Scraped_Data):
 
     end_time = time.time()
     duration = end_time - start_time
-    print("--------------------------")
-    print("---Final Suggestions------")
+    print("\033[32m✔\033[0m Final Suggestions")
     print(f"-- {duration:.2f} (sec)--")

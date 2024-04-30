@@ -21,6 +21,21 @@
         </nav>
       </div>
     </header>
+    <div class="container">
+    <div id="output-section"></div> <!-- Placeholder for displaying the output -->
+    <!-- Display products -->
+    <div id="clothing-item-tile">
+        {% for product in products %}
+        <div class="clothing-item-tile">
+            <!-- Display product image -->
+            <img class="product-image" src="{{ product.image }}" alt="Product Image">
+            <h3>{{ product.name }}</h3>
+            <p>Price: {{ product.price }}</p>
+            <!-- Add more details if needed -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
     <script src="script.js"></script>  
     <script>
       // Script to fetch and display data from the server
