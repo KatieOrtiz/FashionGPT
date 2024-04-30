@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
-from models import User, UserQuery
+from models import User, UserQuery, Product
 import jwt
 from extensions import app, db, login_manager
 
@@ -83,7 +83,10 @@ def verify_password():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    # Fetch products from the database
+    products = Product.query.all()
+    print(products)  # Check if products are fetched successfully
+    return render_template('dashboard.html', products=products)
 
 @app.route('/pref', methods=['GET', 'POST'])
 #@login_required
@@ -121,6 +124,11 @@ def pref():
         resp = redirect(url_for('dashboard'))
         return resp
     return render_template('reigstersize.html')
+
+# Add 
+@app.route('/userSettings')
+def personalDetails():
+    return render_template('userSettings.html')
 
 
 #change password
