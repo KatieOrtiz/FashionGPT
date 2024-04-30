@@ -1,32 +1,46 @@
 body {
   display: flex;
-  flex-direction: column; /* Change to column */
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: black;
   color: white;
+  overflow: hidden;
 }
 
 .header {
-  background-color: #18181c; /* Set the background color here */
+  background-color: #18181c;
   padding: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  width: 100%; /* Set the width to 100% to expand across the entire page */
+  position: flex; /* Position the header fixed at the top */
+  top: 0; /* Align the header to the top of the viewport */
+  left: 0; /* Align the header to the left edge of the viewport */
+  right: 0; /* Align the header to the right edge of the viewport */
+  z-index: 999; /* Ensure the header stays on top of other content */
 }
 
 .navbar {
   display: flex;
   align-items: center;
+  justify-content: center; /* Center horizontally */
+  padding: 10px 20px; /* Adjust padding */
 }
 
 .navbar h1 {
   color: #ffffff;
   margin: 0;
+  margin-right: auto; /* Add this line to push the h1 element to the left */
 }
-
+.navbar span{
+  color: #ffffff;
+  margin: 0 auto;
+}
 nav ul {
   list-style: none;
   margin: 0;
@@ -57,33 +71,20 @@ button {
   cursor: pointer;
 }
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  flex: 1; /* Make the container take the available vertical space */
+  width: 1100px;
+  margin: 0 auto; /* Center horizontally */
 }
+
 .footer {
   background-color: #18181c;
   color: white;
   padding: 10px;
   text-align: center;
-  margin-top: auto; /* Push the footer to the bottom */
-}
-
-/*homepage*/
-.three-sections-page {
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  background-color: black;
-}
-#left-section {
-  flex: 1;
-  background-color: #18181c;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 150px;
+  width: 100%; /* Set the width to 100% to expand across the entire page */
+  position: absolute; /* Position the footer at the bottom of the viewport */
+  bottom: 0; /* Align the footer to the bottom of the viewport */
+  left: 0; /* Align the footer to the left edge of the viewport */
+  right: 0; /* Align the footer to the right edge of the viewport */
 }
 
 .collapsible {
@@ -110,48 +111,6 @@ button {
   background-color: #f1f1f1;
 }
 
-#middle-section {
-  flex: 2;
-  background-color: black;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align content at the top */
-}
-
-#search-bar {
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 20px; /* Add margin to separate search bar from collapsible buttons */
-}
-
-#right-section {
-  flex: 1;
-  background-color: #18181c;
-  height: 100vh;
-  padding: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start; /* Align items at the top */
-  margin-right: 150px;
-}
-
-/*.menu-button {
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-  padding: 18px;
-  border: none;
-  text-align: center;
-  outline: none;
-  font-size: 15px;
-  margin-right: 10px; Add margin between buttons//
-  transition: background-color 0.3s;
-}
-
-.menu-button:hover {
-  background-color: #45a049;
-}*/
 
 i{
   color: white;
@@ -159,45 +118,58 @@ i{
   font-size: 20px;
 }
 
+#page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px; /* Adjust margin-top value */
+}
 
-.preferences {
+.section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Remove margin-bottom */
+}
+
+h1.section-header {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 20px; /* Add margin to lower the headers */
+}
+
+.box {
+  width: 150px; /* Set a fixed width for the boxes */
+  height: 100px; /* Adjust height as needed */
+  background-color: gray;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.box-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  gap: 10px; /* Adjust gap between boxes */
+  justify-content: space-between; /* Center boxes horizontally with space between */
 }
 
-.preference-button {
-  background-color: #777;
-  color: white;
-  cursor: pointer;
-  padding: 10px;
-  border: none;
-  outline: none;
-  font-size: 15px;
-  border-radius: 5px;
+.box:hover {
+  background-color: gray;
+  transform: translateY(-3px);
 }
 
-.submit-filters {
-  background-color: hsl(209, 100%, 45%);
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+#next-button {
+  margin-top: 30px; /* Add margin to separate button from boxes */
 }
 
-.reset-filters {
-  background-color: #777;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.preference-button.active {
-  background-color: #4CAF50; /* Green background for active buttons */
-  color: white; /* White text color for contrast */
+.container1 {
+  display: flex;
+  justify-content: center;
 }
