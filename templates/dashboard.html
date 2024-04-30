@@ -6,78 +6,67 @@
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <title>Dashboard</title>
-    <style>
-        /* Adjust the background color to dark gray */
-        .clothing-item-tile {
-            background-color: #555; /* Set background color to dark gray */
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        
-        /* Style for the product image */
-        .product-image {
-            width: 100%; /* Ensure the image fills the container */
-            border-radius: 5px; /* Add a slight border radius */
-        }
-    </style>
 </head>
-<body class="three-sections-page">
-    <div id="left-section">
-        <!-- Left section content (filters) -->
-    </div>
-
-    <div id="middle-section">
-        <input type="text" id="search-bar" placeholder="Search...">
-        <div id="output-section"></div> <!-- Placeholder for displaying the output -->
-        
-        <!-- Display products -->
-        <div id="clothing-item-tile">
-            {% for product in products %}
-            <div class="clothing-item-tile">
-                <!-- Display product image -->
-                <img class="product-image" src="{{ product.image }}" alt="Product Image">
-                <h3>{{ product.name }}</h3>
-                <p>Price: {{ product.price }}</p>
-                <!-- Add more details if needed -->
-            </div>
-            {% endfor %}
+<body class="single-section-page">
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <h1>FashionGPT</h1>
+          <ul>
+            <li></li>
+            <span id="homebutton"><i class="fas fa-house"></i></span>
+            <span id="likebutton"><i class="fas fa-heart"></i></span>
+            <span id="settingbutton"><i class="fas fa-gear"></i></span>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+    <div id="output-section"></div> <!-- Placeholder for displaying the output -->
+    <!-- Display products -->
+    <div id="clothing-item-tile">
+        {% for product in products %}
+        <div class="clothing-item-tile">
+            <!-- Display product image -->
+            <img class="product-image" src="{{ product.image }}" alt="Product Image">
+            <h3>{{ product.name }}</h3>
+            <p>Price: {{ product.price }}</p>
+            <!-- Add more details if needed -->
         </div>
+        {% endfor %}
     </div>
-
-    <div id="right-section">
-        <!-- Right section content -->
-        <span id="homebutton"><i class="fa-solid fa-house"></i></span>
-        <span id="likebutton"><i class="fa-solid fa-heart"></i></span>
-        <span id="settingbutton"><i class="fa-solid fa-gear"></i></span>
-    </div>
-    <script src="static/script.js"></script>
-    <!-- JavaScript for fetching and displaying data -->
+</div>
+    <script src="script.js"></script>  
     <script>
-        document.getElementById('submit-filters').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            var formData = new FormData(document.getElementById('filters-form'));
+      // Script to fetch and display data from the server
+      document
+        .getElementById("submit-filters")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent default form submission
+          var formData = new FormData(document.getElementById("filters-form"));
 
-            fetch('/pref', {
-                method: 'POST',
-                body: formData
-            }).then(response => response.json())
-            .then(data => {
-                const outputDiv = document.getElementById('output-section');
-                outputDiv.innerHTML = ''; // Clear previous content
-                // Dynamically create content based on data received
-                data.forEach((choice, index) => {
-                    let choiceDiv = document.createElement('div');
-                    choiceDiv.innerHTML = `<h3>Choice ${index + 1}</h3>`;
-                    Object.keys(choice).forEach(key => {
-                        let itemDiv = document.createElement('div');
-                        itemDiv.textContent = `${key}: ${choice[key].join(' - ')}`;
-                        choiceDiv.appendChild(itemDiv);
-                    });
-                    outputDiv.appendChild(choiceDiv);
+          fetch("/pref", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const outputDiv = document.getElementById("output-section");
+              outputDiv.innerHTML = ""; // Clear previous content
+              // Dynamically create content based on data received
+              data.forEach((choice, index) => {
+                let choiceDiv = document.createElement("div");
+                choiceDiv.innerHTML = `<h3>Choice ${index + 1}</h3>`;
+                Object.keys(choice).forEach((key) => {
+                  let itemDiv = document.createElement("div");
+                  itemDiv.textContent = `${key}: ${choice[key].join(" - ")}`;
+                  choiceDiv.appendChild(itemDiv);
                 });
-            }).catch(error => console.error('Error:', error));
+                outputDiv.appendChild(choiceDiv);
+              });
+            })
+            .catch((error) => console.error("Error:", error));
         });
     </script>
-</body>
+  </body>
 </html>
