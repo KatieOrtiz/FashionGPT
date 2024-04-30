@@ -65,9 +65,8 @@ button {
   background: none;
   color: white;
 }
-
-.error{
-  background-color: #f7bcbc;
+#error{
+color: red;
 }
 .back-btn {
   position: fixed;
@@ -120,4 +119,48 @@ select {
   padding-left: 60px;
   width: 70%; /* Adjust width as needed */
   height: auto; /* Maintain aspect ratio */
+}
+/* Add this CSS */
+.social-icons {
+  margin-top: 20px;
+}
+
+.social-icons i {
+  font-size: 24px;
+  margin: 0 5px;
+  color: white;
+}
+.continue-text {
+  color: #cccccc;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.continue-text span {
+  margin: 40px 10px ; /* Adjust the margin as needed */
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid #cccccc;
+  flex-grow: 1;
+  margin: 0 10px;
+}
+
+.separator.top {
+  display: none; /* Hide the separator on top */
+}
+.social-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.social-logos i {
+  font-size: 50px; /* Increase the font size */
+  padding-bottom: 40px;
+  margin: 5px; /* Reduce the margin */
+  flex-basis: 20%; /* Each logo takes up 25% of the container width */
+  text-align: center; /* Center the icons */
 }
