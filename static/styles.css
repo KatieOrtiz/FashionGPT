@@ -177,6 +177,7 @@ h1.section-header {
   display: flex;
   justify-content: center;
 }
+
 /* Form Styles */
 .change-password, .user-settings-form {
   margin-bottom: 20px;
@@ -221,4 +222,17 @@ input[type="submit"]:hover {
   .container {
     padding: 10px;
   }
+
+/* Adjust the background color to dark gray */
+.clothing-item-tile {
+  background-color: #555; /* Set background color to dark gray */
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* Style for the product image */
+.product-image {
+  width: 100%; /* Ensure the image fills the container */
+  border-radius: 5px; /* Add a slight border radius */
 }

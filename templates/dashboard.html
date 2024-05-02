@@ -22,20 +22,25 @@
       </div>
     </header>
     <div class="container">
-    <div id="output-section"></div> <!-- Placeholder for displaying the output -->
-    <!-- Display products -->
-    <div id="clothing-item-tile">
-        {% for product in products %}
-        <div class="clothing-item-tile">
-            <!-- Display product image -->
-            <img class="product-image" src="{{ product.image }}" alt="Product Image">
-            <h3>{{ product.name }}</h3>
-            <p>Price: {{ product.price }}</p>
-            <!-- Add more details if needed -->
+    <div id="output-section"></div>
+    {% for suggestion_id, products in suggestion_products.items() %}
+    <div class="user-suggestion">
+        <h2>User Suggestion #{{ loop.index }}</h2>
+        <!-- Display products for this suggestion -->
+        <div class="suggested-products">
+            {% for product in products %}
+            <div class="clothing-item-tile">
+                <!-- Display product image -->
+                <img class="product-image" src="{{ product.image }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
+                <h3>{{ product.name }}</h3>
+                <p>Price: {{ product.price }}</p>
+                <!-- Add more details if needed -->
+                <a href="{{ product.link }}">View Product</a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
+    {% endfor %}
     <script src="script.js"></script>  
     <script>
       // Script to fetch and display data from the server
