@@ -1,139 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/styles.css">
-    <script src="static/script.js"></script>
-    <style>
-      /* Add a class to the labels to target only the ones for dropdowns */
-      label.dropdown-label {
-          display: block;
-          margin-bottom: 5px; /* Optional: Add some spacing between labels and dropdowns */
-      }
-
-      /* Style for the dropdowns */
-      select.menu-dropdown {
-          width: 100%; /* Make the dropdown take 100% width of its container */
-          padding: 8px;
-          box-sizing: border-box; /* Include padding and border in the total width */
-          margin-bottom: 10px; /* Optional: Add some spacing between dropdowns */
-      }
-  </style>
-    <title>User Profile</title>
-  </head>
-
-<body>
-
-  <body class="three-sections-page">
-
-    <div id="left-section">
-        <h2>Filters</h2>
-        <button class="collapsible">Password/Security</button>
-        <div class="content">
-            <p>Go to Password and Security</p>
-        </div>
-
-        <button class="collapsible">Size Preference</button>
-        <div class="content">
-            <p>Go to Size Preference</p>
-        </div>
-
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="static/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+  <script src="static/script.js"></script>  
+  <title>User Settings</title>
+</head>
+<body class="user-settings">
+  <header class="usersettingheader">
+    <div class="settingsContainer">
+      <nav class="navbar">
+        <h1>FashionGPT</h1>
+        <ul>
+          <li></li>
+          <span id="homebutton"><i class="fas fa-house"></i></span>
+          <span id="likebutton"><i class="fas fa-heart"></i></span>
+          <span id="settingbutton"><i class="fas fa-gear"></i></span>
+        </ul>
+      </nav>
     </div>
+  </header>
+  <div class="settingsContainer">
+    <h2>Change Password</h2>
+    <form method="POST" action="/change-password">
+      <label for="oldPassword">Old Password:</label>
+      <input type="password" id="oldPassword" name="oldPassword" required>
+      
+      <label for="newPassword">New Password:</label>
+      <input type="password" id="newPassword" name="newPassword" required>
 
-
-
-    <div id="middle-section">
-      <h2>Profile Options</h2>
-      <h3>Shirts</h3>
-
-      <!-- Dropdown Menu 1 -->
-      <label for="neck" class="dropdown-label">Neck:</label>
-      <select id="neck" name="neck" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="confirmNewPassword">Confirm New Password:</label>
+      <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+      
+      <input type="submit" value="Change Password">
+    </form>
+    <div class="settingsContainer">
+    <h2>User Settings</h2>
+    <form method="POST" action="/update-settings">
+      <!-- Dropdowns for profile information -->
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
       </select>
 
-      <!-- Dropdown Menu 2 -->
-      <label for="shoulder" class="dropdown-label">Shoulder:</label>
-      <select id="shoulder" name="shoulder" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="height">Height:</label>
+      <select id="height" name="height" required>
+        <option value="150-160">150-160 cm</option>
+        <option value="161-170">161-170 cm</option>
+        <option value="171-180">171-180 cm</option>
+        <option value="181-190">181-190 cm</option>
+        <option value="191+">191+ cm</option>
       </select>
 
-      <label for="chest" class="dropdown-label">Chest:</label>
-      <select id="chest" name="chest" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="weight">Weight:</label>
+      <select id="weight" name="weight" required>
+        <option value="under50">Under 50 kg</option>
+        <option value="50-60">50-60 kg</option>
+        <option value="61-70">61-70 kg</option>
+        <option value="71-80">71-80 kg</option>
+        <option value="81+">81+ kg</option>
       </select>
 
-      <label for="arm" class="dropdown-label">Arm:</label>
-      <select id="arm" name="arm" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="hair">Hair Color:</label>
+      <select id="hair" name="hair" required>
+        <option value="black">Black</option>
+        <option value="brown">Brown</option>
+        <option value="blonde">Blonde</option>
+        <option value="red">Red</option>
+        <option value="grey">Grey</option>
+        <option value="other">Other</option>
       </select>
 
-      <h3>Pants</h3>
-
-      <!-- Dropdown Menu 3 -->
-      <label for="waist" class="dropdown-label">Waist:</label>
-      <select id="waist" name="waist" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="skintone">Skin Tone:</label>
+      <select id="skintone" name="skintone" required>
+        <option value="light">Light</option>
+        <option value="medium">Medium</option>
+        <option value="dark">Dark</option>
       </select>
 
-      <label for="thighs" class="dropdown-label">Thighs:</label>
-      <select id="thighs" name="thighs" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="build">Build:</label>
+      <select id="build" name="build" required>
+        <option value="slim">Slim</option>
+        <option value="average">Average</option>
+        <option value="muscular">Muscular</option>
+        <option value="heavy">Heavy</option>
       </select>
 
-      <label for="calf" class="dropdown-label">Calf:</label>
-      <select id="calf" name="calf" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="style">Style:</label>
+      <select id="style" name="style" required>
+        <option value="casual">Casual</option>
+        <option value="formal">Formal</option>
+        <option value="sporty">Sporty</option>
+        <option value="vintage">Vintage</option>
+        <option value="-">Don't care</option>
       </select>
 
-      <label for="inseam" class="dropdown-label">Inseam:</label>
-      <select id="inseam" name="inseam" class="menu-dropdown">
-          <option value="item1">Item 1</option>
-          <option value="item2">Item 2</option>
-          <!-- Add more options as needed -->
+      <label for="season">Season:</label>
+      <select id="season" name="season" required>
+        <option value="spring">Spring</option>
+        <option value="summer">Summer</option>
+        <option value="fall">Fall</option>
+        <option value="winter">Winter</option>
+        <option value="-">Don't care</option>
       </select>
-      <h3>Change Password</h3>
- <!-- Change Password Form -->
- <form class="change-password-form">
-  <label for="currentPassword">Current Password:</label>
-  <input type="password" id="currentPassword" name="currentPassword" required>
 
-  <label for="newPassword">New Password:</label>
-  <input type="password" id="newPassword" name="newPassword" required>
+      <label for="fabric">Fabric:</label>
+      <select id="fabric" name="fabric" required>
+        <option value="cotton">Cotton</option>
+        <option value="polyester">Polyester</option>
+        <option value="wool">Wool</option>
+        <option value="linen">Linen</option>
+        <option value="-">Don't care</option>
+      </select>
 
-  <label for="confirmPassword">Confirm Password:</label>
-  <input type="password" id="confirmPassword" name="confirmPassword" required>
+      <label for="waist">Waist:</label>
+      <select id="waist" name="waist" required>
+        <option value="under28">Under 28 in</option>
+        <option value="28-32">28-32 in</option>
+        <option value="33-37">33-37 in</option>
+        <option value="38+">38+ in</option>
+      </select>
 
-  <button type="submit">Change Password</button>
-</form>
+      <label for="length">Length:</label>
+      <select id="length" name="length" required>
+        <option value="short">Short</option>
+        <option value="regular">Regular</option>
+        <option value="long"></option>
+        <option value="-">Don't know</option>
+      </select>
 
-    </div>
+      <label for="budget">Budget:</label>
+      <select id="budget" name="budget" required>
+        <option value="under$50">Low (Under $50)</option>
+        <option value="$50-150">Medium ($50 - $150)</option>
+        <option value="over$150">High (Over $150)</option>
+        <option value="-">Don't have one</option>
+      </select>
 
+      <label for="colors">Favorite Colors:</label>
+      <select id="colors" name="colors" multiple required>
+        <option value="-">Don't care</option>
+        <option value="black">Black</option>
+        <option value="white">White</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="purple">Purple</option>
+      </select>
 
-    <div id="right-section">
-      <button class="menu-button">Home</button>
-      <button class="menu-button">Likes</button>
-      <button class="menu-button">Settings</button>
+      <label for="specialRequests">Special Requests:</label>
+      <textarea id="specialRequests" name="specialRequests"></textarea>
+
+      <input type="submit" value="Update Settings">
+    </form>
   </div>
-
-
-
-
-
-    
+  </div>
 </body>
+</html>
