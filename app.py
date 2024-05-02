@@ -1,5 +1,5 @@
 from operator import or_
-from flask import request, render_template, redirect, url_for, session, flash
+from flask import request, render_template, redirect, url_for, session, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
@@ -123,6 +123,42 @@ def dashboard():
                     print(suggestion_products)
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
+
+@app.route('/mark-favorite', methods=['POST'])
+def mark_favorite():
+    suggestion_id = request.json['suggestion_id']
+    
+    # Save the suggestion ID to a text file
+    with open('favorite_suggestions.txt', 'a') as f:
+        f.write(str(suggestion_id) + '\n')
+    
+    return 'OK', 200
+
+@app.route('/check-favorite')
+def check_favorite():
+    suggestion_id = request.args.get('suggestion_id')
+
+    with open('favorite_suggestions.txt', 'r') as f:
+        favorite_suggestions = f.read().splitlines()
+        
+    is_favorite = suggestion_id in favorite_suggestions
+    return jsonify({'isFavorite': is_favorite})
+
+@app.route('/remove-favorite', methods=['POST'])
+def remove_favorite():
+    suggestion_id = request.json['suggestion_id']
+
+    with open('favorite_suggestions.txt', 'r') as f:
+        favorite_suggestions = f.read().splitlines()
+    
+    if suggestion_id in favorite_suggestions:
+        favorite_suggestions.remove(suggestion_id)
+    
+    with open('favorite_suggestions.txt', 'w') as f:
+        for line in favorite_suggestions:
+            f.write(line + '\n')
+    
+    return 'OK', 200
 
 @app.route('/pref', methods=['GET', 'POST'])
 #@login_required

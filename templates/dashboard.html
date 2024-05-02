@@ -25,9 +25,17 @@
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
     <div class="user-suggestion">
-        <h2>User Suggestion #{{ loop.index }}</h2>
-        <!-- Display products for this suggestion -->
+        <h2>User Suggestion #{{ loop.index }}</h2> 
+        <!-- Button to mark suggestion as favorite -->
+        <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
+          {% if suggestion_id in favorite_suggestion_ids %}
+              <i class="fas fa-heart"></i> <!-- Filled heart icon -->
+          {% else %}
+              <i class="far fa-heart"></i> <!-- Unfilled heart icon -->
+          {% endif %}
+      </button>
         <div class="suggested-products">
+          <br>
             {% for product in products %}
             <div class="clothing-item-tile">
                 <!-- Display product image -->
@@ -38,11 +46,76 @@
                 <a href="{{ product.link }}">View Product</a>
             </div>
             {% endfor %}
-        </div>
+        </div>  <!-- Button to mark suggestion as favorite -->
+       
     </div>
     {% endfor %}
     <script src="static/script.js"></script>  
     <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to all mark favorite buttons
+        document.querySelectorAll('.mark-favorite').forEach(function(button) {
+            // Check if suggestion is already favorited
+            const suggestionId = button.dataset.suggestionId;
+            fetch('/check-favorite?suggestion_id=' + suggestionId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isFavorite) {
+                        button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
+                    }
+                });
+
+            button.addEventListener('click', function() {
+                // Get the suggestion ID from data attribute
+                const suggestionId = button.dataset.suggestionId;
+                
+                // Toggle favorite status
+                if (button.classList.contains('favorited')) {
+                    // Remove from favorites
+                    fetch('/remove-favorite', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ suggestion_id: suggestionId })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            button.innerHTML = '<i class="far fa-heart"></i>'; // Unfilled heart icon
+                            button.classList.remove('favorited');
+                        } else {
+                            alert('Failed to remove suggestion from favorites.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to remove suggestion from favorites.');
+                    });
+                } else {
+                    // Add to favorites
+                    fetch('/mark-favorite', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ suggestion_id: suggestionId })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
+                            button.classList.add('favorited');
+                        } else {
+                            alert('Failed to mark suggestion as favorite.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to mark suggestion as favorite.');
+                    });
+                }
+            });
+        });
+    });
       // Script to fetch and display data from the server
       document
         .getElementById("submit-filters")
