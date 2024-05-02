@@ -1,9 +1,10 @@
+from operator import or_
 from flask import request, render_template, redirect, url_for, session, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
-from models import User, UserQuery, Product
+from models import Suggestion, User, UserQuery, Product
 import jwt
 from extensions import app, db, login_manager
 
@@ -56,7 +57,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user is None:
             flash('No account found with that email address.')
-            return render_template('login.html')
+            return render_template('register.html')
         # If user exists, proceed to verify password
         session['email'] = email
         return redirect(url_for('verify_password'))
@@ -81,12 +82,47 @@ def verify_password():
     return render_template('verify_password.html')
 
 @app.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
-    # Fetch products from the database
-    products = Product.query.all()
-    print(products)  # Check if products are fetched successfully
-    return render_template('dashboard.html', products=products)
+    #logging to DB
+    email = session['email']
+    user = User.query.filter_by(email=email).first()
+    user_id = user.id
+    
+     # Retrieve user suggestions from the database
+    user_suggestions = Suggestion.query.filter_by(user_id=user_id).all()
+
+    # Initialize dictionary to store product suggestions grouped by user suggestion
+    suggestion_products = {}
+
+    # Iterate through user suggestions
+    for suggestion in user_suggestions:
+        # Initialize list to store products for this suggestion
+        suggestion_products[suggestion.id] = []
+
+         # Match product names for each category
+        categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
+        for category in categories:
+            product_info = getattr(suggestion, category)  # Get product info from suggestion
+            print(product_info)
+            if product_info:
+               # Parse the string to extract the product name
+                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")   
+                print("PRODUCT:", product_name)
+                # Query the product table for the matching product
+                product = Product.query.filter_by(name=product_name).first()
+                print(product)
+                if product:
+                    suggestion_products[suggestion.id].append({
+                        'name': product.name,
+                        'price': product.price,
+                        'color': product.color,
+                        'image': product.image,  # Include image attribute
+                        'link': product.link  # Include link attribute
+                    })
+                    print(suggestion_products)
+
+    return render_template('dashboard.html', suggestion_products=suggestion_products)
 
 @app.route('/pref', methods=['GET', 'POST'])
 #@login_required
@@ -142,7 +178,7 @@ def personalDetails():
 
 
 @app.route('/logout')
-@login_required
+#@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))

@@ -10,21 +10,12 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     password_hash = db.Column(db.String(512), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    api_requests = db.relationship('APIRequest', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-class APIRequest(db.Model):
-    __tablename__ = 'api_requests'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    request_type = db.Column(db.String(50), nullable=False)
-    request_details = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 class UserQuery(db.Model):
     __tablename__ = 'user_query'
@@ -72,7 +63,7 @@ class Suggestion(db.Model):
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), unique=True)
     price = db.Column(db.Float)
     color = db.Column(db.Text)  # Text type to handle multiple colors if stored as JSON
     image = db.Column(db.Text)

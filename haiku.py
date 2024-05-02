@@ -19,7 +19,7 @@ def GPT(system_prompt: str, msg: str):
     )
     response = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=1224,
+        max_tokens=2048,
         temperature=0,
         system=system_prompt,
         messages=[
