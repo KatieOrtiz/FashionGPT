@@ -27,7 +27,7 @@
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
     <div class="user-suggestion">
-        <h2>User Suggestion #{{ loop.index }}</h2> 
+        <h2>Favorited Suggestion #{{ loop.index }}</h2> 
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
         {% if suggestion_id in favorite_suggestion_ids %}

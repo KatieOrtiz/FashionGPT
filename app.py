@@ -42,6 +42,16 @@ def register():
         session['email'] = email
         resp = redirect(url_for('pref'))
        # resp.set_cookie('x-access-token', token)
+       
+       # Check if the favorite_suggestions.txt file exists
+        if os.path.exists('favorite_suggestions.txt'):
+            # If it exists, delete it
+            os.remove('favorite_suggestions.txt')
+
+        # Create the favorite_suggestions.txt file
+        with open('favorite_suggestions.txt', 'w'):
+            pass  # Create an empty file
+            
         return redirect(url_for('pref'))
     return render_template('register.html')
 
@@ -60,6 +70,8 @@ def login():
             return render_template('register.html')
         # If user exists, proceed to verify password
         session['email'] = email
+        
+            
         return redirect(url_for('verify_password'))
 
     return render_template('login.html')
@@ -74,6 +86,16 @@ def verify_password():
         if user and user.check_password(request.form['password']):
             login_user(user)
            # token = jwt.encode({'user': email, 'exp': datetime.now(timezone.utc) + timedelta(hours=12)}, app.secret_key)
+           
+            # Check if the favorite_suggestions.txt file exists
+            if os.path.exists('favorite_suggestions.txt'):
+                # If it exists, delete it
+                os.remove('favorite_suggestions.txt')
+
+            # Create the favorite_suggestions.txt file
+            with open('favorite_suggestions.txt', 'w'):
+                pass  # Create an empty file
+            
             resp = redirect(url_for('dashboard'))
             #resp.set_cookie('x-access-token', token)
             return resp
@@ -104,7 +126,7 @@ def dashboard():
         categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
         for category in categories:
             product_info = getattr(suggestion, category)  # Get product info from suggestion
-            print(product_info)
+            
             if product_info:
                # Parse the string to extract the product name
                 product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")   
@@ -120,7 +142,6 @@ def dashboard():
                         'image': product.image,  # Include image attribute
                         'link': product.link  # Include link attribute
                     })
-                    print(suggestion_products)
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
 
