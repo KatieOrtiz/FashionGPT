@@ -21,23 +21,23 @@
         </nav>
       </div>
     </header>
+</header>
     <div class="container">
+        <h1>Favorites</h1>
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
-    {% if suggestion_id in favorite_suggestion_ids %}
-    <div class="user-suggestion" id="user-suggestion-{{ suggestion_id }}" style="display: none;">
+    <div class="user-suggestion">
         <h2>User Suggestion #{{ loop.index }}</h2> 
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
-          {% if suggestion_id in favorite_suggestion_ids %}
-              <i class="fas fa-heart"></i> <!-- Filled heart icon -->
-          {% else %}
-              <i class="far fa-heart"></i> <!-- Unfilled heart icon -->
-          {% endif %}
-      </button>
+        {% if suggestion_id in favorite_suggestion_ids %}
+            <i class="fas fa-heart"></i> <!-- Filled heart icon -->
+        {% else %}
+            <i class="far fa-heart"></i> <!-- Unfilled heart icon -->
+        {% endif %}
+    </button>
         <div class="suggested-products">
-          <br>
-            <!-- Display products for this suggestion -->
+        <br>
             {% for product in products %}
             <div class="clothing-item-tile">
                 <!-- Display product image -->
@@ -48,24 +48,15 @@
                 <a href="{{ product.link }}">View Product</a>
             </div>
             {% endfor %}
-        </div> 
-       
+        </div>
+    
     </div>
-    {% endif %}
     {% endfor %}
+
+
     <script src="static/script.js"></script>  
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Check if each user suggestion should be displayed based on favorite_suggestions.txt
-        const favoriteSuggestions = {% raw %}{{ favorite_suggestion_ids | tojson | safe }}{% endraw %}; // Convert to JavaScript array
-        console.log('Loaded favorite suggestion IDs:', favoriteSuggestions); // Log loaded suggestion IDs
-        favoriteSuggestions.forEach(function(suggestionId) {
-            const userSuggestion = document.getElementById('user-suggestion-' + suggestionId);
-            if (userSuggestion) {
-                userSuggestion.style.display = 'block'; // Show the user suggestion
-            }
-        });
-
+    document.addEventListener('DOMContentLoaded', function() {
         // Add event listener to all mark favorite buttons
         document.querySelectorAll('.mark-favorite').forEach(function(button) {
             // Check if suggestion is already favorited
@@ -75,6 +66,7 @@
                 .then(data => {
                     if (data.isFavorite) {
                         button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
+                        button.classList.add('favorited'); // Add favorited class
                     }
                 });
 
@@ -95,7 +87,7 @@
                     .then(response => {
                         if (response.ok) {
                             button.innerHTML = '<i class="far fa-heart"></i>'; // Unfilled heart icon
-                            button.classList.remove('favorited');
+                            button.classList.remove('favorited'); // Remove favorited class
                         } else {
                             alert('Failed to remove suggestion from favorites.');
                         }
@@ -116,7 +108,7 @@
                     .then(response => {
                         if (response.ok) {
                             button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
-                            button.classList.add('favorited');
+                            button.classList.add('favorited'); // Add favorited class
                         } else {
                             alert('Failed to mark suggestion as favorite.');
                         }

@@ -127,12 +127,29 @@ def dashboard():
 @app.route('/mark-favorite', methods=['POST'])
 def mark_favorite():
     suggestion_id = request.json['suggestion_id']
-    
-    # Save the suggestion ID to a text file
-    with open('favorite_suggestions.txt', 'a') as f:
-        f.write(str(suggestion_id) + '\n')
-    
+
+    # Read existing suggestion IDs from the file
+    with open('favorite_suggestions.txt', 'r') as f:
+        existing_suggestion_ids = [int(line.strip()) for line in f]
+
+    # Check if the suggestion ID already exists
+    if suggestion_id in existing_suggestion_ids:
+        # Remove the existing suggestion ID from the list
+        existing_suggestion_ids.remove(suggestion_id)
+
+        # Write the updated list of suggestion IDs back to the file
+        with open('favorite_suggestions.txt', 'w') as f:
+            for id in existing_suggestion_ids:
+                f.write(str(id) + '\n')
+    else:
+        # If the suggestion ID does not exist, append it to the file
+        with open('favorite_suggestions.txt', 'a') as f:
+            f.write(str(suggestion_id) + '\n')
+
     return 'OK', 200
+
+
+
 
 @app.route('/check-favorite')
 def check_favorite():
@@ -144,6 +161,7 @@ def check_favorite():
         
     is_favorite = suggestion_id in favorite_suggestions
     return jsonify({'isFavorite': is_favorite})
+
 
 @app.route('/remove-favorite', methods=['POST'])
 def remove_favorite():
@@ -162,6 +180,7 @@ def remove_favorite():
     return 'OK', 200
 
 
+
 @app.route('/favorites')
 #@login_required
 def favorites():
@@ -169,40 +188,40 @@ def favorites():
     email = session['email']
     user = User.query.filter_by(email=email).first()
     user_id = user.id
-    
-     # Retrieve user suggestions from the database
-    user_suggestions = Suggestion.query.filter_by(user_id=user_id).all()
 
     # Initialize dictionary to store product suggestions grouped by user suggestion
     suggestion_products = {}
 
-    # Iterate through user suggestions
-    for suggestion in user_suggestions:
-        # Initialize list to store products for this suggestion
-        suggestion_products[suggestion.id] = []
+    # Read suggestion IDs from favorite_suggestions.txt
+    with open('favorite_suggestions.txt', 'r') as f:
+        for line in f:
+            suggestion_id = int(line.strip())
 
-         # Match product names for each category
-        categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
-        for category in categories:
-            product_info = getattr(suggestion, category)  # Get product info from suggestion
-            print(product_info)
-            if product_info:
-               # Parse the string to extract the product name
-                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")   
-                print("PRODUCT:", product_name)
-                # Query the product table for the matching product
-                product = Product.query.filter_by(name=product_name).first()
-                print(product)
-                if product:
-                    suggestion_products[suggestion.id].append({
-                        'name': product.name,
-                        'price': product.price,
-                        'color': product.color,
-                        'image': product.image,  # Include image attribute
-                        'link': product.link  # Include link attribute
-                    })
-                    print(suggestion_products)
+            # Retrieve user suggestion from the database based on suggestion ID
+            suggestion = Suggestion.query.get(suggestion_id)
 
+            # Check if the suggestion exists
+            if suggestion:
+                # Initialize list to store products for this suggestion
+                suggestion_products[suggestion_id] = []
+
+                # Match product names for each category
+                categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
+                for category in categories:
+                    product_info = getattr(suggestion, category)  # Get product info from suggestion
+                    if product_info:
+                        # Parse the string to extract the product name
+                        product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")
+                        # Query the product table for the matching product
+                        product = Product.query.filter_by(name=product_name).first()
+                        if product:
+                            suggestion_products[suggestion_id].append({
+                                'name': product.name,
+                                'price': product.price,
+                                'color': product.color,
+                                'image': product.image,  # Include image attribute
+                                'link': product.link  # Include link attribute
+                            })
     return render_template('favorites.html', suggestion_products=suggestion_products)
 
 
