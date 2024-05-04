@@ -72,12 +72,12 @@ def login():
         session['email'] = email
         
             
-        return redirect(url_for('verify_password'))
+        return redirect(url_for('verifyPassword'))
 
     return render_template('login.html')
 
-@app.route('/verify_password', methods=['GET', 'POST'])
-def verify_password():
+@app.route('/verifyPassword', methods=['GET', 'POST'])
+def verifyPassword():
     if 'email' not in session:
         return redirect(url_for('login'))
     email = session['email']
@@ -101,7 +101,7 @@ def verify_password():
             return resp
         else:
             flash('Invalid password. Try again.')
-    return render_template('verify_password.html')
+    return render_template('verifyPassword.html')
 
 @app.route('/dashboard')
 #@login_required
@@ -281,7 +281,7 @@ def pref():
         
         resp = redirect(url_for('dashboard'))
         return resp
-    return render_template('reigstersize.html')
+    return render_template('registerSize.html')
 
 # Add 
 @app.route('/userSettings')
