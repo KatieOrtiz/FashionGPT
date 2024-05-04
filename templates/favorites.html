@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <title>Dashboard</title>
+    <title>Favorites</title>
 </head>
 <body class="single-section-page">
     <header class="header">
@@ -24,7 +24,8 @@
     <div class="container">
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
-    <div class="user-suggestion">
+    {% if suggestion_id in favorite_suggestion_ids %}
+    <div class="user-suggestion" id="user-suggestion-{{ suggestion_id }}" style="display: none;">
         <h2>User Suggestion #{{ loop.index }}</h2> 
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
@@ -36,6 +37,7 @@
       </button>
         <div class="suggested-products">
           <br>
+            <!-- Display products for this suggestion -->
             {% for product in products %}
             <div class="clothing-item-tile">
                 <!-- Display product image -->
@@ -46,13 +48,24 @@
                 <a href="{{ product.link }}">View Product</a>
             </div>
             {% endfor %}
-        </div>
+        </div> 
        
     </div>
+    {% endif %}
     {% endfor %}
     <script src="static/script.js"></script>  
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Check if each user suggestion should be displayed based on favorite_suggestions.txt
+        const favoriteSuggestions = {% raw %}{{ favorite_suggestion_ids | tojson | safe }}{% endraw %}; // Convert to JavaScript array
+        console.log('Loaded favorite suggestion IDs:', favoriteSuggestions); // Log loaded suggestion IDs
+        favoriteSuggestions.forEach(function(suggestionId) {
+            const userSuggestion = document.getElementById('user-suggestion-' + suggestionId);
+            if (userSuggestion) {
+                userSuggestion.style.display = 'block'; // Show the user suggestion
+            }
+        });
+
         // Add event listener to all mark favorite buttons
         document.querySelectorAll('.mark-favorite').forEach(function(button) {
             // Check if suggestion is already favorited
@@ -116,35 +129,6 @@
             });
         });
     });
-      // Script to fetch and display data from the server
-      document
-        .getElementById("submit-filters")
-        .addEventListener("click", function (event) {
-          event.preventDefault(); // Prevent default form submission
-          var formData = new FormData(document.getElementById("filters-form"));
-
-          fetch("/pref", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              const outputDiv = document.getElementById("output-section");
-              outputDiv.innerHTML = ""; // Clear previous content
-              // Dynamically create content based on data received
-              data.forEach((choice, index) => {
-                let choiceDiv = document.createElement("div");
-                choiceDiv.innerHTML = `<h3>Choice ${index + 1}</h3>`;
-                Object.keys(choice).forEach((key) => {
-                  let itemDiv = document.createElement("div");
-                  itemDiv.textContent = `${key}: ${choice[key].join(" - ")}`;
-                  choiceDiv.appendChild(itemDiv);
-                });
-                outputDiv.appendChild(choiceDiv);
-              });
-            })
-            .catch((error) => console.error("Error:", error));
-        });
     </script>
   </body>
 </html>
