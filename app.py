@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
 from models import Suggestion, User, UserQuery, Product
-import jwt
+import jwt, os
 from extensions import app, db, login_manager
 
 from haiku import one_getUserData
@@ -138,6 +138,7 @@ def mark_favorite():
 def check_favorite():
     suggestion_id = request.args.get('suggestion_id')
 
+
     with open('favorite_suggestions.txt', 'r') as f:
         favorite_suggestions = f.read().splitlines()
         
@@ -219,7 +220,7 @@ def pref():
         build = request.form['build']
         Budget = request.form['Budget']
         Colors = request.form['Colors']
-        age = request.form['age']
+        age = '18'
         Style = request.form['Style']
         Season = request.form['Season']
         fabric = request.form['fabric']

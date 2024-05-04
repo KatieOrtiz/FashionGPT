@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   document.getElementById('likebutton').addEventListener('click', function() {
-    window.location.href = 'likes';
+    window.location.href = 'favorites';
   });
 
   document.getElementById('settingbutton').addEventListener('click', function() {
