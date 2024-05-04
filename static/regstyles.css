@@ -171,3 +171,9 @@ select {
 font-size: 20px;
 margin-right: 320px;
 }
+#back2sec1:hover,
+#back2sec2:hover,
+#back2sec3:hover,
+#back2sec4:hover {
+  cursor: pointer;
+}
