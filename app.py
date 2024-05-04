@@ -1,11 +1,11 @@
 from operator import or_
-from flask import request, render_template, redirect, url_for, session, flash
+from flask import request, render_template, redirect, url_for, session, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
 from models import Suggestion, User, UserQuery, Product
-import jwt
+import jwt, os
 from extensions import app, db, login_manager
 
 from haiku import one_getUserData
@@ -124,6 +124,107 @@ def dashboard():
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
 
+@app.route('/mark-favorite', methods=['POST'])
+def mark_favorite():
+    suggestion_id = request.json['suggestion_id']
+
+    # Read existing suggestion IDs from the file
+    with open('favorite_suggestions.txt', 'r') as f:
+        existing_suggestion_ids = [int(line.strip()) for line in f]
+
+    # Check if the suggestion ID already exists
+    if suggestion_id in existing_suggestion_ids:
+        # Remove the existing suggestion ID from the list
+        existing_suggestion_ids.remove(suggestion_id)
+
+        # Write the updated list of suggestion IDs back to the file
+        with open('favorite_suggestions.txt', 'w') as f:
+            for id in existing_suggestion_ids:
+                f.write(str(id) + '\n')
+    else:
+        # If the suggestion ID does not exist, append it to the file
+        with open('favorite_suggestions.txt', 'a') as f:
+            f.write(str(suggestion_id) + '\n')
+
+    return 'OK', 200
+
+
+
+
+@app.route('/check-favorite')
+def check_favorite():
+    suggestion_id = request.args.get('suggestion_id')
+
+
+    with open('favorite_suggestions.txt', 'r') as f:
+        favorite_suggestions = f.read().splitlines()
+        
+    is_favorite = suggestion_id in favorite_suggestions
+    return jsonify({'isFavorite': is_favorite})
+
+
+@app.route('/remove-favorite', methods=['POST'])
+def remove_favorite():
+    suggestion_id = request.json['suggestion_id']
+
+    with open('favorite_suggestions.txt', 'r') as f:
+        favorite_suggestions = f.read().splitlines()
+    
+    if suggestion_id in favorite_suggestions:
+        favorite_suggestions.remove(suggestion_id)
+    
+    with open('favorite_suggestions.txt', 'w') as f:
+        for line in favorite_suggestions:
+            f.write(line + '\n')
+    
+    return 'OK', 200
+
+
+
+@app.route('/favorites')
+#@login_required
+def favorites():
+    #logging to DB
+    email = session['email']
+    user = User.query.filter_by(email=email).first()
+    user_id = user.id
+
+    # Initialize dictionary to store product suggestions grouped by user suggestion
+    suggestion_products = {}
+
+    # Read suggestion IDs from favorite_suggestions.txt
+    with open('favorite_suggestions.txt', 'r') as f:
+        for line in f:
+            suggestion_id = int(line.strip())
+
+            # Retrieve user suggestion from the database based on suggestion ID
+            suggestion = Suggestion.query.get(suggestion_id)
+
+            # Check if the suggestion exists
+            if suggestion:
+                # Initialize list to store products for this suggestion
+                suggestion_products[suggestion_id] = []
+
+                # Match product names for each category
+                categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
+                for category in categories:
+                    product_info = getattr(suggestion, category)  # Get product info from suggestion
+                    if product_info:
+                        # Parse the string to extract the product name
+                        product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")
+                        # Query the product table for the matching product
+                        product = Product.query.filter_by(name=product_name).first()
+                        if product:
+                            suggestion_products[suggestion_id].append({
+                                'name': product.name,
+                                'price': product.price,
+                                'color': product.color,
+                                'image': product.image,  # Include image attribute
+                                'link': product.link  # Include link attribute
+                            })
+    return render_template('favorites.html', suggestion_products=suggestion_products)
+
+
 @app.route('/pref', methods=['GET', 'POST'])
 #@login_required
 def pref():
@@ -138,7 +239,7 @@ def pref():
         build = request.form['build']
         Budget = request.form['Budget']
         Colors = request.form['Colors']
-        age = request.form['age']
+        age = '18'
         Style = request.form['Style']
         Season = request.form['Season']
         fabric = request.form['fabric']

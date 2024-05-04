@@ -2,11 +2,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("getStarted");
   button.addEventListener("click", function () {
-    window.location.href = "login.html";
+    window.location.href = "login";
   });
   var button = document.getElementById("getStarted2");
   button.addEventListener("click", function () {
-    window.location.href = "login.html";
+    window.location.href = "login";
   });
 });
 
@@ -14,14 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn");
   button.addEventListener("click", function () {
-    window.location.href = "index.html";
+    window.location.href = "index";
   });
 });
 //register.html
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn1");
   button.addEventListener("click", function () {
-    window.location.href = "login.html";
+    window.location.href = "login";
   });
 });
 //homepage
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('continue-btn1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registersize2.html';
+      window.location.href = 'registersize2';
     });
   }
 });
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs2');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registerSize.html';
+      window.location.href = 'registerSize';
     });
   }
 });
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'register.html';
+      window.location.href = 'register';
     });
   }
 });
@@ -72,22 +72,22 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnev1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'emailVerification.html';
+      window.location.href = 'emailVerification';
     });
   }
 });
 document.addEventListener("DOMContentLoaded", function() {
   // Code to execute after DOM content is fully loaded
   document.getElementById('homebutton').addEventListener('click', function() {
-    window.location.href = 'dashboard.html';
+    window.location.href = 'dashboard';
   });
 
   document.getElementById('likebutton').addEventListener('click', function() {
-    window.location.href = 'likes.html';
+    window.location.href = 'favorites';
   });
 
   document.getElementById('settingbutton').addEventListener('click', function() {
-    window.location.href = 'userSettings.html';
+    window.location.href = 'userSettings';
   });
 });
 //RegisterSize 
