@@ -2,19 +2,26 @@
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("getStarted");
   button.addEventListener("click", function () {
-    window.location.href = "login";
+    window.location.href = "login.html";
   });
   var button = document.getElementById("getStarted2");
   button.addEventListener("click", function () {
-    window.location.href = "login";
+    window.location.href = "login.html";
   });
 });
 
-//emailverification.html
+//login.html
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn");
   button.addEventListener("click", function () {
-    window.location.href = "frontPage";
+    window.location.href = "index.html";
+  });
+});
+//register.html
+document.addEventListener("DOMContentLoaded", function () {
+  var button = document.getElementById("backBtn1");
+  button.addEventListener("click", function () {
+    window.location.href = "login.html";
   });
 });
 //homepage
@@ -38,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('continue-btn1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registersize2';
+      window.location.href = 'registersize2.html';
     });
   }
 });
@@ -47,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs2');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'registerSize';
+      window.location.href = 'registerSize.html';
     });
   }
 });
@@ -56,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnrs1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'register';
+      window.location.href = 'register.html';
     });
   }
 });
@@ -65,7 +72,83 @@ document.addEventListener('DOMContentLoaded', function () {
   var continueBtn = document.getElementById('backBtnev1');
   if (continueBtn) { // Ensure the button exists before trying to add an event listener
     continueBtn.addEventListener('click', function() {
-      window.location.href = 'emailVerification';
+      window.location.href = 'emailVerification.html';
     });
   }
 });
+document.addEventListener("DOMContentLoaded", function() {
+  // Code to execute after DOM content is fully loaded
+  document.getElementById('homebutton').addEventListener('click', function() {
+    window.location.href = 'dashboard.html';
+  });
+
+  document.getElementById('likebutton').addEventListener('click', function() {
+    window.location.href = 'likes.html';
+  });
+
+  document.getElementById('settingbutton').addEventListener('click', function() {
+    window.location.href = 'userSettings.html';
+  });
+});
+//RegisterSize 
+document.addEventListener("DOMContentLoaded", (event) => {
+  // Function to hide all sections
+  function hideAllSections() {
+    const sections = document.querySelectorAll(".verification");
+    sections.forEach((section) => {
+      section.classList.add("hidden");
+      section.classList.remove("fade-in");
+    });
+  }
+
+  // Initially hide all sections
+  hideAllSections();
+
+  // Show the first section by default
+  const firstSection = document.getElementById("section1");
+  if (firstSection) {
+    firstSection.classList.remove("hidden");
+  }
+
+  // Function to show the next section
+  window.showSection = function (sectionNumber) {
+    hideAllSections();
+    const currentSection = document.querySelector(".verification:not(.hidden)");
+    const nextSection = document.getElementById(`section${sectionNumber}`);
+    if (currentSection && nextSection) {
+      currentSection.classList.add("hidden");
+      currentSection.classList.remove("fade-in");
+      nextSection.classList.remove("hidden");
+    }
+  };
+
+  // Function to go back to the previous section
+  function goBack(sectionNumber) {
+    const currentSection = document.getElementById(`section${sectionNumber}`);
+    if (currentSection) {
+      currentSection.classList.add("hidden");
+      const previousSectionNumber = sectionNumber - 1;
+      const previousSection = document.getElementById(`section${previousSectionNumber}`);
+      if (previousSection) {
+        previousSection.classList.remove("hidden");
+      }
+    }
+  }
+
+  // Event listeners for back buttons
+  document.getElementById("back2sec1").addEventListener("click", () => {
+    goBack(2);
+  });
+  document.getElementById("back2sec2").addEventListener("click", () => {
+    goBack(3);
+  });
+
+  document.getElementById("back2sec3").addEventListener("click", () => {
+    goBack(4);
+  });
+
+  document.getElementById("back2sec4").addEventListener("click", () => {
+    goBack(5);
+  });
+});
+

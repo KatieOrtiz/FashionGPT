@@ -164,3 +164,10 @@ select {
   flex-basis: 20%; /* Each logo takes up 25% of the container width */
   text-align: center; /* Center the icons */
 }
+#back2sec1,
+#back2sec2,
+#back2sec3,
+#back2sec4 {
+font-size: 20px;
+margin-right: 320px;
+}
