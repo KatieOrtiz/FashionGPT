@@ -281,7 +281,7 @@ def pref():
         
         resp = redirect(url_for('dashboard'))
         return resp
-    return render_template('reigstersize.html')
+    return render_template('registersize.html')
 
 # Add 
 @app.route('/userSettings')
