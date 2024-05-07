@@ -152,3 +152,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 });
 
+//verifyPassword Back Button - takes you back to login
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("back2login").addEventListener("click", function() {
+    window.location.href = "login"; // Replace "login.html" with the actual URL of your login page
+  });
+});

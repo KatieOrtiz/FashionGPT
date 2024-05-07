@@ -138,7 +138,7 @@ select {
 }
 
 .continue-text span {
-  margin: 40px 10px ; /* Adjust the margin as needed */
+  margin: 20px 10px ; /* Adjust the margin as needed */
 }
 
 .separator {
@@ -176,4 +176,29 @@ margin-right: 320px;
 #back2sec3:hover,
 #back2sec4:hover {
   cursor: pointer;
+}
+.registerimages1{
+  width: 400px;
+  height: 220px;
+}
+.registerimages2{
+  width: 400px;
+  height: 220px;
+}
+.registerimages3{
+  width: 350px;
+  height: 220px;
+}
+.registerimages4{
+  width: 400px;
+  height: 220px;
+}
+.registerimages5{
+  width: 400px;
+  height: 220px;
+}
+.fashiongptlogo
+{
+  width: 90px;
+  height: 60px;
 }

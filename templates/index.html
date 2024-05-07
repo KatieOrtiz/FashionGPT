@@ -1,49 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="static/styles.css">
+    <script src="static/script.js"></script>
+    <title>Index</title>
+  </head>
 
-  <script src="static/script.js"></script>
-  <title>Front Page</title>
-</head>
-
-<body>
-  <header class="header">
-    <div class="container">
-      <nav class="navbar">
-        <h1>FashionGPT</h1>
-        <ul>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <div class="container">
-    <main>
-      <h1>FashionGPT</h1>
-      <p>
-        Welcome to Fashion-GPT! Here at Fashion-GPT, we help our users create
-        outfits based on certain factors the users input with the help of
-        ChatGPT.
-      </p>
-      <p>
-        What it does: Fashion-GPT uses a GPT AI, alongside user measurements to
-        create outfits based on them.
-      </p>
-      <div class="container1">
-        <button type="button" id="getStarted">Get Started</button>
+  <body>
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
+          <div class="navbarh1">
+            <h1>FashionGPT</h1>
+          </div>
+          <div class="pagebuttons" style="visibility: hidden">
+            <ul>
+              <li></li>
+              <span hidden id="homebutton"><i class="fas fa-house"></i></span>
+              <span id="likebutton"><i class="fas fa-heart"></i></span>
+              <span id="settingbutton"><i class="fas fa-gear"></i></span>
+            </ul>
+          </div>
+        </nav>
       </div>
-    </main>
-  </div>
+    </header>
+    <div class="container2">
+      <main>
+        <h1>FashionGPT</h1>
+        <p>
+          Welcome to FashionGPT, your personalized stylist in the digital
+          realm! Say goodbye to the endless scrolling through fashion blogs and
+          magazines, and let us revolutionize your wardrobe. Whether you're
+          aiming for casual chic or red-carpet glamour, FashionGPT tailors
+          outfit suggestions just for you. Simply input your size, style
+          preferences, occasion, and any other specifics, and watch as our
+          cutting-edge AI generates an array of outfit options perfectly suited
+          to your taste and body type. With FashionGPT, your style evolution is
+          just a click away.
+        </p>
+        <div class="container1">
+          <button type="button" id="getStarted">Get Started</button>
+        </div>
+      </main>
+    </div>
 
-  <footer class="footer" id="contactme">
-    <h2>Let's Keep in Touch!</h2>
-    <p>Copyright&copy; 2023 by FashionGPT</p>
-  </footer>
-</body>
-
-
+    <footer class="footer" id="contactme">
+      <h2>Let's Keep in Touch!</h2>
+      <p>Copyright&copy; 2024 by FashionGPT</p>
+    </footer>
+  </body>
 </html>
