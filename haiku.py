@@ -48,6 +48,7 @@ def GPT(system_prompt: str, msg: str):
 
 def one_getUserData(generated_id, gender, weight, waist, length, Skintone, height, hair, build, Budget, Colors, age, Style, Season, fabric, usersRequest):
     start_time = time.time()
+    brands = 'H&M, Banana Republic, Forever 21, Zara, Shien, Nike, and Macy'
     msg = '''
     <INSTRUCTIONS_TO_FOLLOW>
     </IMPORTANT>dont be too specific be less specific and more general, VERY GENERAL IN-FACT!</IMPORTANT>
@@ -56,11 +57,11 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
 
     2. It's RECOMMENDED that you give colors too, for when its appropriate.
 
-    3. The hashtags are general values and uses may divert sometimes from using them so make destines appropriately
+    3. The hashtags are general values and uses may divert sometimes, so make decisions appropriately.
 
     4. ALWAYS return the optimum recommendation then the color then brand and finally price all in an array.
 
-    6. for now the only brands you can suggest are as follows H&M, Banana Republic, Forever 21, Uniqlo, and Zara
+    6. for now the ONLY brands you can suggest are from the following brands: '''+ brands +'''
 
     </INSTRUCTIONS_TO_FOLLOW>
 
@@ -231,17 +232,19 @@ def four_Get_Best_Suggestion(Scraped_Data):
 
     <INSTRUCTIONS_TO_FOLLOW>
 
-    1. You had provided a suggestion eailier which we WILL call suggestions, depending on that make decitions.
+    1. You had provided a suggestion earlier which we WILL call suggestions, depending on that make decisions.
 
     2. you WILL be given a json like list in which you WILL choose the best fitting option and return it as an JSON object back.
 
     3. you also WILL calculate the total cost for the outfit.
 
-    4. you WILL give a rating out of 10 of how sattifited you are with the outfit and why, this hgoes under "reasoning", you are allowed to be as desciptive as you want.
+    4. you WILL give a rating out of 10 of how satisfied you are with the outfit and why, this goes under "reasoning", you are allowed to be as descriptive as you want.
     
-    5. you WILL give 3 choices and strickly stick to 3
+    5. you WILL give 3 choices, Strictly stick to 3.
 
-    6. strickly stick to the price range
+    6. Strictly stick to the price range.
+
+    7. MOST IMPORTANT, return exact names which were given in options_to_choose_from when returning choices.
     </INSTRUCTIONS_TO_FOLLOW>
 
     <BLUEPRINT>
@@ -272,7 +275,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
@@ -286,7 +289,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
@@ -300,7 +303,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
