@@ -1,0 +1,203 @@
+body {
+  display: flex;
+  flex-direction: column; /* Change to column */
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.header {
+  background-color: #18181c; /* Set the background color here */
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar h1 {
+  color: #ffffff;
+  margin: 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center; /* Center the list items vertically */
+}
+
+nav ul li {
+  margin-left: 520px; /* Increase the margin to add more space */
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+main {
+  padding: 20px;
+}
+
+button {
+  background-color: #0074e4;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  flex: 1; /* Make the container take the available vertical space */
+}
+.footer {
+  background-color: #18181c;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  margin-top: auto; /* Push the footer to the bottom */
+}
+
+/*homepage*/
+.three-sections-page {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: black;
+}
+#left-section {
+  flex: 1;
+  background-color: #18181c;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 150px;
+}
+
+.collapsible {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: background-color 0.3s;
+}
+
+.collapsible:hover {
+  background-color: #18181c;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+#middle-section {
+  flex: 2;
+  background-color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content at the top */
+}
+
+#search-bar {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 20px; /* Add margin to separate search bar from collapsible buttons */
+}
+
+#right-section {
+  flex: 1;
+  background-color: #18181c;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* Align items at the top */
+  margin-right: 150px;
+}
+
+/*.menu-button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+  margin-right: 10px; Add margin between buttons//
+  transition: background-color 0.3s;
+}
+
+.menu-button:hover {
+  background-color: #45a049;
+}*/
+
+i{
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+}
+
+
+.preferences {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.preference-button {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.submit-filters {
+  background-color: hsl(209, 100%, 45%);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-filters {
+  background-color: #777;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.preference-button.active {
+  background-color: #4CAF50; /* Green background for active buttons */
+  color: white; /* White text color for contrast */
+}

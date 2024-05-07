@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/regstyles.css">
+    <script src="static/script.js"></script>
+    <title>Front Page</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <button class="back-btn" type="button" id="backBtn">Back</button>
+      <main>
+        <div class="verification">
+          <h1>FashionGPT</h1>
+          <div class="error">
+            <p>It seems like you aren't a member yet!</p>
+          </div>
+          <form method="POST" action="{{ url_for('register') }}">
+            <div class="regTextbox">
+              <p>Username</p>
+              <input type="text" name="username" id="username" class="enterText"/>
+              <p>Email</p>
+              <input type="text" name="email" id="email" class="enterText"/>
+              <p>Password</p>
+              <input type="password" name="password" id="password" class="enterText" />
+              <p>Re-enter Password</p>
+              <input type="password" id="rpassword" class="enterText"/>
+              <button class="regbutton" type="submit" id="signupbtn">Sign Up</button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

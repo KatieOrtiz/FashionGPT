@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <title>Three Sections Page</title>
+</head>
+<body class="three-sections-page">
+    <div id="left-section">
+        <form id="filters-form" style="padding-left: 10px;">
+            <h2>Filters</h2>
+            <div class="filter-section">
+                <h3>Price</h3>
+                <input type="text" id="price-range" name="priceRange" placeholder="From" style="width: 120px;"> ~
+                <input type="text" id="price-range" name="priceRange" placeholder="To" style="width: 120px;">
+            </div>
+            <div class="filter-section">
+                <h3>Outfit Preference</h3>
+                <div class="preferences" id="outfit-preferences">
+                    <button type="button" class="preference-button" data-value="Casual">Casual</button>
+                    <button type="button" class="preference-button" data-value="Formal">Formal</button>
+                    <button type="button" class="preference-button" data-value="Sporty">Sporty</button>
+                    <button type="button" class="preference-button" data-value="BusinessCasual">Business Casual</button>
+                    <button type="button" class="preference-button" data-value="Glamorous">Glamorous</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3>Season</h3>
+                <div class="preferences" id="season-preferences">
+                    <button type="button" class="preference-button" data-value="Spring">Spring</button>
+                    <button type="button" class="preference-button" data-value="Summer">Summer</button>
+                    <button type="button" class="preference-button" data-value="Autumn">Autumn</button>
+                    <button type="button" class="preference-button" data-value="Winter">Winter</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3>Style</h3>
+                <div class="preferences" id="style-preferences">
+                    <button type="button" class="preference-button" data-value="Classic">Classic</button>
+                    <button type="button" class="preference-button" data-value="Vintage">Vintage</button>
+                    <button type="button" class="preference-button" data-value="Streetwear">Streetwear</button>
+                    <button type="button" class="preference-button" data-value="Preppy">Preppy</button>
+                    <button type="button" class="preference-button" data-value="Boho">Boho</button>
+                    <button type="button" class="preference-button" data-value="Minimalist">Minimalist</button>
+                </div>
+            </div>
+            <br>
+            <button type="submit" id="submit-filters" style="margin: 20px; padding-left: 40px; padding-right: 40px;">Submit</button>
+            <button type="reset" id="reset-filters" style="padding-left: 40px; padding-right: 40px;">Reset</button>
+        </form>
+    </div>
+
+    <div id="middle-section">
+        <input type="text" id="search-bar" placeholder="Search...">
+        <div id="middle-section">
+            <input type="text" id="search-bar" placeholder="Search...">
+            <div id="output-section"></div> <!-- Placeholder for displaying the output -->
+        </div>
+    </div>
+
+    <div id="right-section">
+        <span id="homebutton"><i class="fa-solid fa-house"></i></span>
+        <span id="likebutton"><i class="fa-solid fa-heart"></i></span>
+        <span id="settingbutton"><i class="fa-solid fa-gear"></i></span>
+    </div>
+    <script src="static/script.js"></script>
+    <script>
+        // Script to fetch and display data from the server
+        document.getElementById('submit-filters').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(document.getElementById('filters-form'));
+
+            fetch('/pref', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                const outputDiv = document.getElementById('output-section');
+                outputDiv.innerHTML = ''; // Clear previous content
+                // Dynamically create content based on data received
+                data.forEach((choice, index) => {
+                    let choiceDiv = document.createElement('div');
+                    choiceDiv.innerHTML = `<h3>Choice ${index + 1}</h3>`;
+                    Object.keys(choice).forEach(key => {
+                        let itemDiv = document.createElement('div');
+                        itemDiv.textContent = `${key}: ${choice[key].join(' - ')}`;
+                        choiceDiv.appendChild(itemDiv);
+                    });
+                    outputDiv.appendChild(choiceDiv);
+                });
+            }).catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
