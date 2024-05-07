@@ -1,126 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
     <title>Favorites</title>
-</head>
-<body class="single-section-page">
+  </head>
+  <body class="single-section-page">
     <header class="header">
       <div class="container">
         <nav class="navbar">
-          <h1>FashionGPT</h1>
-          <ul>
-            <li></li>
-            <span id="homebutton"><i class="fas fa-house"></i></span>
-            <span id="likebutton"><i class="fas fa-heart"></i></span>
-            <span id="settingbutton"><i class="fas fa-gear"></i></span>
-          </ul>
+          <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
+          <div class="navbarh1">
+            <h1>FashionGPT</h1>
+          </div>
+          <div class="navsearch">
+            <input type="text" placeholder="Search..." />
+          </div>
+          <div class="pagebuttons">
+            <ul>
+              <li></li>
+              <span id="homebutton"><i class="fas fa-house"></i></span>
+              <span id="likebutton"><i class="fas fa-heart"></i></span>
+              <span id="settingbutton"><i class="fas fa-gear"></i></span>
+            </ul>
+          </div>
         </nav>
       </div>
     </header>
-</header>
-    <div class="container">
-        <h1>Favorites</h1>
-    <div id="output-section"></div>
-    {% for suggestion_id, products in suggestion_products.items() %}
-    <div class="user-suggestion">
-        <h2>Favorited Suggestion #{{ loop.index }}</h2> 
+    <div class="container2">
+      <h1>Favorites</h1>
+      <div id="output-section"></div>
+      {% for suggestion_id, products in suggestion_products.items() %}
+      <div class="user-suggestion">
+        <h2>Favorited Suggestion #{{ loop.index }}</h2>
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
-        {% if suggestion_id in favorite_suggestion_ids %}
-            <i class="fas fa-heart"></i> <!-- Filled heart icon -->
-        {% else %}
-            <i class="far fa-heart"></i> <!-- Unfilled heart icon -->
-        {% endif %}
-    </button>
+          {% if suggestion_id in favorite_suggestion_ids %}
+          <i class="fas fa-heart"></i>
+          <!-- Filled heart icon -->
+          {% else %}
+          <i class="far fa-heart"></i>
+          <!-- Unfilled heart icon -->
+          {% endif %}
+        </button>
         <div class="suggested-products">
-        <br>
-            {% for product in products %}
-            <div class="clothing-item-tile">
-                <!-- Display product image -->
-                <img class="product-image" src="{{ product.image }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
-                <h3>{{ product.name }}</h3>
-                <p>Price: {{ product.price }}</p>
-                <!-- Add more details if needed -->
-                <a href="{{ product.link }}">View Product</a>
-            </div>
-            {% endfor %}
+          <br />
+          {% for product in products %}
+          <div class="clothing-item-tile">
+            <!-- Display product image -->
+            <img
+              class="product-image"
+              src="{{ product.image }}"
+              alt="Product Image"
+              style="max-width: 200px; max-height: 200px"
+            />
+            <h3>{{ product.name }}</h3>
+            <p>Price: {{ product.price }}</p>
+            <!-- Add more details if needed -->
+            <button href="{{ product.link }}">View Product</button>
+          </div>
+          {% endfor %}
         </div>
-    
-    </div>
-    {% endfor %}
+      </div>
+      {% endfor %}
 
-
-    <script src="static/script.js"></script>  
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to all mark favorite buttons
-        document.querySelectorAll('.mark-favorite').forEach(function(button) {
-            // Check if suggestion is already favorited
-            const suggestionId = button.dataset.suggestionId;
-            fetch('/check-favorite?suggestion_id=' + suggestionId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.isFavorite) {
-                        button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
-                        button.classList.add('favorited'); // Add favorited class
-                    }
+      <script src="static/script.js"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          // Add event listener to all mark favorite buttons
+          document
+            .querySelectorAll(".mark-favorite")
+            .forEach(function (button) {
+              // Check if suggestion is already favorited
+              const suggestionId = button.dataset.suggestionId;
+              fetch("/check-favorite?suggestion_id=" + suggestionId)
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.isFavorite) {
+                    button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
+                    button.classList.add("favorited"); // Add favorited class
+                  }
                 });
 
-            button.addEventListener('click', function() {
+              button.addEventListener("click", function () {
                 // Get the suggestion ID from data attribute
                 const suggestionId = button.dataset.suggestionId;
-                
+
                 // Toggle favorite status
-                if (button.classList.contains('favorited')) {
-                    // Remove from favorites
-                    fetch('/remove-favorite', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ suggestion_id: suggestionId })
+                if (button.classList.contains("favorited")) {
+                  // Remove from favorites
+                  fetch("/remove-favorite", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ suggestion_id: suggestionId }),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        button.innerHTML = '<i class="far fa-heart"></i>'; // Unfilled heart icon
+                        button.classList.remove("favorited"); // Remove favorited class
+                      } else {
+                        alert("Failed to remove suggestion from favorites.");
+                      }
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            button.innerHTML = '<i class="far fa-heart"></i>'; // Unfilled heart icon
-                            button.classList.remove('favorited'); // Remove favorited class
-                        } else {
-                            alert('Failed to remove suggestion from favorites.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Failed to remove suggestion from favorites.');
+                    .catch((error) => {
+                      console.error("Error:", error);
+                      alert("Failed to remove suggestion from favorites.");
                     });
                 } else {
-                    // Add to favorites
-                    fetch('/mark-favorite', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ suggestion_id: suggestionId })
+                  // Add to favorites
+                  fetch("/mark-favorite", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ suggestion_id: suggestionId }),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
+                        button.classList.add("favorited"); // Add favorited class
+                      } else {
+                        alert("Failed to mark suggestion as favorite.");
+                      }
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            button.innerHTML = '<i class="fas fa-heart"></i>'; // Filled heart icon
-                            button.classList.add('favorited'); // Add favorited class
-                        } else {
-                            alert('Failed to mark suggestion as favorite.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Failed to mark suggestion as favorite.');
+                    .catch((error) => {
+                      console.error("Error:", error);
+                      alert("Failed to mark suggestion as favorite.");
                     });
                 }
+              });
             });
         });
-    });
-    </script>
+      </script>
+    </div>
+
   </body>
 </html>
