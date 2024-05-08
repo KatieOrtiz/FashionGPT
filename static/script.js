@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("backBtn");
   button.addEventListener("click", function () {
-    window.location.href = "index";
+    window.location.href = "/";
   });
 });
 //register.html
