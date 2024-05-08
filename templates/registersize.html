@@ -25,11 +25,34 @@
           opacity: 1;
         }
       }
+      /* Style for loading indicator */
+      .loading {
+        display: none;
+        margin: 10px;
+        text-align: center;
+      }
+      .loading i {
+        font-size: 24px;
+        animation: spin 1s infinite linear;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      /* Style for disabled button */
+      button:disabled {
+          opacity: 0.5; /* Reduce opacity to visually indicate disabled state */
+          cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <form method="POST" action="/pref" class="container">
+      <form method="POST" action="/pref" class="container" id="registerForm">
         <main>
           <!-- Section 1: Basic Information -->
           <div class="verification" id="section1">
@@ -245,7 +268,11 @@
               <textarea id="usersRequest" name="usersRequest"></textarea>
             </div>
             <div class="button-container">
-              <button type="submit">Submit</button>
+                <!-- Loading indicator -->
+              <div class="loading" id="loadingIndicator">
+                <i class="fas fa-spinner fa-spin"></i> Generating Outfit Suggestions...  
+              </div>
+                <button id="submitButton" type="submit">Submit</button>
             </div>
           </div>
         </main>
@@ -282,6 +309,29 @@
           }
         };
       });
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Add event listener for form submission
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+    
+            // Get submit button and loading indicator elements
+            var submitButton = document.getElementById("submitButton");
+            var loadingIndicator = document.getElementById("loadingIndicator");
+    
+            // Show loading indicator and disable the submit button
+            if (loadingIndicator) {
+                loadingIndicator.style.display = "block";
+                submitButton.disabled = true;
+                submitButton.classList.add("disabled"); // Add a class to style the button
+            }
+    
+            // Submit the form
+            this.submit();
+        });
+    });    
+    
     </script>
   </body>
 </html>

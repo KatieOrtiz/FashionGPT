@@ -284,8 +284,33 @@ def pref():
     return render_template('registerSize.html')
 
 # Add 
-@app.route('/userSettings')
-def personalDetails():
+@app.route('/userSettings', methods=['GET', 'POST'])
+def user_settings():
+    if request.method == 'POST':
+        old_password = request.form.get('oldPassword')
+        new_password = request.form.get('newPassword')
+        confirm_password = request.form.get('confirmPassword')
+        email = session['email']
+        current_user = User.query.filter_by(email=email).first()
+
+        # Check if the old password matches the stored password
+        if not current_user.check_password(old_password):
+            flash('Incorrect current password.', 'error')
+            return redirect(url_for('user_settings'))
+
+        # Check if the new password matches the confirm password
+        if new_password != confirm_password:
+            flash('New password and confirm password do not match.', 'error')
+            return redirect(url_for('user_settings'))
+
+        # Update the user's password in the database
+        current_user.set_password(new_password)
+        db.session.commit()
+
+        flash('Password successfully updated.', 'success')
+        return render_template('userSettings.html')
+
+    # If it's a GET request, render the password reset form
     return render_template('userSettings.html')
 
 

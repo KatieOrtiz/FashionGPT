@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/styles.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
     <script src="static/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    />
-    <title>Settings</title>
-  </head>
-  <body class="single-section-page">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <title>Password Reset</title>
+</head>
+<body class="single-section-page">
     <header class="header">
-      <div class="container">
-        <nav class="navbar">
-          <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
-          <div class="navbarh1">
-            <h1>FashionGPT</h1>
-          </div>
-          <div class="pagebuttons">
-            <ul>
-              <li></li>
-              <span id="homebutton"><i class="fas fa-house"></i></span>
-              <span id="likebutton"><i class="fas fa-heart"></i></span>
-              <span id="settingbutton"><i class="fas fa-gear"></i></span>
-            </ul>
-          </div>
-        </nav>
-      </div>
+        <div class="container">
+            <nav class="navbar">
+                <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
+                <div class="navbarh1">
+                    <h1>FashionGPT</h1>
+                </div>
+                <div class="pagebuttons">
+                    <ul>
+                        <li></li>
+                        <span id="homebutton"><i class="fas fa-house"></i></span>
+                        <span id="likebutton"><i class="fas fa-heart"></i></span>
+                        <span id="settingbutton"><i class="fas fa-gear"></i></span>
+                    </ul>
+                </div>
+            </nav>
+        </div>
     </header>
+    <br>
+    <br>
     <div class="container4">
-      <div class="password-reset-form">
-        <h2>Password Reset</h2>
-        <form action="#" method="POST">
-          <label for="oldPassword">Old Password:</label>
-          <input type="password" id="oldPassword" name="oldPassword" required />
+        <div class="password-reset-form">
+            <h2>Password Reset</h2>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message">
+                        <p>{{ messages[0] }}</p>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form action="#" method="POST">
+                <label for="oldPassword">Current Password:</label>
+                <input type="password" id="oldPassword" name="oldPassword" required />
 
-          <label for="newPassword">New Password:</label>
-          <input type="password" id="newPassword" name="newPassword" required />
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required />
 
-          <label for="confirmPassword">Confirm New Password:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            required
-          />
+                <label for="confirmPassword">Confirm New Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required />
 
-          <button type="submit">Confirm Reset</button>
-        </form>
-      </div>
+                <button type="submit">Confirm Reset</button>
+            </form>
+        </div>
     </div>
-        <footer class="footer" id="contactme">
-      <h2>Let's Keep in Touch!</h2>
-      <p>Copyright&copy; 2024 by FashionGPT</p>
+    <footer class="footer" id="contactme">
+        <h2>Let's Keep in Touch!</h2>
+        <p>Copyright&copy; 2024 by FashionGPT</p>
     </footer>
-  </body>
+</body>
 </html>

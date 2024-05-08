@@ -11,6 +11,8 @@ load_dotenv()
 suggestion_nextstep = ""
 start_time = time.time()
 query_id =0
+global sex 
+sex = 'Male'
 
 def GPT(system_prompt: str, msg: str): 
     client = anthropic.Anthropic(
@@ -20,7 +22,7 @@ def GPT(system_prompt: str, msg: str):
     response = client.messages.create(
         model="claude-3-haiku-20240307",
         max_tokens=2048,
-        temperature=0,
+        temperature=0.6,
         system=system_prompt,
         messages=[
             {
@@ -48,6 +50,9 @@ def GPT(system_prompt: str, msg: str):
 
 def one_getUserData(generated_id, gender, weight, waist, length, Skintone, height, hair, build, Budget, Colors, age, Style, Season, fabric, usersRequest):
     start_time = time.time()
+    global sex
+    sex = gender
+    brands = 'H&M, Banana Republic, Forever 21, Zara, Shien, Nike, and Macys'
     msg = '''
     <INSTRUCTIONS_TO_FOLLOW>
     </IMPORTANT>dont be too specific be less specific and more general, VERY GENERAL IN-FACT!</IMPORTANT>
@@ -56,11 +61,11 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
 
     2. It's RECOMMENDED that you give colors too, for when its appropriate.
 
-    3. The hashtags are general values and uses may divert sometimes from using them so make destines appropriately
+    3. The hashtags are general values and uses may divert sometimes, so make decisions appropriately.
 
     4. ALWAYS return the optimum recommendation then the color then brand and finally price all in an array.
 
-    6. for now the only brands you can suggest are as follows H&M, Banana Republic, Forever 21, Uniqlo, and Zara
+    6. for now the ONLY brands you can suggest are from the following brands: '''+ brands +'''
 
     </INSTRUCTIONS_TO_FOLLOW>
 
@@ -84,7 +89,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     "usersRequest":"" #a customs input by the user detailing more.
     }
     </INPUT>
-    <RESPONCE>
+    <RESPONSE>
     {
     "top":[val,color,brand},
     "outerwear":[val,color,brand},
@@ -100,7 +105,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     "avgTotalPrice":"",
     "reasoning":""
     }
-    </RESPONCE>
+    </RESPONSE>
 
     </BLUEPRINT>
 
@@ -126,7 +131,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     "usersRequest":"lunch outing with friends, at a high scale restaurant"
     }
     </INPUT>
-    <RESPONCE>
+    <RESPONSE>
     {
     "top":[G200 Gildan Adult Ultra Cotton T-Shirt", "white", "Gildan"],
     "outerwear":["quarter zip sweater","black","abercrombie"],
@@ -142,7 +147,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     "avgTotalPrice":"150:170",
     "reasoning":"The old money dress code emphasizes timeless, high-quality pieces that suggest understated elegance and comfort. This look, featuring a classic T-shirt, a quarter-zip sweater, linen-cotton pants, casual shoes, and white socks, conveys a relaxed yet refined aesthetic."
     }
-    </RESPONCE>
+    </RESPONSE>
 
     </EXAMPLE>
     
@@ -187,40 +192,40 @@ def two_ask_GPT_Suggestion(totalMsg):
             suggestion[key] = None
 
     # Logging to DB
-    email = session['email']
-    user = User.query.filter_by(email=email).first()
-    user_id = user.id
-    query = Suggestion(
-        user_id=user_id,
-        query_id=query_id,
-        choose="general",
-        top=json.dumps(suggestion["top"]),
-        outerwear=json.dumps(suggestion["outerwear"]),
-        hat=json.dumps(suggestion["hat"]),
-        necklace=json.dumps(suggestion["necklace"]),
-        earring=json.dumps(suggestion["earring"]),
-        bottoms=json.dumps(suggestion["Bottoms"]),
-        socks=json.dumps(suggestion["socks"]),
-        footwear=json.dumps(suggestion["footwear"]),
-        bracelet=json.dumps(suggestion["bracelet"]),
-        watch=json.dumps(suggestion["watch"]),
-        belt=json.dumps(suggestion["belt"]),
-        avgTotalPrice=json.dumps(suggestion["avgTotalPrice"]),
-        reasoning=json.dumps(suggestion["reasoning"])
-    )
-    db.session.add(query)
-    db.session.commit()
+    # email = session['email']
+    # user = User.query.filter_by(email=email).first()
+    # user_id = user.id
+    # query = Suggestion(
+    #     user_id=user_id,
+    #     query_id=query_id,
+    #     choose="general",
+    #     top=json.dumps(suggestion["top"]),
+    #     outerwear=json.dumps(suggestion["outerwear"]),
+    #     hat=json.dumps(suggestion["hat"]),
+    #     necklace=json.dumps(suggestion["necklace"]),
+    #     earring=json.dumps(suggestion["earring"]),
+    #     bottoms=json.dumps(suggestion["Bottoms"]),
+    #     socks=json.dumps(suggestion["socks"]),
+    #     footwear=json.dumps(suggestion["footwear"]),
+    #     bracelet=json.dumps(suggestion["bracelet"]),
+    #     watch=json.dumps(suggestion["watch"]),
+    #     belt=json.dumps(suggestion["belt"]),
+    #     avgTotalPrice=json.dumps(suggestion["avgTotalPrice"]),
+    #     reasoning=json.dumps(suggestion["reasoning"])
+    # )
+    # db.session.add(query)
+    # db.session.commit()
 
     # Assign each value from the dictionary to a variable
     print("\033[32m✔\033[0m GOT SUGGESTION")
     three_Scrape_Data(suggestion_nextstep)
 
-async def scrape(suggestion):
-    scraped_data = outfit_suggestions_scraper(suggestion)
+async def scrape(suggestion, sex):
+    scraped_data = outfit_suggestions_scraper(suggestion, sex)
     return scraped_data
 
 def three_Scrape_Data(suggestion):
-    Scraped_Data = asyncio.run(scrape(suggestion))
+    Scraped_Data = asyncio.run(scrape(suggestion, sex))
     print("\033[32m✔\033[0m GOT SCRAPED DATA")
     
     four_Get_Best_Suggestion(Scraped_Data)
@@ -231,17 +236,19 @@ def four_Get_Best_Suggestion(Scraped_Data):
 
     <INSTRUCTIONS_TO_FOLLOW>
 
-    1. You had provided a suggestion eailier which we WILL call suggestions, depending on that make decitions.
+    1. You had provided a suggestion earlier which we WILL call suggestions, depending on that make decisions.
 
     2. you WILL be given a json like list in which you WILL choose the best fitting option and return it as an JSON object back.
 
     3. you also WILL calculate the total cost for the outfit.
 
-    4. you WILL give a rating out of 10 of how sattifited you are with the outfit and why, this hgoes under "reasoning", you are allowed to be as desciptive as you want.
+    4. you WILL give a rating out of 10 of how satisfied you are with the outfit and why, this goes under "reasoning", you are allowed to be as descriptive as you want.
     
-    5. you WILL give 3 choices and strickly stick to 3
+    5. you WILL give 3 choices, Strictly stick to 3.
 
-    6. strickly stick to the price range
+    6. Strictly stick to the price range.
+
+    7. MOST IMPORTANT, return exact names which were given in options_to_choose_from when returning choices.
     </INSTRUCTIONS_TO_FOLLOW>
 
     <BLUEPRINT>
@@ -264,7 +271,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     options_to_choose_from = {'top': '{"name": "...", "price": "...", "colors": [...]}, 
                             {"name": "...", "price": "...", "colors": [...]}...',...}
     </INPUT>
-    <RESPONCE>
+    <RESPONSE>
     {"choice1":{
     "top": [name,color,price],
     "outerwear":[name,color,price],
@@ -272,7 +279,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
@@ -286,7 +293,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
@@ -300,7 +307,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "necklace": [name,color,price],
     "earring":[name,color,price],
     "Bottoms":[name,color,price],
-    "socks":namel,colorprice]}
+    "socks":[name,color,price]}
     "footwear":[name,color,price],
     "bracelet":[name,color,price],
     "watch":[name,color,price],
@@ -308,7 +315,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "TotalPrice":"total_cost",
     "reasoning":"..."
     }}
-    </RESPONCE>
+    </RESPONSE>
 
     </BLUEPRINT>
 
@@ -331,15 +338,15 @@ def four_Get_Best_Suggestion(Scraped_Data):
     "TotalPrice": "100-150",
     "reasoning": "For a casual spring look for a shorter, slimmer build with light skin and red hair, this outfit featuring a slim fit t-shirt, lightweight denim jacket, chino shorts, canvas sneakers, and a casual canvas belt provides a comfortable yet stylish look. The cotton fabrics and spring-appropriate colors work well for the season."
     }
-    options_to_choose_from = {'top': '{"name": "Printed T-shirt", "price": "$ 9.99", "colors": ["White/Fender", "Black/Spiritualized", "White/Nirvana", "Dark gray"]}, {"name": "Printed T-shirt", "price": "$ 9.99", "colors": ["White/Nirvana", "White/Fender", "Black/Spiritualized", "Dark gray"]}', 'outerwear': '', 'hat': '{"name": "Curved-Brim Baseball Cap", "price": "$6.99", ...}'}
+    options_to_choose_from = {'top': '{"name": "Printed T-shirt", "price": "$9.99", "colors": ["White/Fender", "Black/Spiritualized", "White/Nirvana", "Dark gray"]}, {"name": "Printed T-shirt", "price": "$9.99", "colors": ["White/Nirvana", "White/Fender", "Black/Spiritualized", "Dark gray"]}', 'outerwear': '', 'hat': '{"name": "Curved-Brim Baseball Cap", "price": "$6.99", ...}'}
     </INPUT>
-    <RESPONCE>
+    <RESPONSE>
     {"choice1":{
-    "top": ["Printed T-shirt","Black/Spiritualized","$ 9.99"],
-    "hat":["Embroidered Rose Baseball Cap","WHITE/RED","$ 8.00"],
-    ..., "TotalPrice": "$ 189",...
+    "top": ["Printed T-shirt","Black/Spiritualized","$9.99"],
+    "hat":["Embroidered Rose Baseball Cap","WHITE/RED","$8.00"],
+    ..., "TotalPrice": "$189",...
     },{"choice2":{...
-    </RESPONCE>
+    </RESPONSE>
 
     </EXAMPLE>
     
