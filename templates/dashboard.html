@@ -23,13 +23,18 @@
             <li></li>
             <span id="homebutton"><i class="fas fa-house"></i></span>
             <span id="likebutton"><i class="fas fa-heart"></i></span>
-            <span id="settingbutton"><i class="fas fa-gear"></i></span>
+            <span id="settingbutton" class="dropdown"><i class="fas fa-gear"></i>
+              <div class="dropdown-content">
+                <a id="settingsdd">Settings</a>
+                <a href="#">Signout</a>
+                </div>
+            </span>
           </ul>
         </div>
       </nav>
     </div>
   </header>
-  <button id="generateoutfit" class="back2pref">Generate a new outfit!</button>
+  <button id="generateoutfit" class="generateoutfit">Generate a new outfit!</button>
     <div class="container2">
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
@@ -48,16 +53,16 @@
         <div class="suggested-products">
           <br>
             {% for product in products %}
-            <div class="clothing-item-tile">
-                <!-- Display product image -->
-                <img class="product-image" src="{{ product.image }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
-                <h3>{{ product.name }}</h3>
-                <p>Price: {{ product.price }}</p>
-                <!-- Add more details if needed -->
-                <a class="viewProductbtn" href="{{ product.link }}" target="_blank">View Product</a>
-            </div>
-            {% endfor %}
-        </div>
+            <div class="product-container">
+              <!-- Display product image -->
+              <img class="product-image" src="{{ product.image }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
+              <h3>{{ product.name }}</h3>
+              <p>Price: {{ product.price }}</p>
+              <!-- Add more details if needed -->
+              <a class="viewProductbtn" href="{{ product.link }}" target="_blank">View Product</a>
+          </div>
+          {% endfor %}
+      </div>
        
     </div>
     {% endfor %}
