@@ -340,3 +340,9 @@ a.viewProductbtn:active {
   background-color: black;
   padding: 0px;
 }
+.flash-error{
+  color: red;
+}
+.flash-success{
+  color: green;
+}
