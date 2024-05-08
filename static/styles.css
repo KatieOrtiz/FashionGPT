@@ -420,3 +420,9 @@ a.viewProductbtn:active {
 .generateoutfit:hover {
   background-color: #0056b3; /* Darken background color on hover */
 }
+.flash-error{
+  color: red;
+}
+.flash-success{
+  color: green;
+}
