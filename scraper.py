@@ -14,6 +14,7 @@ import json, re, random
 options = Options()
 # options.add_argument('--headless=new')
 options.add_argument("--incognito")
+options.add_argument('--disable-blink-features=AutomationControlled')
 service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
 options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
 
@@ -750,7 +751,7 @@ def outfit_suggestions_scraper(outfit_json, sex):
             "Zara": ZARA,
             "Shien": SHEIN,
             "Nike": NIKE,
-            "Macy": MACYS
+            "Macy's": MACYS
         }
         
         # Iterate over each item in the outfit

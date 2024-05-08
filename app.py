@@ -260,11 +260,50 @@ def get_user_queries():
         app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({'error': 'Could not fetch user queries'}), 500
 
-# @app.route('/api/update_user_data', methods=['GET'])
-# def update_user_data():
+@app.route('/api/update_user_data/<int:user_id>', methods=['GET', 'POST'])
+def update_user_data(user_id):
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        new_email = request.form.get('email')
+        try:
+            user = User.query.get(user_id)
+            if user:
+                user.username = new_username if new_username else user.username
+                user.email = new_email if new_email else user.email
+                db.session.commit()
+                return jsonify({'message': 'User data updated successfully'}), 200
+            else:
+                return jsonify({'message': 'User not found'}), 404
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'Failed to update user data', 'error': str(e)}), 500
+    else:  # GET request
+        try:
+            user = User.query.get(user_id)
+            if user:
+                return jsonify({
+                    'user_id': user.id,
+                    'username': user.username,
+                    'email': user.email
+                }), 200
+            else:
+                return jsonify({'message': 'User not found'}), 404
+        except Exception as e:
+            return jsonify({'message': 'Failed to retrieve user data', 'error': str(e)}), 500
 
-# @app.route('/api/delete_account', methods=['GET'])
-# def delete_account():
+@app.route('/api/delete_account/<int:user_id>', methods=['POST'])
+def delete_account(user_id):
+    try:
+        user = User.query.get(user_id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({'message': 'User account deleted successfully'}), 200
+        else:
+            return jsonify({'message': 'User not found'}), 404
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to delete account', 'error': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():

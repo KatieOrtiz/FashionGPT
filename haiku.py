@@ -52,7 +52,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     start_time = time.time()
     global sex
     sex = gender
-    brands = 'H&M, Banana Republic, Forever 21, Uniqlo, Zara, Shien, Nike, and Macy'
+    brands = 'H&M, Banana Republic, Forever 21, Zara, Shien, Nike, and Macys'
     msg = '''
     <INSTRUCTIONS_TO_FOLLOW>
     </IMPORTANT>dont be too specific be less specific and more general, VERY GENERAL IN-FACT!</IMPORTANT>
