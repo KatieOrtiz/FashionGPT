@@ -11,32 +11,12 @@ from datetime import datetime
 from time import sleep
 import json, re, random
 
-
 options = Options()
-options.add_argument('--headless=new')
+# options.add_argument('--headless=new')
 options.add_argument("--incognito")
-
-# Set the path to your chromedriver.exe file
-chrome_driver_path = "C:\\Users\\katie\\Desktop\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
-service = Service(executable_path=chrome_driver_path)
-
-# Set the path to your Chrome executable
-chrome_binary_location = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-options.binary_location = chrome_binary_location
-
-# Pass the options when creating the driver instance
-driver = webdriver.Chrome(service=service, options=options)
-driver.implicitly_wait(0.5)
-
-# options = Options()
-# # options.add_argument('--headless=new')
-# options.add_argument("--incognito")
-# service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
-# options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
-
-# # Pass the options when creating the driver instance
-# driver = webdriver.Chrome(service=service, options=options)
-# driver.implicitly_wait(0.5)
+options.add_argument('--disable-blink-features=AutomationControlled')
+service = Service(executable_path="/Users/charitha/Documents/GitHub/fupdated/chromedriver")
+options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
 
 app.app_context().push()
 
@@ -45,7 +25,7 @@ driver = webdriver.Chrome(service=service, options=options)
 # driver.implicitly_wait(0.5)
 
 #scraper for H&M
-def HM(search):
+def HM(search, sex):
     '''
         Scrapes hm.com using users prefernces  
     '''
@@ -57,12 +37,12 @@ def HM(search):
 
     #Page load timeout
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
         )
     except:
         print("failed to load H&M")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product items
@@ -129,7 +109,7 @@ def HM(search):
     return dataDump
 
 #scraper for Banana Republic
-def BR(search):
+def BR(search, sex):
     # Go to the webpage
     driver.get(f'https://bananarepublicfactory.gapfactory.com/browse/search.do?searchText={search}')
 
@@ -138,12 +118,12 @@ def BR(search):
 
     # Ensure that the product cards are loaded
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-card'))
         )
     except:
         print("failed to load Banana Republic")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product cards
@@ -218,7 +198,7 @@ def BR(search):
     return dataDump
 
 #scraper for Forever 21
-def F21(search):
+def F21(search, sex):
     # Go to the webpage
     driver.get(f'https://www.forever21.com/us/search?q={search}&lang=en_US')
 
@@ -227,12 +207,12 @@ def F21(search):
 
     # Find all product items
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-grid__item"))
         )
     except:
         print("failed to load Forever 21")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'product-grid__item')
@@ -308,7 +288,7 @@ def F21(search):
     return dataDump
 
 #scraper for UNIQLO
-def UNIQLO(search):
+def UNIQLO(search, sex):
     # Go to the webpage
     driver.get(f'https://www.uniqlo.com/us/en/search?q={search}')
 
@@ -317,12 +297,12 @@ def UNIQLO(search):
 
     # Find all product items
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "fr-ec-product-tile-resize-wrapper"))
         )
     except:
         print("failed to load UNIQLO")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'fr-ec-product-tile-resize-wrapper')
@@ -435,27 +415,27 @@ def UNIQLO(search):
     return dataDump
 
 #scraper for ZARA
-def ZARA(search):
+def ZARA(search, sex):
     '''
         A function that scrapes data from the website Zara which includes product name, color, price, img, and url
     '''
-    sex = "W"
-    if sex == "M":
-        gender = "MAN"
-    else:
+    if sex == "female":
         gender = "WOMAN"
-
+        search = search[7::]
+    else:
+        gender = "MAN"
+        search = search[4::]
     # Go to the webpage
     driver.get(f'https://www.zara.com/us/en/search?searchTerm={search}&section={gender}')
 
     # Wait for the products to be loaded
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li._product"))
         )
     except:
         print("failed to load ZARA")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
     
     # Find all product items
@@ -531,7 +511,7 @@ def ZARA(search):
     return dataDump
 
 #scraper for H&M
-def SHEIN(search):
+def SHEIN(search, sex):
     '''
         Scrapes shein.com using users prefernces  
     '''
@@ -543,13 +523,13 @@ def SHEIN(search):
 
     #Page load timeout
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-list-v2__container"))
         )
         print("loaded Shein")
     except:
         print("failed to load Shein")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product items
@@ -605,7 +585,7 @@ def SHEIN(search):
     return dataDump
 
 #scraper for NIKE
-def NIKE(search):
+def NIKE(search, sex):
     '''
         Scrapes nike.com using users prefernces  
     '''
@@ -617,13 +597,13 @@ def NIKE(search):
 
     #Page load timeout
     try:
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".product-card__body"))
         )
         print("loaded Nike")
     except:
         print("failed to load Nike")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product items
@@ -682,7 +662,7 @@ def NIKE(search):
     return dataDump
 
 #scraper for MACYS
-def MACYS(search):
+def MACYS(search, sex):
     '''
         Scrapes macys.com using users prefernces  
     '''
@@ -700,7 +680,7 @@ def MACYS(search):
         print("Page loaded successfully")
     except:
         print("failed to load Macys")
-        fallback_brand_picker(search)
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product items
@@ -747,15 +727,15 @@ def MACYS(search):
 
 
 #function when a website fails and call on another webpage as backup
-brand_list = [HM, BR, F21, ZARA, SHEIN, NIKE, MACYS]
+brand_list = [HM, BR, F21, UNIQLO, ZARA, SHEIN, NIKE, MACYS]
 # Main function that calls a random function from the list
-def fallback_brand_picker(search):
+def fallback_brand_picker(search, sex):
     chosen_function = random.choice(brand_list)
-    chosen_function(search)
+    chosen_function(search, sex)
 
 
 #call on this to pass on to GPT for second step
-def outfit_suggestions_scraper(outfit_json):
+def outfit_suggestions_scraper(outfit_json, sex):
     try:
         # Parse the input JSON
         outfit = json.loads(outfit_json)
@@ -768,11 +748,11 @@ def outfit_suggestions_scraper(outfit_json):
             "H&M": HM,
             "Banana Republic": BR,
             "Forever 21": F21,
+            "Uniqlo": UNIQLO,
             "Zara": ZARA,
             "Shien": SHEIN,
             "Nike": NIKE,
-            "Macy": MACYS
-            # "Zara": lambda item, color: zara(item, color, "unisex")  # Assuming a default sex as 'unisex'
+            "Macy's": MACYS
         }
         
         # Iterate over each item in the outfit
@@ -793,10 +773,10 @@ def outfit_suggestions_scraper(outfit_json):
                     search_function = brand_function_map[brand]
                     
                     # Prepare the query with name and color
-                    query = f"{item_name} {color}"
+                    query = f"{sex} {item_name}"
                     
                     # Call the respective brand function and store the results
-                    comprehensive_results[item] = search_function(query)
+                    comprehensive_results[item] = search_function(query, sex)
                 else:
                     print(f"Brand {brand} not recognized")
             else:
@@ -808,3 +788,4 @@ def outfit_suggestions_scraper(outfit_json):
 
     except json.JSONDecodeError as e:
         return f"Error parsing JSON: {str(e)}"
+

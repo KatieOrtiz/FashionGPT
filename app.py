@@ -129,11 +129,9 @@ def dashboard():
             
             if product_info:
                # Parse the string to extract the product name
-                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")   
-                print("PRODUCT:", product_name)
+                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")
                 # Query the product table for the matching product
                 product = Product.query.filter_by(name=product_name).first()
-                print(product)
                 if product:
                     suggestion_products[suggestion.id].append({
                         'name': product.name,
@@ -274,7 +272,6 @@ def pref():
         db.session.add(query)
         db.session.commit()
         generated_id = query.id
-        print(f'The generated ID for the newly inserted row is: {generated_id}')
 
         #sending query to AI
         one_getUserData(generated_id=generated_id, gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
