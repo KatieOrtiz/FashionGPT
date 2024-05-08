@@ -37,6 +37,7 @@
       <div id="output-section"></div>
       {% for suggestion_id, products in suggestion_products.items() %}
       <div class="user-suggestion">
+        <div class="suggestion-header">
         <h2>Favorited Suggestion #{{ loop.index }}</h2>
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
@@ -48,6 +49,7 @@
           <!-- Unfilled heart icon -->
           {% endif %}
         </button>
+      </div>
         <div class="suggested-products">
           <br />
           {% for product in products %}

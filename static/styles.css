@@ -282,12 +282,19 @@ p {
 }
 
 .clothing-item-tile {
-  /* Remove display: inline-block; */
   margin: 0 10px 20px; /* Adjust margin */
   text-align: center; /* Center align text */
   width: 200px; /* Set a fixed width for consistent layout */
+  display: flex; /* Use flexbox for inner content */
+  flex-direction: column; /* Stack content vertically */
 }
-
+.clothing-item-tile .product-info {
+  flex-grow: 1; /* Expand to fill available space */
+}
+.product-image {
+  max-width: 100%; /* Ensure image doesn't exceed container width */
+  max-height: 200px; /* Limit image height */
+}
 
 h3 {
   margin-top: 10px; /* Add top margin for spacing */
@@ -323,4 +330,13 @@ a.viewProductbtn:active {
 {
   width: 90px;
   height: 60px;
+}
+.suggestion-header {
+  display: flex;
+  align-items: center;
+  
+}
+.mark-favorite{
+  background-color: black;
+  padding: 0px;
 }
