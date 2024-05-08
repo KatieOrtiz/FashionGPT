@@ -324,3 +324,9 @@ a.viewProductbtn:active {
   width: 90px;
   height: 60px;
 }
+.flash-error{
+  color: red;
+}
+.flash-success{
+  color: green;
+}
