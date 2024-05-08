@@ -5,25 +5,49 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from extensions import db
+from extensions import db, app
 from models import Product
 from datetime import datetime
 from time import sleep
-import json
-import re
+import json, re, random
+
 
 options = Options()
-# options.add_argument('--headless=new')
+#options.add_argument('--headless=new')
 options.add_argument("--incognito")
-service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
-options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
+options.add_argument('--disable-blink-features=AutomationControlled')
+
+# Set the path to your chromedriver.exe file
+chrome_driver_path = "C:\\Users\\katie\\Desktop\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
+service = Service(executable_path=chrome_driver_path)
+
+# Set the path to your Chrome executable
+chrome_binary_location = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+options.binary_location = chrome_binary_location
 
 # Pass the options when creating the driver instance
 driver = webdriver.Chrome(service=service, options=options)
 driver.implicitly_wait(0.5)
 
+# options = Options()
+# # options.add_argument('--headless=new')
+# options.add_argument("--incognito")
+# service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
+# options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
+
+# # Pass the options when creating the driver instance
+# driver = webdriver.Chrome(service=service, options=options)
+# driver.implicitly_wait(0.5)
+
+app.app_context().push()
+
+# Pass the options when creating the driver instance
+driver = webdriver.Chrome(service=service, options=options)
+# driver.implicitly_wait(0.5)
+
+
 #scraper for H&M
-def HM(search):
+def HM(search, sex):
     '''
         Scrapes hm.com using users prefernces  
     '''
@@ -35,11 +59,12 @@ def HM(search):
 
     #Page load timeout
     try:
-        WebDriverWait(driver, 15).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
         )
     except:
         print("failed to load H&M")
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product items
@@ -106,7 +131,7 @@ def HM(search):
     return dataDump
 
 #scraper for Banana Republic
-def BR(search):
+def BR(search, sex):
     # Go to the webpage
     driver.get(f'https://bananarepublicfactory.gapfactory.com/browse/search.do?searchText={search}')
 
@@ -120,6 +145,7 @@ def BR(search):
         )
     except:
         print("failed to load Banana Republic")
+        fallback_brand_picker(search, sex)
         pass
 
     # Find all product cards
@@ -194,7 +220,7 @@ def BR(search):
     return dataDump
 
 #scraper for Forever 21
-def F21(search):
+def F21(search, sex):
     # Go to the webpage
     driver.get(f'https://www.forever21.com/us/search?q={search}&lang=en_US')
 
@@ -208,6 +234,7 @@ def F21(search):
         )
     except:
         print("failed to load Forever 21")
+        fallback_brand_picker(search, sex)
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'product-grid__item')
@@ -283,7 +310,7 @@ def F21(search):
     return dataDump
 
 #scraper for UNIQLO
-def uniqlo(search):
+def UNIQLO(search, sex):
     # Go to the webpage
     driver.get(f'https://www.uniqlo.com/us/en/search?q={search}')
 
@@ -297,6 +324,7 @@ def uniqlo(search):
         )
     except:
         print("failed to load UNIQLO")
+        fallback_brand_picker(search, sex)
         pass
 
     products = driver.find_elements(By.CLASS_NAME, 'fr-ec-product-tile-resize-wrapper')
@@ -409,15 +437,14 @@ def uniqlo(search):
     return dataDump
 
 #scraper for ZARA
-def zara(search: str) -> str:
+def ZARA(search, sex):
     '''
         A function that scrapes data from the website Zara which includes product name, color, price, img, and url
     '''
-    sex = "M"
-    if sex == "M":
-        gender = "MAN"
-    else:
+    if sex == "Female":
         gender = "WOMAN"
+    else:
+        gender = "MAN"
 
     # Go to the webpage
     driver.get(f'https://www.zara.com/us/en/search?searchTerm={search}&section={gender}')
@@ -429,6 +456,7 @@ def zara(search: str) -> str:
         )
     except:
         print("failed to load ZARA")
+        fallback_brand_picker(search, sex)
         pass
     
     # Find all product items
@@ -503,9 +531,232 @@ def zara(search: str) -> str:
     # print(gptDump)
     return dataDump
 
+#scraper for H&M
+def SHEIN(search, sex):
+    '''
+        Scrapes shein.com using users prefernces  
+    '''
+    # Go to the webpage
+    driver.get(f'https://us.shein.com/pdsearch/{search}')
+
+    # Initialize an empty list to hold all product details
+    all_products = []
+
+    #Page load timeout
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "product-list-v2__container"))
+        )
+        print("loaded Shein")
+    except:
+        print("failed to load Shein")
+        fallback_brand_picker(search, sex)
+        pass
+
+    # Find all product items
+    products = driver.find_elements(By.CSS_SELECTOR, 'section.product-card')
+    # Loop through each product and extract the details
+    for product in products[:4]:
+        try:
+
+            # Product name
+            name = product.find_element(By.CLASS_NAME, 'goods-title-link').text
+            # Price
+            price = product.find_element(By.CSS_SELECTOR, '.product-card__price span').text.strip('$')
+            # Image
+            image = product.find_element(By.CSS_SELECTOR, '.crop-image-container img').get_attribute('src')
+            # Link
+            link = product.find_element(By.CSS_SELECTOR, '.product-card__top-wrapper a').get_attribute('href')
+            
+            #adding to db
+            new_product = Product(name=name, price=float(price), color='-', image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
+
+            # Append product details to all_products list
+            all_products.append({
+                'name': name,
+                'price': price,
+                'image': image,
+                'link': link
+            })
+
+        except Exception as e:
+            print("Error extracting product details", e)
+
+
+    # Serialize the list into JSON
+    gptDump = json.dumps(all_products, indent=4)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    products_list = json.loads(gptDump)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    temp = [{key: value for key, value in product.items() if key not in ['image', 'link']} for product in products_list]
+
+    # Convert to JSON if needed
+    dataDump = json.dumps(temp)
+    clean_string = re.sub(r'\\', '', dataDump)
+    dataDump = re.sub(r'^\[|\]$', '', clean_string)
+
+    # Clean up (close the browser)
+    # driver.quit()
+    # Output the JSON data
+    # print(gptDump)
+    return dataDump
+
+#scraper for NIKE
+def NIKE(search, sex):
+    '''
+        Scrapes nike.com using users prefernces  
+    '''
+    # Go to the webpage
+    driver.get(f'https://www.nike.com/w?q={search}')
+
+    # Initialize an empty list to hold all product details
+    all_products = []
+
+    #Page load timeout
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-card__body"))
+        )
+        print("loaded Nike")
+    except:
+        print("failed to load Nike")
+        fallback_brand_picker(search, sex)
+        pass
+
+    # Find all product items
+    products = driver.find_elements(By.CSS_SELECTOR, '.product-card__body')
+    # Loop through each product and extract the details
+    for product in products[:10]:
+        try:
+
+            # Product name
+            name1 = product.find_element(By.CSS_SELECTOR, '.product-card__title').text
+            name2 = product.find_element(By.CSS_SELECTOR, '.product-card__subtitle').text
+            name_full = f"{name1} - {name2}"
+
+            # Price
+            price = product.find_element(By.CSS_SELECTOR, '.product-price.is--current-price').text.strip('$')
+            # Image
+            image = product.find_element(By.CSS_SELECTOR, 'img.product-card__hero-image').get_attribute('src')
+            # Link
+            link = product.find_element(By.CSS_SELECTOR, 'a.product-card__link-overlay').get_attribute('href')
+            
+            #adding to db
+            new_product = Product(name=name_full, price=float(price), color='-', image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
+
+            # Append product details to all_products list
+            all_products.append({
+                'name': name_full,
+                'price': price,
+                'image': image,
+                'link': link
+            })
+
+        except Exception as e:
+            print("Error extracting product details", e)
+
+
+    # Serialize the list into JSON
+    gptDump = json.dumps(all_products, indent=4)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    products_list = json.loads(gptDump)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    temp = [{key: value for key, value in product.items() if key not in ['image', 'link']} for product in products_list]
+
+    # Convert to JSON if needed
+    dataDump = json.dumps(temp)
+    clean_string = re.sub(r'\\', '', dataDump)
+    dataDump = re.sub(r'^\[|\]$', '', clean_string)
+
+    # Clean up (close the browser)
+    # driver.quit()
+    # Output the JSON data
+    # print(gptDump)
+    return dataDump
+
+#scraper for MACYS
+def MACYS(search, sex):
+    '''
+        Scrapes macys.com using users prefernces  
+    '''
+    # Go to the webpage
+    driver.get(f'https://www.macys.com/shop/featured/{search}')
+
+    # Initialize an empty list to hold all product details
+    all_products = []
+
+    # Wait for the page elements to load
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".productThumbnail"))
+        )
+        print("Page loaded successfully")
+    except:
+        print("failed to load Macys")
+        fallback_brand_picker(search, sex)
+        pass
+
+    # Find all product items
+    products = driver.find_elements(By.CSS_SELECTOR, '.productThumbnail')
+    
+    # Loop through each product and extract the details
+    for product in products[:10]:  # Limit to first 10 products for brevity
+        try:
+            link = product.find_element(By.CSS_SELECTOR, 'a.productDescLink').get_attribute('href')
+            name = product.find_element(By.CSS_SELECTOR, '.productDescription a').text
+            price = product.find_element(By.CSS_SELECTOR, '.prices .regular').text.strip('$')
+            image = product.find_element(By.CSS_SELECTOR, 'img').get_attribute('src')
+
+            # Append product details to all_products list
+            all_products.append({
+                'name': name,
+                'price': price,
+                'image': image,
+                'link': link
+            })
+
+        except Exception as e:
+            print("Error extracting product details:", e)
+
+    # Serialize the list into JSON
+    gptDump = json.dumps(all_products, indent=4)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    products_list = json.loads(gptDump)
+
+    # Create a new list excluding the 'image' and 'link' keys
+    temp = [{key: value for key, value in product.items() if key not in ['image', 'link']} for product in products_list]
+
+    # Convert to JSON if needed
+    dataDump = json.dumps(temp)
+    clean_string = re.sub(r'\\', '', dataDump)
+    dataDump = re.sub(r'^\[|\]$', '', clean_string)
+
+    # Clean up (close the browser)
+    # driver.quit()
+    # Output the JSON data
+    # print(gptDump)
+    return dataDump
+
+
+#function when a website fails and call on another webpage as backup
+brand_list = [HM, BR, F21, UNIQLO, ZARA, SHEIN, NIKE, MACYS]
+# Main function that calls a random function from the list
+def fallback_brand_picker(search, sex):
+    chosen_function = random.choice(brand_list)
+    chosen_function(search, sex)
+
 
 #call on this to pass on to GPT for second step
-def outfit_suggestions_scraper(outfit_json):
+def outfit_suggestions_scraper(outfit_json, sex):
     try:
         # Parse the input JSON
         outfit = json.loads(outfit_json)
@@ -518,9 +769,11 @@ def outfit_suggestions_scraper(outfit_json):
             "H&M": HM,
             "Banana Republic": BR,
             "Forever 21": F21,
-            "Uniqlo": uniqlo,
-            "Zara": zara
-            # "Zara": lambda item, color: zara(item, color, "unisex")  # Assuming a default sex as 'unisex'
+            "Uniqlo": UNIQLO,
+            "Zara": ZARA,
+            "Shien": SHEIN,
+            "Nike": NIKE,
+            "Macy's": MACYS
         }
         
         # Iterate over each item in the outfit
@@ -541,19 +794,18 @@ def outfit_suggestions_scraper(outfit_json):
                     search_function = brand_function_map[brand]
                     
                     # Prepare the query with name and color
-                    query = f"{item_name} {color}"
+                    query = f"{sex} {item_name}"
                     
                     # Call the respective brand function and store the results
-                    comprehensive_results[item] = search_function(query)
+                    comprehensive_results[item] = search_function(query, sex)
                 else:
                     print(f"Brand {brand} not recognized")
             else:
                 print(f"Details for item {item} are incomplete or not a list")
         
         # Return the comprehensive JSON object containing all suggestions
+        return comprehensive_results       
         driver.quit()
-        return comprehensive_results
 
     except json.JSONDecodeError as e:
         return f"Error parsing JSON: {str(e)}"
-
