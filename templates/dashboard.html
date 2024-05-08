@@ -16,7 +16,7 @@
           <h1>FashionGPT</h1>
         </div>
         <div class="navsearch">
-          <input type="text" placeholder="Search..." />
+          <input id="searchInput" type="text" placeholder="Search..." />
         </div>
         <div class="pagebuttons">
           <ul>
@@ -29,6 +29,7 @@
       </nav>
     </div>
   </header>
+  <button id="generateoutfit" class="back2pref">Generate a new outfit!</button>
     <div class="container2">
     <div id="output-section"></div>
     {% for suggestion_id, products in suggestion_products.items() %}
@@ -58,7 +59,7 @@
        
     </div>
     {% endfor %}
-    <script src="static/script.js"></script>  
+    <script src="static/script.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         // Add event listener to all mark favorite buttons

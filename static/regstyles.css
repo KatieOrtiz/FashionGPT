@@ -65,7 +65,7 @@ button {
   background: none;
   color: white;
 }
-#error{
+.error{
 color: red;
 }
 .back-btn {
@@ -201,4 +201,10 @@ margin-right: 320px;
 {
   width: 90px;
   height: 60px;
+}
+.flash-error{
+  color: red;
+}
+.flash-success{
+  color: green;
 }

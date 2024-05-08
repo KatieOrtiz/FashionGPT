@@ -158,3 +158,40 @@ document.addEventListener("DOMContentLoaded", function() {
     window.location.href = "login"; // Replace "login.html" with the actual URL of your login page
   });
 });
+
+// search.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listener to the search input field
+  var searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+      searchInput.addEventListener("input", search);
+  }
+});
+
+function search() {
+  var input, filter, userSuggestion, products, productName, i, j, txtValue;
+  input = document.getElementById("searchInput");
+  filter = input.value.toUpperCase();
+  userSuggestion = document.getElementsByClassName("user-suggestion");
+  
+  for (i = 0; i < userSuggestion.length; i++) {
+      products = userSuggestion[i].getElementsByClassName("clothing-item-tile");
+      for (j = 0; j < products.length; j++) {
+          productName = products[j].getElementsByTagName("h3")[0];
+          txtValue = productName.textContent || productName.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              products[j].style.display = "";
+          } else {
+              products[j].style.display = "none";
+          }
+      }
+  }
+}
+
+//Generate new outfit
+document.addEventListener("DOMContentLoaded", function () {
+  var button = document.getElementById("generateoutfit");
+  button.addEventListener("click", function () {
+    window.location.href = "pref";
+  });
+});
