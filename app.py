@@ -104,15 +104,15 @@ def verifyPassword():
     return render_template('verifyPassword.html')
 
 @app.route('/dashboard')
-#@login_required
+@login_required
 def dashboard():
     #logging to DB
     email = session['email']
     user = User.query.filter_by(email=email).first()
     user_id = user.id
     
-     # Retrieve user suggestions from the database
-    user_suggestions = Suggestion.query.filter_by(user_id=user_id).all()
+    # Retrieve user suggestions from the database and sort by timestamp descending
+    user_suggestions = Suggestion.query.filter_by(user_id=user_id).order_by(Suggestion.timestamp.desc()).all()
 
     # Initialize dictionary to store product suggestions grouped by user suggestion
     suggestion_products = {}
@@ -122,15 +122,16 @@ def dashboard():
         # Initialize list to store products for this suggestion
         suggestion_products[suggestion.id] = []
 
-         # Match product names for each category
+        # Match product names for each category
         categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
         for category in categories:
             product_info = getattr(suggestion, category)  # Get product info from suggestion
             
             if product_info:
-               # Parse the string to extract the product name
-                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")   
+                # Parse the string to extract the product name
+                product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")
                 print("PRODUCT:", product_name)
+                
                 # Query the product table for the matching product
                 product = Product.query.filter_by(name=product_name).first()
                 print(product)
@@ -144,6 +145,7 @@ def dashboard():
                     })
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
+
 
 @app.route('/mark-favorite', methods=['POST'])
 def mark_favorite():
