@@ -260,6 +260,11 @@ def get_user_queries():
         app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({'error': 'Could not fetch user queries'}), 500
 
+# @app.route('/api/update_user_data', methods=['GET'])
+# def update_user_data():
+
+# @app.route('/api/delete_account', methods=['GET'])
+# def delete_account():
 
 if __name__ == '__main__':
     with app.app_context():
