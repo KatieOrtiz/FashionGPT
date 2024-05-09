@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.location.href = 'favorites';
   });
 
-  document.getElementById('settingbutton').addEventListener('click', function() {
+  document.getElementById('settingsdd').addEventListener('click', function() {
     window.location.href = 'userSettings';
   });
 });
