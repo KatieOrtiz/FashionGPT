@@ -104,7 +104,7 @@ def verifyPassword():
     return render_template('verifyPassword.html')
 
 @app.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
     #logging to DB
     email = session['email']
