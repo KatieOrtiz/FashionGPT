@@ -322,20 +322,9 @@ def user_settings():
     return render_template('userSettings.html')
 
 
-#change password
-
-#change username
-
-#change Email
-
-#about us
-
-
-
 @app.route('/logout')
-#@login_required
 def logout():
-    logout_user()
+    #logout_user()
     flash('You have been logged out!', 'success')
     return redirect(url_for('index'))
 
