@@ -35,6 +35,8 @@ body {
 }
 
 .navbar h1 {
+  font-size: 25px;
+  font-weight: bold;
   color: #ffffff;
   margin: 0;
   margin-right: auto; /* Add this line to push the h1 element to the left */
@@ -233,6 +235,7 @@ h1.section-header {
   border: 2px solid #cccccc; /* Add a border */
   border-radius: 5px; /* Add some border radius for rounded corners */
   font-size: 16px; /* Adjust font size as needed */
+  color: black;
   transition: border-color 0.3s ease; /* Add transition for smoother hover effect */
   flex: 1; /* Expand to fill remaining space */
   width: 100%;
@@ -281,45 +284,6 @@ p {
   justify-content: center; /* Center items horizontally */
 }
 
-.clothing-item-tile {
-  margin: 0 10px 20px; /* Adjust margin */
-  text-align: center; /* Center align text */
-  width: 200px; /* Set a fixed width for consistent layout */
-}
-
-.suggested-products {
-  display: flex; /* Use flexbox layout */
-  flex-wrap: wrap; /* Allow items to wrap to the next line */
-}
-
-.product-container {
-  width: calc(20% - 20px); /* Set the width to 20% minus the margin */
-  margin: 0 10px 20px; /* Adjust margin */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  display: flex; /* Use flexbox layout */
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center items horizontally */
-  justify-content: space-between; /* Distribute space between elements */
-}
-
-.product-image {
-  max-width: 100%; /* Limit image width to its container */
-  max-height: 200px; /* Limit image height */
-  border: 2px solid #18181c; /* Add a border around the image */
-  border-radius: 5px; /* Add border radius for rounded corners */
-  margin-bottom: 10px; /* Add spacing below the image */
-}
-
-
-.product-details {
-  margin-top: 10px; /* Add margin to separate from the image */
-  width: 100%; /* Ensure full width */
-}
-
-.clothing-item-tile .product-image {
-  max-width: 150px !important; /* Reduce the maximum width */
-  max-height: 200px; /* Limit image height */
-}
 
 h3 {
   margin-top: 0; /* Remove top margin for the title */
@@ -327,6 +291,7 @@ h3 {
   white-space: normal; /* Allow text to wrap to the next line */
   text-align: center; /* Center align the title */
   width: 80%; /* Set width to 80% */
+  text-align: left;
 }
 a.viewProductbtn {
   display: inline-block; /* Display as inline-block */
@@ -407,6 +372,7 @@ a.viewProductbtn:active {
 }
 
 .generateoutfit {
+  padding: 5px 10px;
   background-color: #007bff; /* Set background color */
   color: #fff; /* Set text color */
   margin: 20px;
@@ -425,4 +391,15 @@ a.viewProductbtn:active {
 }
 .flash-success{
   color: green;
+}
+h2#dashh2{
+  font-size: 25px;
+  font-weight: bold;
+}
+.dashh1{
+  font-size: 30px;
+  font-weight: bold;
+}
+.shadow-lg{
+  margin-bottom: 30px;
 }

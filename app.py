@@ -104,11 +104,12 @@ def verifyPassword():
     return render_template('verifyPassword.html')
 
 @app.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
     #logging to DB
     email = session['email']
     user = User.query.filter_by(email=email).first()
+
     user_id = user.id
     
     # Retrieve user suggestions from the database and sort by timestamp descending
@@ -133,19 +134,18 @@ def dashboard():
                 
                 # Query the product table for the matching product
                 product = Product.query.filter_by(name=product_name).first()
-                
                 if product:
-                    # Fetch reasoning from the suggestion
-                    reasoning = suggestion.reasoning
-                    
                     suggestion_products[suggestion.id].append({
                         'name': product.name,
                         'price': product.price,
                         'color': product.color,
-                        'image': product.image,  # Include image attribute
-                        'link': product.link,  # Include link attribute
-                        'reasoning': reasoning  # Include reasoning attribute
+                        'image': product.image,  
+                        'link': product.link,
                     })
+                else:
+                    # Handle case where product doesn't exist
+                    # For example, log a warning or skip adding the product to the suggestion
+                    pass
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
 
@@ -230,9 +230,6 @@ def favorites():
                 # Initialize list to store products for this suggestion
                 suggestion_products[suggestion_id] = []
 
-                # Fetch reasoning from the suggestion
-                reasoning = suggestion.reasoning
-
                 # Match product names for each category
                 categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
                 for category in categories:
@@ -247,10 +244,14 @@ def favorites():
                                 'name': product.name,
                                 'price': product.price,
                                 'color': product.color,
-                                'image': product.image,  # Include image attribute
-                                'link': product.link,  # Include link attribute
-                                'reasoning': reasoning  # Include reasoning attribute
+                                'image': product.image, 
+                                'link': product.link,  
                             })
+                        else:
+                            # Handle case where product doesn't exist
+                            # For example, log a warning or skip adding the product to the suggestion
+                            pass
+
     return render_template('favorites.html', suggestion_products=suggestion_products)
 
 

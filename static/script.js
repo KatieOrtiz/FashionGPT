@@ -173,20 +173,21 @@ function search() {
   input = document.getElementById("searchInput");
   filter = input.value.toUpperCase();
   userSuggestion = document.getElementsByClassName("user-suggestion");
-  
+
   for (i = 0; i < userSuggestion.length; i++) {
       products = userSuggestion[i].getElementsByClassName("clothing-item-tile");
       for (j = 0; j < products.length; j++) {
           productName = products[j].getElementsByTagName("h3")[0];
           txtValue = productName.textContent || productName.innerText;
           if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              products[j].style.display = "";
+              products[j].style.display = ""; // Show product if it matches the filter
           } else {
-              products[j].style.display = "none";
+              products[j].style.display = "none"; // Hide product if it doesn't match the filter
           }
       }
   }
 }
+
 
 //Generate new outfit
 document.addEventListener("DOMContentLoaded", function () {
