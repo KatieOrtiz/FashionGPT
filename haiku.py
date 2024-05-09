@@ -12,7 +12,7 @@ suggestion_nextstep = ""
 start_time = time.time()
 query_id =0
 global sex 
-sex = 'Male'
+sex = "Male"
 
 def GPT(system_prompt: str, msg: str): 
     client = anthropic.Anthropic(
@@ -52,7 +52,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     start_time = time.time()
     global sex
     sex = gender
-    brands = 'H&M, Banana Republic, Forever 21, Zara, Shien, Nike, and Macys'
+    brands = "H&M, Banana Republic, Forever 21, Zara, Shien, Nike, and Macys."
     msg = '''
     <INSTRUCTIONS_TO_FOLLOW>
     </IMPORTANT>dont be too specific be less specific and more general, VERY GENERAL IN-FACT!</IMPORTANT>
@@ -67,6 +67,7 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
 
     6. for now the ONLY brands you can suggest are from the following brands: '''+ brands +'''
 
+    7. Be VERY gender bias.
     </INSTRUCTIONS_TO_FOLLOW>
 
     <BLUEPRINT>
@@ -91,23 +92,65 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     </INPUT>
     <RESPONSE>
     {
-    "top":[val,color,brand},
-    "outerwear":[val,color,brand},
-    "hat":[val,color,brand},
-    "necklace": [val,color,brand},
-    "earring":[val,color,brand},
-    "Bottoms":[val,color,brand},
-    "socks":[val,color,brand}
-    "footwear":[val,color,brand},
-    "bracelet":[val,color,brand},
-    "watch":[val,color,brand},
-    "belt":[val,color,brand},
+    "top":[val,color,brand],
+    "outerwear":[val,color,brand],
+    "hat":[val,color,brand],
+    "necklace": [val,color,brand],
+    "earring":[val,color,brand],
+    "Bottoms":[val,color,brand],
+    "socks":[val,color,brand]
+    "footwear":[val,color,brand],
+    "bracelet":[val,color,brand],
+    "watch":[val,color,brand],
+    "belt":[val,color,brand],
     "avgTotalPrice":"",
     "reasoning":""
     }
     </RESPONSE>
 
     </BLUEPRINT>
+
+    <*** below is an example ***>
+
+    <EXAMPLE>
+    <INPUT>
+    {
+    "gender":"M",
+    "weight":"185",
+    "weist":"32",
+    "length":"32",
+    "Skintone": "light brown",
+    "height":"184",
+    "hair":"brunet",
+    "build":"Fit",
+    "Budget":"10:400",
+    "Colors":"-",
+    "age":"29",
+    "Style":"old money",
+    "Season":"spring",
+    "fabric":"-",
+    "usersRequest":"lunch outing with friends, at a high scale restaurant"
+    }
+    </INPUT>
+    <RESPONSE>
+    {
+    "top":[G200 Gildan Adult Ultra Cotton T-Shirt", "white", "Gildan"],
+    "outerwear":["quarter zip sweater","black","abercrombie"],
+    "hat":"-",
+    "necklace": "-",
+    "earring":"-",
+    "Bottoms":["THLETIC LINEN-COTTON EWAIST PANT","black", "Banana republic"],
+    "socks":["White socks", "white", "hanes"],
+    "footwear":["Mens Wally Linen", "white", "Hey Dude"],
+    "bracelet":"-",
+    "watch":"-",
+    "belt":"-",
+    "avgTotalPrice":"150:170",
+    "reasoning":"The old money dress code emphasizes timeless, high-quality pieces that suggest understated elegance and comfort. This look, featuring a classic T-shirt, a quarter-zip sweater, linen-cotton pants, casual shoes, and white socks, conveys a relaxed yet refined aesthetic."
+    }
+    </RESPONSE>
+
+    </EXAMPLE>
     
     '''
     user_preferences = f'''
@@ -138,9 +181,10 @@ def one_getUserData(generated_id, gender, weight, waist, length, Skintone, heigh
     two_ask_GPT_Suggestion(totalMsg)
 
 def two_ask_GPT_Suggestion(totalMsg):
-    system = "you are a fashion designer, your role as a fashion designer is to give good suggestions on which outfits go with what; you have been known give amazing suggestions and have always been known for giving appropriate and not over the top suggestion, sleek and stylish designs which make people stare and appreciate. You are also known for getting right to the point and output your response only in JSON format and in a very strict order and way (explained more about how you respond in the examples below)."
+    system = "You are an AI assistant known for your excellent fashion sense and ability to provide sleek, stylish, and appropriate outfit suggestions for any occasion. Your role is to suggest outfits that will turn heads and garner appreciation, while still being tasteful and not over-the-top."
     suggestion = GPT(system, totalMsg)
     # print(suggestion)
+    global suggestion_nextstep 
     suggestion_nextstep = suggestion
     suggestion = json.loads(suggestion)
 
@@ -189,103 +233,75 @@ def three_Scrape_Data(suggestion):
     four_Get_Best_Suggestion(Scraped_Data)
 
 def four_Get_Best_Suggestion(Scraped_Data):
-    system = "you are a fashion designer, your role as a fashion designer is to give good suggestions on which outfits go with what; you have been known give amazing suggestions and have always been known for giving appropriate and not over the top suggestion, sleek and stylish designs which make people stare and appreciate. You are also known for getting right to the point and output your response only in JSON format and in a very strict order and way (explained more about how you respond in the examples below)."
+    system = "You are an AI assistant known for your excellent fashion sense and ability to provide sleek, stylish, and appropriate outfit suggestions for any occasion. Your role is to suggest outfits that will turn heads and garner appreciation, while still being tasteful and not over-the-top."
     msg = '''
+    You will be acting as an AI fashion assistant to suggest 3 stylish outfit choices based on a previous suggestion and a list of options to choose from. 
 
-    <INSTRUCTIONS_TO_FOLLOW>
+    Here is the previous outfit suggestion, provided as a JSON object:
+    <suggestion>
+    '''+str(suggestion_nextstep)+'''
+    </suggestion>
 
-    1. You had provided a suggestion earlier which we WILL call suggestions, depending on that make decisions.
+    And here is the list of options to choose from for each piece of the outfit, also in JSON format:
+    <options_to_choose_from>
+    '''+str(Scraped_Data)+'''
+    </options_to_choose_from>
 
-    2. you WILL be given a json like list in which you WILL choose the best fitting option and return it as an JSON object back.
+    Your task is to generate 3 new outfit choices, using the previous suggestion as a starting point but selecting items from the options provided. 
 
-    3. you also WILL calculate the total cost for the outfit.
+    For each of the 3 outfit choices:
+    - Select items for each part of the outfit that match the style and color scheme of the original suggestion. If an item category is marked with a "-" in the original suggestion, you can skip it for the new outfits as well.
+    - Make sure to choose items that are in the specified price range from the original suggestion.
+    - Select items that are appropriate for the gender specified in the original suggestion.
 
-    4. you WILL give a rating out of 10 of how satisfied you are with the outfit and why, this goes under "reasoning", you are allowed to be as descriptive as you want.
-    
-    5. you WILL give 3 choices, Strictly stick to 3.
+    After you have selected all the items for an outfit, calculate the total price by adding up the individual item prices. 
 
-    6. Strictly stick to the price range.
+    Then, take a moment to reflect on the completed outfit in your <reflection> inner monologue. Consider how well the pieces go together, whether the outfit suits the original style request, and how satisfied you think the client would be with it. </reflection>
 
-    7. make sure it is for '''+ sex +'''
+    Emerge from your reflection and assign the outfit a rating score out of 10. Write out the reasoning for your score in a <reasoning> tag.
 
-    8. MOST IMPORTANT, return exact names which were given in options_to_choose_from when returning choices.
-    </INSTRUCTIONS_TO_FOLLOW>
+    Repeat this process for all 3 outfit choices.
 
-    <BLUEPRINT>
-    <INPUT>
-    suggestion = {
-    "top": ["NAME", "COLOR", "BRAND"],
-    "outerwear": ["NAME", "COLOR", "BRAND"],
-    "hat": ["NAME", "COLOR", "BRAND"],
-    "necklace": ["NAME", "COLOR", "BRAND"],
-    "earring": ["NAME", "COLOR", "BRAND"],
-    "Bottoms": ["NAME", "COLOR", "BRAND"],
-    "socks": ["NAME", "COLOR", "BRAND"],
-    "footwear": ["NAME", "COLOR", "BRAND"],
-    "bracelet": ["NAME", "COLOR", "BRAND"],
-    "watch": ["NAME", "COLOR", "BRAND"],
-    "belt": ["NAME", "COLOR", "BRAND"],
-    "TotalPrice": "price",
-    "reasoning": "reason..."
-    }
-    options_to_choose_from = {'top': '{"name": "...", "price": "...", "colors": [...]}, 
-                            {"name": "...", "price": "...", "colors": [...]}...',...}
-    </INPUT>
-    <RESPONSE>
+    When you are done, return the 3 completed outfits in JSON format like this:
+
+    <result>
     {"choice1":{
-    "top": [name,color,price],
-    "outerwear":[name,color,price],
-    "hat":[name,color,price],
-    "necklace": [name,color,price],
-    "earring":[name,color,price],
-    "Bottoms":[name,color,price],
-    "socks":[name,color,price]}
-    "footwear":[name,color,price],
-    "bracelet":[name,color,price],
-    "watch":[name,color,price],
-    "belt":[name,color,price],
-    "TotalPrice":"total_cost",
-    "reasoning":"..."
-    },{"choice2":{...
-    }, {"choice3":{...
+    "top": ["name","color","price"],
+    "outerwear": ["name","color","price"],
+    "hat": ["name","color","price"],
+    "necklace": ["name","color","price"], 
+    "earring": ["name","color","price"],
+    "Bottoms": ["name","color","price"],
+    "socks": ["name","color","price"],
+    "footwear": ["name","color","price"],
+    "bracelet": ["name","color","price"],
+    "watch": ["name","color","price"],
+    "belt": ["name","color","price"],
+    "TotalPrice": "total_price",
+    "rating": "rating_score",
+    "reasoning": "reasoning_text"
+    },
+    "choice2":{
+    ...
+    },
+    "choice3":{
+    ...  
     }}
-    </RESPONSE>
+    </result>
 
-    </BLUEPRINT>
+    Some important notes:
+    - Stick strictly to the price range from the original suggestion.
+    - Make sure your outfit choices are appropriate for the specified gender.
+    - Use the exact names for items as they appear in the options_to_choose_from object. Do not make up your own names.
+    - Skip any item categories that have a "-" in the original suggestion.
+    - Always provide exactly 3 choices, no more and no less.
+    - Make sure it is for '''+ sex +'''
 
-    <*** below is an example ***>
-
-    <EXAMPLE>
-    <INPUT>
-    suggestion = {
-    "top": ["Slim Fit Crew Neck T-Shirt", "white", "H&M"],
-    "outerwear": ["Lightweight Denim Jacket", "light blue", "Zara"],
-    "hat": ["Baseball Cap", "red", "Forever 21"],
-    "necklace": "-",
-    "earring": "-",
-    "Bottoms": ["Slim Fit Chino Shorts", "khaki", "Uniqlo"],
-    "socks": ["Ankle Socks", "white", "H&M"],
-    "footwear": ["Canvas Sneakers", "white", "Converse"],
-    "bracelet": "-",
-    "watch": "-",
-    "belt": ["Casual Canvas Belt", "brown", "Banana Republic"],
-    "TotalPrice": "100-150",
-    "reasoning": "For a casual spring look for a shorter, slimmer build with light skin and red hair, this outfit featuring a slim fit t-shirt, lightweight denim jacket, chino shorts, canvas sneakers, and a casual canvas belt provides a comfortable yet stylish look. The cotton fabrics and spring-appropriate colors work well for the season."
-    }
-    options_to_choose_from = {'top': '{"name": "Printed T-shirt", "price": "$9.99", "colors": ["White/Fender", "Black/Spiritualized", "White/Nirvana", "Dark gray"]}, {"name": "Printed T-shirt", "price": "$9.99", "colors": ["White/Nirvana", "White/Fender", "Black/Spiritualized", "Dark gray"]}', 'outerwear': '', 'hat': '{"name": "Curved-Brim Baseball Cap", "price": "$6.99", ...}'}
-    </INPUT>
-    <RESPONSE>
-    {"choice1":{
-    "top": ["Printed T-shirt","Black/Spiritualized","$9.99"],
-    "hat":["Embroidered Rose Baseball Cap","WHITE/RED","$8.00"],
-    ..., "TotalPrice": "$189",...
-    },{"choice2":{...
-    </RESPONSE>
-
-    </EXAMPLE>
-    
+    Remember, your role is to be a fashionable and thoughtful stylist. Take time to consider each outfit carefully to ensure it will delight the client. Good luck!
     '''
-    totalMsg = msg+"\n suggestion = "+str(suggestion_nextstep)+"\n options_to_choose_from = "+str(Scraped_Data)
+    # totalMsg = msg+"\n suggestion = "+str(suggestion_nextstep)+"\n options_to_choose_from = "+str(Scraped_Data)
+    totalMsg = msg
+    print(totalMsg)
     Final_suggestions = GPT(system, totalMsg)
     if re.findall(r'"\s*}$', Final_suggestions):
         Final_suggestions = Final_suggestions + "}"
@@ -299,6 +315,7 @@ def four_Get_Best_Suggestion(Scraped_Data):
     try:
         # Assume Final_suggestions is your JSON string
         Final_suggestions = json.loads(Final_suggestions)
+        print(Final_suggestions)
     except json.JSONDecodeError as e:
         print("Failed to decode JSON:")
         print(Final_suggestions)  # Log the problematic JSON string
