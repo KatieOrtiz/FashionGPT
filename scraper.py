@@ -37,9 +37,15 @@ def HM(search, sex):
 
     #Page load timeout
     try:
+        error = product.find_element(By.CSS_SELECTOR, 'div.section > h1').text
+        if error == 'No matching items':
+            print("No results on HM")
+            fallback_brand_picker(search, sex)
+            pass
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
         )
+        print("Loaded H&M")
     except:
         print("failed to load H&M")
         fallback_brand_picker(search, sex)
@@ -118,9 +124,17 @@ def BR(search, sex):
 
     # Ensure that the product cards are loaded
     try:
+        # Check for error message container existence
+        error_present = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'error-message-container'))
+        )
+        if error_present:
+            print("No results on Banana Republic")
+            fallback_brand_picker(search, sex)
         WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-card'))
         )
+        print("Loaded BR")
     except:
         print("failed to load Banana Republic")
         fallback_brand_picker(search, sex)
@@ -210,6 +224,7 @@ def F21(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-grid__item"))
         )
+        print("Loaded F21")
     except:
         print("failed to load Forever 21")
         fallback_brand_picker(search, sex)
@@ -300,6 +315,7 @@ def UNIQLO(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "fr-ec-product-tile-resize-wrapper"))
         )
+        print("Loaded UNIQLO")
     except:
         print("failed to load UNIQLO")
         fallback_brand_picker(search, sex)
@@ -433,6 +449,7 @@ def ZARA(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li._product"))
         )
+        print("Loaded ZARA")
     except:
         print("failed to load ZARA")
         fallback_brand_picker(search, sex)
@@ -526,7 +543,7 @@ def SHEIN(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "product-list-v2__container"))
         )
-        print("loaded Shein")
+        print("Loaded Shein")
     except:
         print("failed to load Shein")
         fallback_brand_picker(search, sex)
@@ -600,7 +617,7 @@ def NIKE(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".product-card__body"))
         )
-        print("loaded Nike")
+        print("Loaded Nike")
     except:
         print("failed to load Nike")
         fallback_brand_picker(search, sex)
@@ -677,7 +694,7 @@ def MACYS(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".productThumbnail"))
         )
-        print("Page loaded successfully")
+        print("Loaded MACYS")
     except:
         print("failed to load Macys")
         fallback_brand_picker(search, sex)
@@ -774,6 +791,7 @@ def outfit_suggestions_scraper(outfit_json, sex):
                     
                     # Prepare the query with name and color
                     query = f"{sex} {item_name}"
+                    print(query)
                     
                     # Call the respective brand function and store the results
                     comprehensive_results[item] = search_function(query, sex)
@@ -784,6 +802,7 @@ def outfit_suggestions_scraper(outfit_json, sex):
         
         # Return the comprehensive JSON object containing all suggestions
         driver.quit()
+        print(comprehensive_results)
         return comprehensive_results
 
     except json.JSONDecodeError as e:
