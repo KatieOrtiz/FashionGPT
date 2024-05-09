@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="static/styles.css" />
     <link
       rel="stylesheet"
@@ -40,12 +41,12 @@
       </div>
     </header>
     <div class="container2">
-      <h1>Favorites</h1>
+      <h1 class="dashh1">Favorites</h1>
       <div id="output-section"></div>
       {% for suggestion_id, products in suggestion_products.items() %}
       <div class="user-suggestion">
         <div class="suggestion-header">
-        <h2>Favorited Suggestion #{{ loop.index }}</h2>
+          <h2 id ="dashh2">Outfit Suggestion #{{ loop.index }}</h2>
         <!-- Button to mark suggestion as favorite -->
         <button class="mark-favorite" data-suggestion-id="{{ suggestion_id }}">
           {% if suggestion_id in favorite_suggestion_ids %}
@@ -60,21 +61,24 @@
       <p>{{ products[0].reasoning }}</p>
         <div class="suggested-products">
           <br />
-          {% for product in products %}
           <div class="clothing-item-tile">
             <!-- Display product image -->
-            <img
-              class="product-image"
-              src="{{ product.image }}"
-              alt="Product Image"
-              style="max-width: 200px; max-height: 200px"
-            />
-            <h3>{{ product.name }}</h3>
-            <p>Price: {{ product.price }}</p>
-            <!-- Add more details if needed -->
-            <button href="{{ product.link }}">View Product</button>
+            <div class="mt-6 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {% for product in products %}
+          <div class="flex item-center rounded-lg bg-white shadow-lg overflow-hidden w-96">
+            <img src="{{ product.image }}" alt="Product Image" class="bg-contain h-full w-32 flex-shrink-0">
+            <div class="px-6 py-4">
+              <h3 class="text-md font-semibold text-gray-800">{{ product.name }}</h3>
+              <p class="text-gray-600">Price: ${{ product.price }}</p>
+              <div class="mt-4">
+                <a  href="{{ product.link }}" target="_blank" class="text-indigo-500 hover:text-indigo-400 font-semibold text-sm">View Product</a>
+              </div>
           </div>
+          </div>
+
           {% endfor %}
+        </div>
+      </div>
         </div>
       </div>
       {% endfor %}
