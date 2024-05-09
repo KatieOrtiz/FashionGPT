@@ -28,7 +28,7 @@ def register():
         password = request.form['password']
 
         if User.query.filter_by(email=email).first():
-            flash('Email already exists.')
+            flash('Email already exists')
             return redirect(url_for('register'))
 
         new_user = User(username=username, email=email)
@@ -60,13 +60,13 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         if not email:
-            flash('Please enter an email address.')
+            flash('Please enter an email address')
             return render_template('login.html')
 
         # Check if the email exists in the database
         user = User.query.filter_by(email=email).first()
         if user is None:
-            flash('No account found with that email address.')
+            flash('No account found with that email address')
             return render_template('register.html')
         # If user exists, proceed to verify password
         session['email'] = email
@@ -100,7 +100,7 @@ def verifyPassword():
             #resp.set_cookie('x-access-token', token)
             return resp
         else:
-            flash('Invalid password. Try again.')
+            flash('Invalid password. Try again.', 'error')
     return render_template('verifyPassword.html')
 
 @app.route('/dashboard')
@@ -130,21 +130,25 @@ def dashboard():
             if product_info:
                 # Parse the string to extract the product name
                 product_name = product_info.split(',')[0].strip("[]").strip('"').strip("'")
-                print("PRODUCT:", product_name)
                 
                 # Query the product table for the matching product
                 product = Product.query.filter_by(name=product_name).first()
-                print(product)
+                
                 if product:
+                    # Fetch reasoning from the suggestion
+                    reasoning = suggestion.reasoning
+                    
                     suggestion_products[suggestion.id].append({
                         'name': product.name,
                         'price': product.price,
                         'color': product.color,
                         'image': product.image,  # Include image attribute
-                        'link': product.link  # Include link attribute
+                        'link': product.link,  # Include link attribute
+                        'reasoning': reasoning  # Include reasoning attribute
                     })
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
+
 
 
 @app.route('/mark-favorite', methods=['POST'])
@@ -202,8 +206,6 @@ def remove_favorite():
     
     return 'OK', 200
 
-
-
 @app.route('/favorites')
 #@login_required
 def favorites():
@@ -228,6 +230,9 @@ def favorites():
                 # Initialize list to store products for this suggestion
                 suggestion_products[suggestion_id] = []
 
+                # Fetch reasoning from the suggestion
+                reasoning = suggestion.reasoning
+
                 # Match product names for each category
                 categories = ['top', 'outerwear', 'hat', 'bottoms', 'socks', 'footwear', 'belt']
                 for category in categories:
@@ -243,7 +248,8 @@ def favorites():
                                 'price': product.price,
                                 'color': product.color,
                                 'image': product.image,  # Include image attribute
-                                'link': product.link  # Include link attribute
+                                'link': product.link,  # Include link attribute
+                                'reasoning': reasoning  # Include reasoning attribute
                             })
     return render_template('favorites.html', suggestion_products=suggestion_products)
 
@@ -297,19 +303,19 @@ def user_settings():
 
         # Check if the old password matches the stored password
         if not current_user.check_password(old_password):
-            flash('Incorrect current password.', 'error')
+            flash('Incorrect current password', 'error')
             return redirect(url_for('user_settings'))
 
         # Check if the new password matches the confirm password
         if new_password != confirm_password:
-            flash('New password and confirm password do not match.', 'error')
+            flash('New password and confirm password do not match', 'error')
             return redirect(url_for('user_settings'))
 
         # Update the user's password in the database
         current_user.set_password(new_password)
         db.session.commit()
 
-        flash('Password successfully updated.', 'success')
+        flash('Password successfully updated', 'success')
         return render_template('userSettings.html')
 
     # If it's a GET request, render the password reset form
@@ -330,6 +336,7 @@ def user_settings():
 #@login_required
 def logout():
     logout_user()
+    flash('You have been logged out!', 'success')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

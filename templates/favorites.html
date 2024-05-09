@@ -29,7 +29,7 @@
               <span id="settingbutton" class="dropdown"><i class="fas fa-gear"></i>
                 <div class="dropdown-content">
                   <a id="settingsdd">Settings</a>
-                  <a href="#">Signout</a>
+                  <a href="/logout">Signout</a>
                   </div>
               </span>
             </ul>
@@ -55,6 +55,7 @@
           {% endif %}
         </button>
       </div>
+      <p>{{ products[0].reasoning }}</p>
         <div class="suggested-products">
           <br />
           {% for product in products %}
