@@ -35,6 +35,13 @@
     <div class="container2">
       <main>
         <h1>FashionGPT</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+            {% endwith %}
         <p>
           Welcome to FashionGPT, your personalized stylist in the digital
           realm! Say goodbye to the endless scrolling through fashion blogs and
