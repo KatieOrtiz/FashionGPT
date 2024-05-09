@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Dashboard</title>
 </head>
 <body class="single-section-page">
@@ -44,16 +45,24 @@
       </button>
         <div class="suggested-products">
           <br>
-            {% for product in products %}
-            <div class="clothing-item-tile">
-                <!-- Display product image -->
-                <img class="product-image" src="{{ product.image }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
-                <h3>{{ product.name }}</h3>
-                <p>Price: ${{ product.price }}</p>
+          <div class="clothing-item-tile">
+            <!-- Display product image -->
+            <div class="mt-6 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                  {% for product in products %}
+                  <div class="flex item-center rounded-lg bg-white shadow-lg overflow-hidden w-96">
+                    <img src="{{ product.image }}" alt="Product Image" class="bg-contain h-full w-32 flex-shrink-0">
+                    <div class="px-6 py-4">
+                      <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
+                      <p class="text-gray-600">Price: ${{ product.price }}</p>
+                      <div class="mt-4">
+                        <a  href="{{ product.link }}" target="_blank" class="text-indigo-500 hover:text-indigo-400 font-semibold text-sm">View Product</a>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
                 <!-- Add more details if needed -->
-                <a class="viewProductbtn" href="{{ product.link }}" target="_blank">View Product</a>
             </div>
-            {% endfor %}
         </div>
        
     </div>
