@@ -18,7 +18,7 @@ options.add_argument("--incognito")
 options.add_argument('--disable-blink-features=AutomationControlled')
 
 # Set the path to your chromedriver.exe file
-chrome_driver_path = "C:\\Users\\katie\\Desktop\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
+chrome_driver_path = "C:\\path\\to\\chromedriver.exe"
 service = Service(executable_path=chrome_driver_path)
 
 # Set the path to your Chrome executable
@@ -29,17 +29,8 @@ options.binary_location = chrome_binary_location
 driver = webdriver.Chrome(service=service, options=options)
 driver.implicitly_wait(0.5)
 
-# options = Options()
-# # options.add_argument('--headless=new')
-# options.add_argument("--incognito")
-# service = Service(executable_path="/Users/charitha/Documents/GitHub/FashionGPT/chromedriver")
-# options.binary_location = '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
-
-# # Pass the options when creating the driver instance
-# driver = webdriver.Chrome(service=service, options=options)
-# driver.implicitly_wait(0.5)
-
 app.app_context().push()
+
 
 # Pass the options when creating the driver instance
 driver = webdriver.Chrome(service=service, options=options)
@@ -57,16 +48,22 @@ def HM(search, sex):
     # Initialize an empty list to hold all product details
     all_products = []
 
-    #Page load timeout
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "product-item"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'article > div.image-container'))
         )
+        error_messages = driver.find_elements(By.CSS_SELECTOR, '#main-content > div.deck-text.section > p')
+        if len(error_messages) > 0:
+            print("No products found on HM")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load H&M")
+        print("Failed to load H&M.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded H&M.")
     # Find all product items
     products = driver.find_elements(By.CLASS_NAME, 'product-item')
 
@@ -74,10 +71,12 @@ def HM(search, sex):
     for product in products[:10]:
         try:
             # Product name
-            name = product.find_element(By.CLASS_NAME, 'item-heading').text
+            name = product.find_element(By.CSS_SELECTOR, 'div.item-details > h3 > a').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             # Price
-            price = product.find_element(By.CLASS_NAME, 'item-price').text
-            price2 = price[1::]
+            price = product.find_element(By.CSS_SELECTOR, 'div.item-details > strong > span').text
+            price = re.sub(r'\$ ', '', price)
+
             # Color(s): Find the ul with class 'list-swatches' and then find all li with class 'item' within
             swatches_ul = product.find_elements(By.CLASS_NAME, 'list-swatches')
             color_elements = [li.find_element(By.TAG_NAME, 'a') for ul in swatches_ul for li in ul.find_elements(By.CLASS_NAME, 'item')]
@@ -85,15 +84,13 @@ def HM(search, sex):
             colors_json = json.dumps(colors)
 
             # Image
-            image_element = product.find_element(By.CLASS_NAME, 'item-image')
-            image = image_element.get_attribute("src")
+            image = product.find_element(By.CLASS_NAME, 'item-image').get_attribute("src")
 
             # Link
-            link_element = product.find_element(By.CLASS_NAME, 'item-link')
-            link = link_element.get_attribute("href")
+            link = product.find_element(By.CLASS_NAME, 'item-link').get_attribute("href")
 
             #adding to db
-            new_product = Product(name=name, price=float(price2), color=colors_json, image=image, link=link)
+            new_product = Product(name=name, price=float(price), color=colors_json, image=image, link=link)
             db.session.add(new_product)
             db.session.commit()
 
@@ -123,11 +120,6 @@ def HM(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for Banana Republic
@@ -135,59 +127,54 @@ def BR(search, sex):
     # Go to the webpage
     driver.get(f'https://bananarepublicfactory.gapfactory.com/browse/search.do?searchText={search}')
 
-    # Initialize an empty list to hold all product details
     all_products = []
 
-    # Ensure that the product cards are loaded
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-card'))
         )
+        error_messages = driver.find_elements(By.CSS_SELECTOR, 'div > p.error-message-text')
+        if len(error_messages) > 0:
+            print("No products found on BR")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load Banana Republic")
+        print("Failed to load BR.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded BR.")
     # Find all product cards
     products = driver.find_elements(By.CSS_SELECTOR, 'div.product-card')
 
-    # Loop through each product and extract details
-    for product in products[:10]:  # Limit to first 10 for simplicity
+    # Extract details from each product card
+    all_products = []
+    for product in products:
         try:
-            # Using data-testid for more stable selection if available
-            name = product.find_element(By.CSS_SELECTOR, '[data-testid="product-info-wrapper"] div').text
+            # Extract product name
+            name = product.find_element(By.CSS_SELECTOR, 'section > div > div > div > div > a > div').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
 
-            # Price extraction with alternative strategies if structure changes
+            # Extract price details
             try:
-                price_element = product.find_element(By.CSS_SELECTOR, '.product-price__highlight--br, .product-price--line-item')
-                price = price_element.text
-                price = re.sub(r"Now \$\d+\.\d+ - ", "", price)
-                price = re.sub(r"\$\d+\.\d+ - ", "", price)
-                price = re.sub("Now ", "", price)
+                price = product.find_element(By.CSS_SELECTOR, 'div.product-card-price > div > div > div > span').text
             except NoSuchElementException:
-                price = "Price not found"
+                price = product.find_element(By.CSS_SELECTOR, 'div.product-card-price > div > div > span').text
+                
+            price = re.sub(r'Was \$', '', price).strip()
 
-            # Image extraction using alt attribute
-            try:
-                image_element = product.find_element(By.CSS_SELECTOR, 'img')
-                image = image_element.get_attribute("src")
-            except NoSuchElementException:
-                image = "Image not available"
+            # Extract image details
+            image = product.find_element(By.CSS_SELECTOR, 'div.product-card > div > a > img').get_attribute('src')
 
-            # Link extraction, here assuming 'a' tag inside product card links to product
-            try:
-                link_element = product.find_element(By.CSS_SELECTOR, 'a')
-                link = link_element.get_attribute("href")
-            except NoSuchElementException:
-                link = "Link not available"
+            # Extract product link
+            link = product.find_element(By.CSS_SELECTOR, 'div.cat_product-image > a').get_attribute('href')
 
-            #adding to db
-            price2 = price[1::]
-            new_product = Product(name=name, price=float(price2), color="-", image=image, link=link)
+            new_product = Product(name=name, price=float(price), color='-', image=image, link=link)
             db.session.add(new_product)
             db.session.commit()
 
-            # Append product details to all_products list
+            # Append to list
             all_products.append({
                 'name': name,
                 'price': price,
@@ -196,8 +183,7 @@ def BR(search, sex):
             })
 
         except Exception as e:
-            print(f"An error occurred: {e}")
-
+            print(f"An error occurred while processing a product: {e}")
 
     # Serialize the list into JSON
     gptDump = json.dumps(all_products, indent=4)
@@ -212,11 +198,6 @@ def BR(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for Forever 21
@@ -226,17 +207,23 @@ def F21(search, sex):
 
     # Initialize an empty list to hold all product details
     all_products = []
-
-    # Find all product items
+    
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "product-grid__item"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-tile__media.product-tile__media--default > div > div > div'))
         )
+        error_messages = driver.find_elements(By.CSS_SELECTOR, 'div.search-results--null-page.max-width--large.gutter--normal > div')
+        if len(error_messages) > 0:
+            print("No products found on F21")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load Forever 21")
+        print("Failed to load F21.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded F21.")
     products = driver.find_elements(By.CLASS_NAME, 'product-grid__item')
 
     # Loop through each product and extract the details
@@ -244,6 +231,7 @@ def F21(search, sex):
         try:
             # Product name
             name = product.find_element(By.CLASS_NAME, 'product-tile__name').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             # Price
             try:
                 price = product.find_element(By.CLASS_NAME, 'price__default').text
@@ -302,11 +290,6 @@ def F21(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for UNIQLO
@@ -317,16 +300,22 @@ def UNIQLO(search, sex):
     # Initialize an empty list to hold all product details
     all_products = []
 
-    # Find all product items
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "fr-ec-product-tile-resize-wrapper"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.fr-ec-product-tile__image > div > img'))
         )
+        error_messages = driver.find_elements(By.CSS_SELECTOR, 'section > div > div> div > div > p')
+        if len(error_messages) > 0:
+            print("No products found on UNIQLO")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load UNIQLO")
+        print("Failed to load UNIQLO.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded UNIQLO.")
     products = driver.find_elements(By.CLASS_NAME, 'fr-ec-product-tile-resize-wrapper')
 
     # Loop through each product and extract the details
@@ -334,6 +323,7 @@ def UNIQLO(search, sex):
         try:
             # Product name
             name = product.find_element(By.CLASS_NAME, 'fr-ec-title').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             # Price
             try:
                 price = product.find_element(By.CLASS_NAME, 'fr-ec-price-text').text
@@ -429,11 +419,6 @@ def UNIQLO(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for ZARA
@@ -449,16 +434,22 @@ def ZARA(search, sex):
     # Go to the webpage
     driver.get(f'https://www.zara.com/us/en/search?searchTerm={search}&section={gender}')
 
-    # Wait for the products to be loaded
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li._product"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'a > div > div > div > div > div.carousel__viewport'))
         )
+        error_messages = driver.find_elements(By.CSS_SELECTOR, 'section > div.search-products-message-block > div')
+        if len(error_messages) > 0:
+            print("No products found on Zara")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load ZARA")
+        print("Failed to load Zara.")
         fallback_brand_picker(search, sex)
-        pass
-    
+
+    print("Loaded ZARA.")
     # Find all product items
     products = driver.find_elements(By.CSS_SELECTOR, "li._product")
     
@@ -471,14 +462,11 @@ def ZARA(search, sex):
             # Product name
             name_element = product.find_element(By.CSS_SELECTOR, 'h2')
             name = name_element.text if name_element else "Name not found"
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             
             # Price
-            try:
-                price_element = product.find_element(By.CSS_SELECTOR, '.price__amount-wrapper .price__amount .money-amount__main')
-                price = price_element.text
-            except NoSuchElementException:
-                price = "Price not found"
-            
+            price = product.find_element(By.CSS_SELECTOR, '.price__amount-wrapper .price__amount .money-amount__main').text
+            price = re.sub(r'\$ ', '', price).strip()
             # Image
             try:
                 image_element = product.find_element(By.CSS_SELECTOR, 'img.media-image__image')
@@ -494,8 +482,7 @@ def ZARA(search, sex):
                 link = "Link not found"
             
             #adding to db
-            price2 = price[1::]
-            new_product = Product(name=name, price=float(price2), color="-", image=image, link=link)
+            new_product = Product(name=name, price=float(price), color="-", image=image, link=link)
             db.session.add(new_product)
             db.session.commit()
 
@@ -524,11 +511,6 @@ def ZARA(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for H&M
@@ -542,17 +524,22 @@ def SHEIN(search, sex):
     # Initialize an empty list to hold all product details
     all_products = []
 
-    #Page load timeout
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "product-list-v2__container"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.product-list-v2__container > section'))
         )
-        print("loaded Shein")
+        error_messages = driver.find_elements(By.CSS_SELECTOR, '#product-list-v2 > div > div.search-empty > p')
+        if len(error_messages) > 0:
+            print("No products found on Shein")
+            fallback_brand_picker(search, sex)
+        else:
+            pass
     except:
-        print("failed to load Shein")
+        print("Failed to load Shein.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded SHEIN.")
     # Find all product items
     products = driver.find_elements(By.CSS_SELECTOR, 'section.product-card')
     # Loop through each product and extract the details
@@ -561,6 +548,7 @@ def SHEIN(search, sex):
 
             # Product name
             name = product.find_element(By.CLASS_NAME, 'goods-title-link').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             # Price
             price = product.find_element(By.CSS_SELECTOR, '.product-card__price span').text.strip('$')
             # Image
@@ -598,11 +586,6 @@ def SHEIN(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for NIKE
@@ -616,17 +599,16 @@ def NIKE(search, sex):
     # Initialize an empty list to hold all product details
     all_products = []
 
-    #Page load timeout
+    # Wait for the product cards to load
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".product-card__body"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'a.product-card__img-link-overlay'))
         )
-        print("loaded Nike")
     except:
-        print("failed to load Nike")
+        print("Failed to load Nike.")
         fallback_brand_picker(search, sex)
-        pass
 
+    print("Loaded NIKE.")
     # Find all product items
     products = driver.find_elements(By.CSS_SELECTOR, '.product-card__body')
     # Loop through each product and extract the details
@@ -636,7 +618,8 @@ def NIKE(search, sex):
             # Product name
             name1 = product.find_element(By.CSS_SELECTOR, '.product-card__title').text
             name2 = product.find_element(By.CSS_SELECTOR, '.product-card__subtitle').text
-            name_full = f"{name1} - {name2}"
+            name = f"{name1} - {name2}"
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
 
             # Price
             price = product.find_element(By.CSS_SELECTOR, '.product-price.is--current-price').text.strip('$')
@@ -646,13 +629,13 @@ def NIKE(search, sex):
             link = product.find_element(By.CSS_SELECTOR, 'a.product-card__link-overlay').get_attribute('href')
             
             #adding to db
-            new_product = Product(name=name_full, price=float(price), color='-', image=image, link=link)
+            new_product = Product(name=name, price=float(price), color='-', image=image, link=link)
             db.session.add(new_product)
             db.session.commit()
 
             # Append product details to all_products list
             all_products.append({
-                'name': name_full,
+                'name': name,
                 'price': price,
                 'image': image,
                 'link': link
@@ -675,11 +658,6 @@ def NIKE(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 #scraper for MACYS
@@ -698,12 +676,13 @@ def MACYS(search, sex):
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".productThumbnail"))
         )
-        print("Page loaded successfully")
+        print("Loaded Macy's")
     except:
         print("failed to load Macys")
         fallback_brand_picker(search, sex)
         pass
 
+    print("Loaded MACYS.")
     # Find all product items
     products = driver.find_elements(By.CSS_SELECTOR, '.productThumbnail')
     
@@ -712,8 +691,14 @@ def MACYS(search, sex):
         try:
             link = product.find_element(By.CSS_SELECTOR, 'a.productDescLink').get_attribute('href')
             name = product.find_element(By.CSS_SELECTOR, '.productDescription a').text
+            name = re.sub(r'(?<!\\)"', r'\\"', name)
             price = product.find_element(By.CSS_SELECTOR, '.prices .regular').text.strip('$')
+            price = re.sub(r',', '', price)
             image = product.find_element(By.CSS_SELECTOR, 'img').get_attribute('src')
+
+            new_product = Product(name=name, price=float(price), color='-', image=image, link=link)
+            db.session.add(new_product)
+            db.session.commit()
 
             # Append product details to all_products list
             all_products.append({
@@ -739,11 +724,6 @@ def MACYS(search, sex):
     dataDump = json.dumps(temp)
     clean_string = re.sub(r'\\', '', dataDump)
     dataDump = re.sub(r'^\[|\]$', '', clean_string)
-
-    # Clean up (close the browser)
-    # driver.quit()
-    # Output the JSON data
-    # print(gptDump)
     return dataDump
 
 
@@ -771,7 +751,7 @@ def outfit_suggestions_scraper(outfit_json, sex):
             "Forever 21": F21,
             "Uniqlo": UNIQLO,
             "Zara": ZARA,
-            "Shien": SHEIN,
+            "Shein": SHEIN,
             "Nike": NIKE,
             "Macy's": MACYS
         }
