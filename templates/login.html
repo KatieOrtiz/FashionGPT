@@ -7,15 +7,17 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    />
+    /> <!-- Links an external stylesheet for Font Awesome icons -->
     <script src="static/script.js"></script>
     <title>Front Page</title>
   </head>
 
   <body>
+     <!-- Main container for content -->
     <div class="container">
       <button class="back-btn" type="button" id="backBtn">Back</button>
       <main>
+        <!-- Creates a form for user verification -->
         <div class="verification">
           <form method="post" action="{{ url_for('login') }}">
             <a href="/">
@@ -23,6 +25,7 @@
             </a>
             <h1>FashionGPT</h1>
             <p>Sign In or Sign Up</p>
+             <!-- Textbox created for entering email address -->
             <div class="regTextbox">
               <input
                 type="text"
@@ -35,6 +38,7 @@
             <button class="regbutton" type="submit" id="emailBtn">
               Continue
             </button>
+             <!-- Social media icons section -->
             <div class="social-icons">
               <hr class="separator top" />
               <div class="continue-text">

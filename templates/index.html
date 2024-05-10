@@ -17,12 +17,14 @@
     <header class="header">
       <div class="container">
         <nav class="navbar">
+             <!-- Logo linking to homepage -->
           <a href="/">
             <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
           </a>
           <div class="navbarh1">
             <h1>FashionGPT</h1>
           </div>
+          <!-- Page buttons (hidden in this case) -->
           <div class="pagebuttons" style="visibility: hidden">
             <ul>
               <li></li>
@@ -37,6 +39,7 @@
     <div class="container2">
       <main>
         <h1>FashionGPT</h1>
+        <!-- Flash messages section (not defined in this snippet) -->
         {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
@@ -44,7 +47,7 @@
                 {% endfor %}
                 {% endif %}
             {% endwith %}
-        <p>
+        <p>  <!-- Description of the website -->
           Welcome to FashionGPT, your personalized stylist in the digital
           realm! Say goodbye to the endless scrolling through fashion blogs and
           magazines, and let us revolutionize your wardrobe. Whether you're
@@ -55,6 +58,7 @@
           to your taste and body type. With FashionGPT, your style evolution is
           just a click away.
         </p>
+           <!-- Button to get started -->
         <div class="container1">
           <button type="button" id="getStarted">Get Started</button>
         </div>

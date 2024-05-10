@@ -18,12 +18,14 @@
                 <div class="navbarh1">
                     <h1>FashionGPT</h1>
                 </div>
+                 <!-- Page buttons -->
                 <div class="pagebuttons">
                     <ul>
                         <li></li>
                         <span id="homebutton"><i class="fas fa-house"></i></span>
                         <span id="likebutton"><i class="fas fa-heart"></i></span>
                         <span id="settingbutton" class="dropdown"><i class="fas fa-gear"></i>
+                            <!-- Dropdown content -->
                             <div class="dropdown-content">
                               <a id="settingsdd">Settings</a>
                               <a href="/logout">Signout</a>
@@ -36,9 +38,11 @@
     </header>
     <br>
     <br>
+      <!-- Password reset form section -->
     <div class="container4">
         <div class="password-reset-form">
             <h2>Password Reset</h2>
+              <!-- Flash messages section (not defined in this snippet) -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
@@ -46,6 +50,7 @@
                 {% endfor %}
                 {% endif %}
             {% endwith %}
+            <!-- Password reset form -->
             <form action="#" method="POST">
                 <label for="oldPassword">Current Password:</label>
                 <input type="password" id="oldPassword" name="oldPassword" required />
