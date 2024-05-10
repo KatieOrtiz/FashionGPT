@@ -61,7 +61,7 @@ API_KEY="" <- the value between the quotations should be the first API key from 
     options.add_argument("--incognito")
 
     # Set the path to your chromedriver.exe file
-    chrome_driver_path = "C:\\path\\to\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe"
+    chrome_driver_path = "C:\\path\\to\\chromedriver-win64\\chromedriver.exe"
     service = Service(executable_path=chrome_driver_path)
 
     # Set the path to your Chrome executable
