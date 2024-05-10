@@ -9,15 +9,20 @@
   </head>
 
   <body>
+      <!-- Main container for content -->
     <div class="container">
       <button class="back-btn" type="button" id="backBtn1">Back</button>
+      <!-- Main content section -->
       <main>
         <div class="verification">
           <h1>FashionGPT</h1>
+          <!-- Error message for non-members -->
           <div class="error">
             <p>It seems like you aren't a member yet!</p>
           </div>
+           <!-- Form for user registration -->
           <form method="POST" action="{{ url_for('register') }}">
+             <!-- Textboxes for entering user information -->
             <div class="regTextbox">
               <p>Username</p>
               <input type="text" name="username" id="username" class="enterText"/>
