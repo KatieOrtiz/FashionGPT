@@ -7,30 +7,35 @@ from flask_cors import CORS
 from models import Suggestion, User, UserQuery, Product
 import jwt, os
 from extensions import app, db, login_manager
-
 from haiku import one_getUserData
 
 CORS(app)
 
+# Function for login session
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
+# Function for index page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Function for registering users
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # Get user information from form
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
 
+        # Check is user email exists in DB
         if User.query.filter_by(email=email).first():
-            flash('Email already exists')
+            flash('Email already exists', 'error')
             return redirect(url_for('register'))
 
+        # Add new user to DB
         new_user = User(username=username, email=email)
         new_user.set_password(password)
 
@@ -45,43 +50,50 @@ def register():
        
        # Check if the favorite_suggestions.txt file exists
         if os.path.exists('favorite_suggestions.txt'):
-            # If it exists, delete it
+            # If the favorite_suggestions.txt file exists, delete it
             os.remove('favorite_suggestions.txt')
 
         # Create the favorite_suggestions.txt file
         with open('favorite_suggestions.txt', 'w'):
-            pass  # Create an empty file
+            pass
             
         return redirect(url_for('pref'))
     return render_template('register.html')
 
+# Function for logging in a user
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Get email from form
     if request.method == 'POST':
         email = request.form.get('email')
+        
+        # If the entered value is not in email format, return an error
         if not email:
-            flash('Please enter an email address')
+            flash('Please enter an email address', 'error')
             return render_template('login.html')
 
         # Check if the email exists in the database
         user = User.query.filter_by(email=email).first()
         if user is None:
-            flash('No account found with that email address')
+            flash('No account found with that email address', 'error')
             return render_template('register.html')
-        # If user exists, proceed to verify password
+        # Create session with the entered email
         session['email'] = email
-        
-            
+
         return redirect(url_for('verifyPassword'))
 
     return render_template('login.html')
 
+# Function to verify user's password
 @app.route('/verifyPassword', methods=['GET', 'POST'])
 def verifyPassword():
+    # Checks if a session currently exists
     if 'email' not in session:
         return redirect(url_for('login'))
     email = session['email']
     user = User.query.filter_by(email=email).first()
+    
+    # Gets the password from login form and checks against DB if it's the correct password
     if request.method == 'POST':
         if user and user.check_password(request.form['password']):
             login_user(user)
@@ -89,12 +101,12 @@ def verifyPassword():
            
             # Check if the favorite_suggestions.txt file exists
             if os.path.exists('favorite_suggestions.txt'):
-                # If it exists, delete it
+                # If the favorite_suggestions.txt file exists, delete it
                 os.remove('favorite_suggestions.txt')
 
             # Create the favorite_suggestions.txt file
             with open('favorite_suggestions.txt', 'w'):
-                pass  # Create an empty file
+                pass
             
             resp = redirect(url_for('dashboard'))
             #resp.set_cookie('x-access-token', token)
@@ -103,10 +115,12 @@ def verifyPassword():
             flash('Invalid password. Try again.', 'error')
     return render_template('verifyPassword.html')
 
+# Function to display the dashboard, including user outfit suggestions
 @app.route('/dashboard')
 #@login_required
 def dashboard():
-    #logging to DB
+    
+    # Retrieves the user ID via their email in the session
     email = session['email']
     user = User.query.filter_by(email=email).first()
 
@@ -115,7 +129,7 @@ def dashboard():
     # Retrieve user suggestions from the database and sort by timestamp descending
     user_suggestions = Suggestion.query.filter_by(user_id=user_id).order_by(Suggestion.timestamp.desc()).all()
 
-    # Initialize dictionary to store product suggestions grouped by user suggestion
+    # Initialize a dictionary to store product suggestions grouped by user suggestion
     suggestion_products = {}
 
     # Iterate through user suggestions
@@ -143,19 +157,17 @@ def dashboard():
                         'link': product.link,
                     })
                 else:
-                    # Handle case where product doesn't exist
-                    # For example, log a warning or skip adding the product to the suggestion
+                    # Skip if product doesn't exist
                     pass
 
     return render_template('dashboard.html', suggestion_products=suggestion_products)
 
-
-
+# Function to mark an outfit suggestion as a favorite
 @app.route('/mark-favorite', methods=['POST'])
 def mark_favorite():
     suggestion_id = request.json['suggestion_id']
 
-    # Read existing suggestion IDs from the file
+    # Read in favorited suggestions from file
     with open('favorite_suggestions.txt', 'r') as f:
         existing_suggestion_ids = [int(line.strip()) for line in f]
 
@@ -175,13 +187,10 @@ def mark_favorite():
 
     return 'OK', 200
 
-
-
-
+# Function to check if the outfit suggestion ID is currently marked as favorite
 @app.route('/check-favorite')
 def check_favorite():
     suggestion_id = request.args.get('suggestion_id')
-
 
     with open('favorite_suggestions.txt', 'r') as f:
         favorite_suggestions = f.read().splitlines()
@@ -189,7 +198,7 @@ def check_favorite():
     is_favorite = suggestion_id in favorite_suggestions
     return jsonify({'isFavorite': is_favorite})
 
-
+# Function to remove a favorited outfit suggestion
 @app.route('/remove-favorite', methods=['POST'])
 def remove_favorite():
     suggestion_id = request.json['suggestion_id']
@@ -206,10 +215,10 @@ def remove_favorite():
     
     return 'OK', 200
 
+# Function to return a user's favorite outfit suggestions on the favorites page
 @app.route('/favorites')
 #@login_required
 def favorites():
-    #logging to DB
     email = session['email']
     user = User.query.filter_by(email=email).first()
     user_id = user.id
@@ -217,7 +226,7 @@ def favorites():
     # Initialize dictionary to store product suggestions grouped by user suggestion
     suggestion_products = {}
 
-    # Read suggestion IDs from favorite_suggestions.txt
+    # Read in favorited suggestions from file
     with open('favorite_suggestions.txt', 'r') as f:
         for line in f:
             suggestion_id = int(line.strip())
@@ -248,16 +257,16 @@ def favorites():
                                 'link': product.link,  
                             })
                         else:
-                            # Handle case where product doesn't exist
-                            # For example, log a warning or skip adding the product to the suggestion
+                            # Skip if product doesn't exist
                             pass
 
     return render_template('favorites.html', suggestion_products=suggestion_products)
 
-
+# Function to gather user's preferences 
 @app.route('/pref', methods=['GET', 'POST'])
 #@login_required
 def pref():
+    # Retreive user preferences from form
     if request.method == 'POST':
         gender = request.form['gender']
         weight = request.form['weight']
@@ -275,7 +284,7 @@ def pref():
         fabric = request.form['fabric']
         usersRequest = request.form['usersRequest']
         
-        #logging to DB
+        # Insert all the preferences to the DB
         email = session['email']
         user = User.query.filter_by(email=email).first()
         user_id = user.id
@@ -285,14 +294,14 @@ def pref():
         generated_id = query.id
         print(f'The generated ID for the newly inserted row is: {generated_id}')
 
-        #sending query to AI
+        # Send the user query of their preferences to be run through the AI
         one_getUserData(generated_id=generated_id, gender=gender, weight=weight, waist=waist, length=length, Skintone=Skintone, height=height, hair=hair, build=build, Budget=Budget, Colors=Colors, age=age, Style=Style, Season=Season, fabric=fabric, usersRequest=usersRequest)
         
         resp = redirect(url_for('dashboard'))
         return resp
     return render_template('registerSize.html')
 
-# Add 
+# Function to change user password 
 @app.route('/userSettings', methods=['GET', 'POST'])
 def user_settings():
     if request.method == 'POST':
@@ -319,10 +328,9 @@ def user_settings():
         flash('Password successfully updated', 'success')
         return render_template('userSettings.html')
 
-    # If it's a GET request, render the password reset form
     return render_template('userSettings.html')
 
-
+# Function to log out the user
 @app.route('/logout')
 def logout():
     #logout_user()
