@@ -14,6 +14,7 @@
   <body class="single-section-page">
     <header class="header">
       <div class="container">
+        <!--Navbar with logo, website name, and 3 buttons-->
         <nav class="navbar">
           <a href="/">
             <img src="https://cdn.glitch.global/70b98674-7945-4933-94d7-ed8029fb2905/logo.PNG?v=1714897729283" class="fashiongptlogo">
@@ -42,6 +43,7 @@
     </header>
     <div class="container2">
       <h1 class="dashh1">Favorites</h1>
+      <!-- Output section for displaying favorite suggestions -->
       <div id="output-section"></div>
       {% for suggestion_id, products in suggestion_products.items() %}
       <div class="user-suggestion">
@@ -58,6 +60,7 @@
           {% endif %}
         </button>
       </div>
+      <!-- Container for suggested products -->
         <div class="suggested-products">
           <br />
           <div class="clothing-item-tile">

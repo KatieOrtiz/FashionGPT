@@ -19,12 +19,12 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-
+/*container stlying*/
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the content horizontally */
-  justify-content: center; /* Center the content vertically */
+  align-items: center; 
+  justify-content: center; 
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -32,7 +32,7 @@ button {
   background-color: black;
   color: white;
 }
-
+/*password verification stlying*/
 .verification {
   text-align: center;
   border-radius: 10px;
@@ -41,7 +41,7 @@ button {
   width: 400px;
   height: 600px;
   padding-top: 25px;
-  box-sizing: border-box; /* Include padding and border in width calculation */
+  box-sizing: border-box; 
   margin-bottom: 0px;
 }
 
@@ -49,7 +49,7 @@ button {
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
-  padding: 50px; /* Add 50 pixels of padding around the text */
+  padding: 50px; 
   padding-top: 0px;
   padding-bottom: 0px;
 }
@@ -78,6 +78,7 @@ color: red;
   margin-top: 25px;
   width: 200px;
 }
+/*signup page styling*/
 .enterSignup
 {
   color: white;
@@ -94,33 +95,33 @@ color: red;
   animation-name: mui-auto-fill-cancel;
   letter-spacing: inherit;
 }
-
+/* measurement page styling*/
 .measurement-select {
   margin-bottom: 20px;
   display: flex;
-  flex-direction: column; /* Display labels and select elements in a column */
-  align-items: center; /* Align items horizontally */
+  flex-direction: column; 
+  align-items: center; 
 }
 
 .measurement-select label {
   font-weight: bold;
-  text-align: center; /* Center text horizontally */
-  margin-bottom: 5px; /* Add some space between label and select */
+  text-align: center; 
+  margin-bottom: 5px; 
 }
 
 select {
-  width: 50%; /* Set the desired width for each select box */
-  max-width: 125px; /* Limit the maximum width if necessary */
+  width: 50%; 
+  max-width: 125px;
   padding: 5px;
   border: 1px solid #cccccc;
   border-radius: 5px;
 }
 .sizing-guide {
   padding-left: 60px;
-  width: 70%; /* Adjust width as needed */
-  height: auto; /* Maintain aspect ratio */
+  width: 70%;
+  height: auto; 
 }
-/* Add this CSS */
+/*social media icons on email page*/
 .social-icons {
   margin-top: 20px;
 }
@@ -138,7 +139,7 @@ select {
 }
 
 .continue-text span {
-  margin: 20px 10px ; /* Adjust the margin as needed */
+  margin: 20px 10px ; 
 }
 
 .separator {
@@ -149,7 +150,7 @@ select {
 }
 
 .separator.top {
-  display: none; /* Hide the separator on top */
+  display: none; 
 }
 .social-logos {
   display: flex;
@@ -158,12 +159,13 @@ select {
 }
 
 .social-logos i {
-  font-size: 50px; /* Increase the font size */
+  font-size: 50px;
   padding-bottom: 40px;
-  margin: 5px; /* Reduce the margin */
-  flex-basis: 20%; /* Each logo takes up 25% of the container width */
-  text-align: center; /* Center the icons */
+  margin: 5px; 
+  flex-basis: 20%; 
+  text-align: center; 
 }
+/*back button*/
 #back2sec1,
 #back2sec2,
 #back2sec3,
@@ -177,6 +179,7 @@ margin-right: 320px;
 #back2sec4:hover {
   cursor: pointer;
 }
+/*images on register page*/
 .registerimages1{
   width: 400px;
   height: 220px;
@@ -202,6 +205,7 @@ margin-right: 320px;
   width: 90px;
   height: 60px;
 }
+/*flash errors*/ 
 .flash-error{
   color: red;
 }

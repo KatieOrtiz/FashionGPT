@@ -1,3 +1,4 @@
+/*body styling*/
 body {
   display: flex;
   flex-direction: column;
@@ -8,30 +9,30 @@ body {
   font-family: Arial, sans-serif;
   background-color: black;
   color: white;
-  overflow-y: auto; /* Enable vertical scrolling */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; 
+  overflow-x: hidden; 
   
 }
-
+/*header*/
 .header {
   background-color: #18181c;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Set the width to 100% to expand across the entire page */
-  position: flex; /* Position the header fixed at the top */
-  top: 0; /* Align the header to the top of the viewport */
-  left: 0; /* Align the header to the left edge of the viewport */
-  right: 0; /* Align the header to the right edge of the viewport */
-  z-index: 999; /* Ensure the header stays on top of other content */
+  width: 100%; 
+  position: flex; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  z-index: 999; 
 }
-
+/*navbar styling*/
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center horizontally */
-  padding: 10px 20px 10px 20px; /* Adjust padding */
+  justify-content: center; 
+  padding: 10px 20px 10px 20px; 
 }
 
 .navbar h1 {
@@ -39,7 +40,7 @@ body {
   font-weight: bold;
   color: #ffffff;
   margin: 0;
-  margin-right: auto; /* Add this line to push the h1 element to the left */
+  margin-right: auto; /
 }
 .navbar span{
   color: #ffffff;
@@ -49,11 +50,11 @@ nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  align-items: center; /* Center the list items vertically */
+  align-items: center; 
 }
 
 nav ul li {
-  margin-left: 520px; /* Increase the margin to add more space */
+  margin-left: 520px; 
 }
 
 nav ul li a {
@@ -75,7 +76,7 @@ button {
 }
 .container {
   width: 1700px;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto; 
 }
 
 .footer {
@@ -83,11 +84,11 @@ button {
   color: white;
   padding: 10px;
   text-align: center;
-  width: 100%; /* Set the width to 100% to expand across the entire page */
-  position: absolute; /* Position the footer at the bottom of the viewport */
-  bottom: 0; /* Align the footer to the bottom of the viewport */
-  left: 0; /* Align the footer to the left edge of the viewport */
-  right: 0; /* Align the footer to the right edge of the viewport */
+  width: 100%; 
+  position: absolute; 
+  bottom: 0; 
+  left: 0; 
+  right: 0; 
 }
 
 
@@ -126,25 +127,24 @@ i{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px; /* Adjust margin-top value */
+  margin-top: 100px; 
 }
-
+/*sectior styling*/
 .section-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; /* Remove margin-bottom */
+  margin-bottom: 20px; 
 }
 
 h1.section-header {
   text-align: center;
   margin-bottom: 10px;
-  margin-top: 20px; /* Add margin to lower the headers */
+  margin-top: 20px; 
 }
 
 .box {
-  width: 150px; /* Set a fixed width for the boxes */
-  height: 100px; /* Adjust height as needed */
+  width: 150px; 
   background-color: gray;
   cursor: pointer;
   display: flex;
@@ -160,8 +160,8 @@ h1.section-header {
 .box-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Adjust gap between boxes */
-  justify-content: space-between; /* Center boxes horizontally with space between */
+  gap: 10px; 
+  justify-content: space-between; 
 }
 
 
@@ -170,22 +170,23 @@ h1.section-header {
   transform: translateY(-3px);
 }
 
-
+/*next button styling*/
 #next-button {
-  margin-top: 30px; /* Add margin to separate button from boxes */
+  margin-top: 30px; 
 }
 
 .container1 {
   display: flex;
   justify-content: center;
 }
+/*container styling*/
 .container4 {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 30vh;
 }
-
+/*password reset form styling*/
 .password-reset-form {
   width: 300px;
 }
@@ -224,26 +225,28 @@ h1.section-header {
     padding: 10px;
   }
 }
+/*navbar button styling*/
 #homebutton:hover,
 #likebutton:hover,
 #setting:hover,
 #settingbutton:hover {
   cursor: pointer;
 }
+/*search bar styling*/
 .navbar input[type="text"] {
-  padding: 10px; /* Adjust padding as needed */
-  border: 2px solid #cccccc; /* Add a border */
-  border-radius: 5px; /* Add some border radius for rounded corners */
-  font-size: 16px; /* Adjust font size as needed */
+  padding: 10px; 
+  border: 2px solid #cccccc; 
+  border-radius: 5px; 
+  font-size: 16px; 
   color: black;
-  transition: border-color 0.3s ease; /* Add transition for smoother hover effect */
-  flex: 1; /* Expand to fill remaining space */
+  transition: border-color 0.3s ease; 
+  flex: 1; 
   width: 100%;
 }
 
 .navbar input[type="text"]:focus {
-  outline: none; /* Remove default focus outline */
-  border-color: #007bff; /* Change border color when input is focused */
+  outline: none; 
+  border-color: #007bff; 
 }
 .searchbar{
   text-align: left;
@@ -259,7 +262,7 @@ h1.section-header {
 }
 
 .pagebuttons {
-  text-align: right; /* Align buttons to the right */
+  text-align: right; 
 }
 
 .pagebuttons ul {
@@ -270,54 +273,56 @@ h1.section-header {
 
 .pagebuttons li {
   display: inline-block;
-  margin-left: 10px; /* Add some spacing between buttons */
+  margin-left: 10px; 
 }
 .container2{
   width: 1200px;
 }
 p {
-  line-height: 1.6; /* Increasing line height for paragraph text */
+  line-height: 1.6; 
 }
+/*suggested products styling*/
 .suggested-products {
-  display: flex; /* Use flexbox layout */
-  flex-wrap: wrap; /* Allow items to wrap to the next line */
-  justify-content: center; /* Center items horizontally */
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
 }
 
 
 h3 {
-  margin-top: 0; /* Remove top margin for the title */
-  margin-bottom: 5px; /* Add bottom margin for spacing */
-  white-space: normal; /* Allow text to wrap to the next line */
-  text-align: center; /* Center align the title */
-  width: 80%; /* Set width to 80% */
+  margin-top: 0; 
+  margin-bottom: 5px; 
+  white-space: normal; 
+  text-align: center;
+  width: 80%; 
   text-align: left;
 }
+/*a tag in view production styling*/
 a.viewProductbtn {
-  display: inline-block; /* Display as inline-block */
-  padding: 10px 20px; /* Add padding for spacing */
-  margin-top: auto; /* Push button to the bottom */
-  text-align: center; /* Center align text */
-  text-decoration: none; /* Remove default underline */
-  color: #ffffff; /* Text color */
-  background-color: #007bff; /* Background color */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Show pointer cursor on hover */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Add smooth transitions */
-  width: 50%; /* Set button width to 100% */
+  display: inline-block;
+  padding: 10px 20px; 
+  margin-top: auto; 
+  text-align: center; 
+  text-decoration: none; 
+  color: #ffffff; 
+  background-color: #007bff; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s; 
+  width: 50%; 
 }
 
 a.viewProductbtn:hover {
-  background-color: #0056b3; /* Change background color on hover */
-  border-color: #0056b3; /* Change border color on hover */
+  background-color: #0056b3; 
+  border-color: #0056b3; 
 }
 
 a.viewProductbtn:focus {
-  outline: none; /* Remove focus outline */
+  outline: none; 
 }
 
 a.viewProductbtn:active {
-  transform: translateY(1px); /* Add slight push effect when clicked */
+  transform: translateY(1px); 
 }
 .fashiongptlogo{
   width: 90px;
@@ -350,15 +355,15 @@ a.viewProductbtn:active {
   z-index: 1;
   padding: 5px 0;
   min-width: 120px;
-  right: 0; /* Align to the right edge */
-  left: auto; /* Reset left positioning */
+  right: 0;
+  left: auto; 
 }
 
 .dropdown-content a {
   color: #333333;
-  font-weight: bold; /* Make text bold */
-  padding: 10px 20px; /* Add padding */
-  text-decoration: none; /* Remove underline */
+  font-weight: bold; 
+  padding: 10px 20px; 
+  text-decoration: none; 
   display: block;
   transition: background-color 0.3s;
 }
@@ -370,22 +375,23 @@ a.viewProductbtn:active {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
+/*outfit generation styling*/
 .generateoutfit {
   padding: 5px 10px;
-  background-color: #007bff; /* Set background color */
-  color: #fff; /* Set text color */
+  background-color: #007bff; 
+  color: #fff; 
   margin: 20px;
-  border: none; /* Remove border */
-  border-radius: 5px; /* Add border radius */
-  cursor: pointer; /* Show pointer cursor on hover */
-  font-size: 16px; /* Set font size */
-  transition: background-color 0.3s; /* Add transition for smoother hover effect */
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 16px; 
+  transition: background-color 0.3s; 
 }
 
 .generateoutfit:hover {
-  background-color: #0056b3; /* Darken background color on hover */
+  background-color: #0056b3;
 }
+/*error styling*/
 .flash-error{
   color: red;
 }
